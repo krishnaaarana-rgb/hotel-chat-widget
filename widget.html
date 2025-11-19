@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hotel Chat Widget</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+        background: transparent;
+      }
+    </style>
+
+    <!-- Web Components polyfill (for safety on older browsers) -->
+    <script src="https://unpkg.com/@webcomponents/webcomponentsjs@2.6.0/webcomponents-bundle.js"></script>
+  </head>
+  <body>
+    <!-- FLOATING CHAT BUBBLE -->
+    <div id="chat-launcher"
+        style="
+          position: fixed;
+          bottom: 20px;
+          right: 20px;
+          width: 60px;
+          height: 60px;
+          border-radius: 50%;
+          background: #0077be;
+          color: white;
+          font-size: 28px;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          cursor: pointer;
+          z-index: 999999;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        ">
+      💬
+    </div>
+
+    <!-- CHAT WINDOW -->
+    <div id="chat-container"
+        style="
+          position: fixed;
+          bottom: 90px;
+          right: 20px;
+          width: 360px;
+          height: 520px;
+          background: white;
+          border-radius: 14px;
+          overflow: hidden;
+          display: none;
+          z-index: 9999999;
+          box-shadow: 0 4px 25px rgba(0,0,0,0.35);
+        ">
+
+      <hotel-chat-widget
+        id="hotel-chat-widget"
+        client-id="demo_hotel"
+        hotel-name="Demo Hotel Assistant"
+        primary-color="#0077be"
+        secondary-color="#ffd700"
+        webhook-url="https://n8n.srv1106816.hstgr.cloud/webhook/2615091a-48f7-4b8a-b2ec-80a208b32579/chat">
+      </hotel-chat-widget>
+    </div>
+
+    <!-- Your compiled widget JS -->
+    <script src="https://krishnaaarana-rgb.github.io/hotel-chat-widget/hotel-chat-widget.js"></script>
+
+    <script>
+      window.addEventListener("load", () => {
+        const launcher = document.getElementById("chat-launcher");
+        const container = document.getElementById("chat-container");
+
+        // Make sure the custom element is ready
+        if (window.customElements && customElements.whenDefined) {
+          customElements.whenDefined("hotel-chat-widget").then(() => {
+            launcher.addEventListener("click", () => {
+              container.style.display = "block";
+              launcher.style.display = "none";
+            });
+          });
+        } else {
+          // Fallback: still try to bind click
+          launcher.addEventListener("click", () => {
+            container.style.display = "block";
+            launcher.style.display = "none";
+          });
+        }
+
+        // ESC key closes chat
+        document.addEventListener("keydown", (e) => {
+          if (e.key === "Escape" && container.style.display === "block") {
+            container.style.display = "none";
+            launcher.style.display = "flex";
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
