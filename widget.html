@@ -13,19 +13,26 @@
     overflow: visible;
     height: 100%;
     width: 100%;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   }
 
-  /* Wrapper ensures widget floats even in Wix iframe */
+  /* FORCE a transparent background for Wix iframe */
+  body {
+    background: transparent !important;
+  }
+
+  /* Container that forces chat to bottom-right INSIDE iframe */
   #chatbot-wrapper {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    pointer-events: none;
+    width: auto;
+    height: auto;
+    pointer-events: none; /* allows iframe to ignore clicks outside widget */
   }
 
-  /* Floating bubble */
+  /* Floating launcher button */
   #hotel-chatbot-launcher {
+    position: relative;
     width: 56px;
     height: 56px;
     border-radius: 50%;
@@ -35,14 +42,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 26px;
-    box-shadow: 0 12px 30px rgba(0,0,0,0.22);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.22);
     cursor: pointer;
-    z-index: 10000;
-    pointer-events: all;
+    z-index: 1000;
+    font-size: 24px;
+    pointer-events: all; /* enable button clicks */
   }
 
-  /* Chat window */
+  /* Chat Window */
   #hotel-chatbot {
     position: absolute;
     bottom: 70px;
@@ -51,24 +58,25 @@
     max-width: 95vw;
     height: 520px;
     max-height: 80vh;
-    background: white;
+    background: #ffffff;
     border-radius: 14px;
     box-shadow: 0 12px 30px rgba(0,0,0,0.25);
     display: none;
     flex-direction: column;
     overflow: hidden;
-    z-index: 10001;
+    font-family: system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    z-index: 2000;
     pointer-events: all;
   }
 
   /* Header */
   #hotel-chatbot-header {
     background: linear-gradient(135deg, #0b7dda, #064a8b);
-    color: white;
+    color: #ffffff;
     padding: 14px 16px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
   }
 
   #hotel-chatbot-header-left {
@@ -81,31 +89,177 @@
     width: 36px;
     height: 36px;
     border-radius: 50%;
-    background: rgba(255,255,255,0.25);
+    background: rgba(255, 255, 255, 0.25);
     display: flex;
-    justify-content: center;
     align-items: center;
-    font-weight: bold;
-    font-size: 16px;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 18px;
   }
 
+  #hotel-chatbot-title {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  #hotel-chatbot-close {
+    background: transparent;
+    border: none;
+    color: #ffffff;
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  /* Messages */
   #hotel-chatbot-messages {
     flex: 1;
+    padding: 10px;
     background: #f3f5f8;
-    padding: 12px;
     overflow-y: auto;
   }
 
   .chat-message-row {
     display: flex;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
   }
 
   .chat-message-row.user { justify-content: flex-end; }
   .chat-message-row.bot { justify-content: flex-start; }
 
   .chat-bubble {
-    padding: 10px 14px;
-    border-radius: 14px;
     max-width: 80%;
-    font-
+    padding: 8px 12px;
+    border-radius: 12px;
+    line-height: 1.4;
+    font-size: 14px;
+    white-space: pre-wrap;
+  }
+
+  .chat-bubble.user {
+    background: #0b7dda;
+    color: #fff;
+    border-bottom-right-radius: 3px;
+  }
+
+  .chat-bubble.bot {
+    background: #ffffff;
+    border-bottom-left-radius: 3px;
+  }
+
+  .chat-bubble.bot.highlight {
+    background: #e6f3ff;
+  }
+
+  #hotel-chatbot-input-area {
+    display: flex;
+    padding: 10px;
+    gap: 10px;
+    border-top: 1px solid #ddd;
+    background: white;
+  }
+
+  #hotel-chatbot-input {
+    flex: 1;
+    border-radius: 20px;
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+
+  #hotel-chatbot-send {
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: none;
+    background: #0b7dda;
+    color: white;
+    cursor: pointer;
+  }
+</style>
+</head>
+
+<body>
+
+<div id="chatbot-wrapper">
+  <button id="hotel-chatbot-launcher">💬</button>
+
+  <div id="hotel-chatbot">
+    <div id="hotel-chatbot-header">
+      <div id="hotel-chatbot-header-left">
+        <div id="hotel-chatbot-avatar">AI</div>
+        <div>
+          <div id="hotel-chatbot-title">Hotel Assistant</div>
+        </div>
+      </div>
+      <button id="hotel-chatbot-close">×</button>
+    </div>
+
+    <div id="hotel-chatbot-messages"></div>
+
+    <div id="hotel-chatbot-input-area">
+      <input id="hotel-chatbot-input" type="text" placeholder="Ask anything..." />
+      <button id="hotel-chatbot-send">Send</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ---- CONFIG ---- */
+const INITIAL_GREETING = "Hello 👋 I'm your assistant! Ask me anything.";
+const WEBHOOK_URL = "https://n8n.srv1106816.hstgr.cloud/webhook/0aadc22c-fff6-4156-8e59-a276bc66d299";
+
+/* ---- ELEMENTS ---- */
+const launcher = document.getElementById("hotel-chatbot-launcher");
+const chat = document.getElementById("hotel-chatbot");
+const closeBtn = document.getElementById("hotel-chatbot-close");
+const messages = document.getElementById("hotel-chatbot-messages");
+const input = document.getElementById("hotel-chatbot-input");
+const sendBtn = document.getElementById("hotel-chatbot-send");
+
+/* ---- FUNCTIONS ---- */
+function appendMessage(text, from="bot", highlight=false) {
+  const row = document.createElement("div");
+  row.className = "chat-message-row " + from;
+  const bubble = document.createElement("div");
+  bubble.className = "chat-bubble " + from;
+  if (highlight) bubble.classList.add("highlight");
+  bubble.textContent = text;
+  row.appendChild(bubble);
+  messages.appendChild(row);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+async function sendMessage() {
+  const text = input.value.trim();
+  if (!text) return;
+
+  appendMessage(text, "user");
+  input.value = "";
+
+  try {
+    const res = await fetch(WEBHOOK_URL, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ message: text })
+    });
+
+    const data = await res.json();
+    appendMessage(data.reply || "I'm not sure, please try again!");
+  } catch (e) {
+    appendMessage("Connection error. Try again.", "bot", true);
+  }
+}
+
+/* ---- EVENTS ---- */
+launcher.onclick = () => {
+  chat.style.display = "flex";
+  messages.innerHTML = "";
+  appendMessage(INITIAL_GREETING, "bot", true);
+};
+
+closeBtn.onclick = () => chat.style.display = "none";
+sendBtn.onclick = sendMessage;
+input.onkeydown = e => { if (e.key === "Enter") sendMessage(); };
+</script>
+
+</body>
+</html>
