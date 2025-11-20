@@ -4,6 +4,12 @@
 <meta charset="UTF-8" />
 <title>Hotel Chatbot</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+// Persist a session ID inside the browser
+let sessionId = localStorage.getItem("hotel_session_id");
+if (!sessionId) {
+  sessionId = "sess_" + Math.random().toString(36).substring(2);
+  localStorage.setItem("hotel_session_id", sessionId);
+}
 
 <style>
   html, body {
