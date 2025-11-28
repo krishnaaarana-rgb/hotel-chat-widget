@@ -8,7 +8,7 @@
 <style>
 
 /* ========================================================================
-   GLOBAL SETTINGS (Client Editable)
+   GLOBAL SETTINGS
    ======================================================================== */
 html, body {
     margin: 0;
@@ -76,7 +76,7 @@ html, body {
     white-space: nowrap;
 }
 
-/* Floating animation keyframes */
+/* Floating animation */
 @keyframes floaty {
     0% { transform: translateY(0px); }
     50% { transform: translateY(-4px); }
@@ -97,7 +97,7 @@ html, body {
     background: white;
     border-radius: 18px;
 
-    /* FIX: fully hide */
+    /* better hiding to avoid Wix ghost outline */
     display: none;
     opacity: 0;
     visibility: hidden;
@@ -107,7 +107,7 @@ html, body {
     overflow: hidden;
     pointer-events: all;
     transform: translateY(20px);
-    transition: all 0.35s ease;
+    transition: 0.3s ease;
 }
 
 #hotel-chatbot.open {
@@ -115,11 +115,8 @@ html, body {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
-
-    /* restore shadow only when open */
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25) !important;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.25) !important;
 }
-
 
 /* ========================================================================
    HEADER
@@ -155,7 +152,7 @@ html, body {
 }
 
 /* ========================================================================
-   MESSAGES AREA
+   MESSAGES
    ======================================================================== */
 #hotel-chatbot-messages {
     flex: 1;
@@ -165,7 +162,6 @@ html, body {
     scroll-behavior: smooth;
 }
 
-/* Scrollbar */
 #hotel-chatbot-messages::-webkit-scrollbar {
     width: 6px;
 }
@@ -181,7 +177,7 @@ html, body {
     animation: fadeIn 0.25s ease;
 }
 .chat-message-row.user { justify-content: flex-end; }
-.chat-message-row.bot { justify-content: flex-start; }
+.chat-message-row.bot  { justify-content: flex-start; }
 
 /* Bubbles */
 .chat-bubble {
@@ -269,7 +265,6 @@ html, body {
         <div id="hotel-chatbot-header">
             <div style="display:flex; align-items:center; gap:12px;">
                 <img src="https://cdn.dribbble.com/userupload/12160645/file/original-e65426dddac4245ad2ae68891780100e.png?format=webp&resize=640x480&vertical=center" />
-
                 <div style="display:flex; flex-direction:column;">
                     <span style="font-size:15px;font-weight:600;">Automation Expert’s Assistant</span>
                     <span style="font-size:12px;opacity:0.85;">Here to help</span>
@@ -303,18 +298,21 @@ if (!sessionId) {
 /* ========================================================================
    CONFIG
    ======================================================================== */
-const INITIAL_GREETING = "Hello 👋 I'm your Automation Expert AI assistant.\nHow can I help today?";
-const WEBHOOK_URL = "https://n8n.srv1106816.hstgr.cloud/webhook/0aadc22c-fff6-4156-8e59-a276bc66d299";
+const INITIAL_GREETING =
+    "Hello 👋 I'm your Automation Expert AI assistant.\nHow can I help today?";
+
+const WEBHOOK_URL =
+    "https://n8n.srv1106816.hstgr.cloud/webhook/0aadc22c-fff6-4156-8e59-a276bc66d299";
 
 /* ========================================================================
    ELEMENTS
    ======================================================================== */
 const launcher = document.getElementById("hotel-chatbot-launcher");
-const chat = document.getElementById("hotel-chatbot");
+const chat     = document.getElementById("hotel-chatbot");
 const closeBtn = document.getElementById("hotel-chatbot-close");
 const messages = document.getElementById("hotel-chatbot-messages");
-const input = document.getElementById("hotel-chatbot-input");
-const sendBtn = document.getElementById("hotel-chatbot-send");
+const input    = document.getElementById("hotel-chatbot-input");
+const sendBtn  = document.getElementById("hotel-chatbot-send");
 
 /* ========================================================================
    MESSAGE APPENDING
@@ -361,21 +359,18 @@ async function sendMessage() {
 }
 
 /* ========================================================================
-   OPEN/CLOSE EVENTS WITH postMessage
+   OPEN/CLOSE EVENTS + iframe resize
    ======================================================================== */
 launcher.onclick = () => {
     chat.classList.add("open");
     messages.innerHTML = "";
     appendMessage(INITIAL_GREETING, "bot", true);
 
-    // NEW — notify Wix iframe to expand
     window.parent.postMessage("chatbot_open", "*");
 };
 
 closeBtn.onclick = () => {
     chat.classList.remove("open");
-
-    // NEW — notify Wix iframe to shrink
     window.parent.postMessage("chatbot_closed", "*");
 };
 
@@ -384,6 +379,22 @@ sendBtn.onclick = sendMessage;
 input.onkeydown = (e) => {
     if (e.key === "Enter") sendMessage();
 };
+
+/* ========================================================================
+   REMOVE WIX IFRAME OUTLINE / SHADOW / BACKGROUND
+   ======================================================================== */
+setTimeout(() => {
+    try {
+        const frame = window.frameElement;
+        if (frame) {
+            frame.style.border = "0";
+            frame.style.boxShadow = "none";
+            frame.style.background = "transparent";
+            frame.style.borderRadius = "0";
+            frame.style.outline = "none";
+        }
+    } catch(e) {}
+}, 50);
 
 </script>
 
