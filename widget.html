@@ -96,12 +96,16 @@ html, body {
     max-height: 80vh;
     background: white;
     border-radius: 18px;
-    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25);
+
+    /* FIX: fully hide */
     display: none;
+    opacity: 0;
+    visibility: hidden;
+    box-shadow: none !important;
+
     flex-direction: column;
     overflow: hidden;
     pointer-events: all;
-    opacity: 0;
     transform: translateY(20px);
     transition: all 0.35s ease;
 }
@@ -109,8 +113,13 @@ html, body {
 #hotel-chatbot.open {
     display: flex;
     opacity: 1;
+    visibility: visible;
     transform: translateY(0);
+
+    /* restore shadow only when open */
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.25) !important;
 }
+
 
 /* ========================================================================
    HEADER
