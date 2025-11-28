@@ -9,11 +9,6 @@
 
 /* ========================================================================
    GLOBAL SETTINGS (Client Editable)
-   ------------------------------------------------------------------------
-   - Change font
-   - Change brand colors
-   - Set rounded corners
-   - Modify spacing, shadows, etc.
    ======================================================================== */
 html, body {
     margin: 0;
@@ -26,10 +21,7 @@ html, body {
 }
 
 /* ========================================================================
-   CHATBOT WRAPPER (Positioning)
-   ------------------------------------------------------------------------
-   - Change bottom/right to move widget
-   - Must keep pointer-events: none
+   CHATBOT WRAPPER
    ======================================================================== */
 #chatbot-wrapper {
     position: fixed;
@@ -38,7 +30,6 @@ html, body {
     pointer-events: none;
     z-index: 999999;
 
-    /* allows text + button alignment */
     display:flex;
     flex-direction:column;
     align-items:flex-end;
@@ -46,10 +37,7 @@ html, body {
 }
 
 /* ========================================================================
-   LAUNCHER BUTTON (Floating Button)
-   ------------------------------------------------------------------------
-   - CHANGE COLORS here to match client branding
-   - Edit animation, shape, or text
+   LAUNCHER BUTTON
    ======================================================================== */
 #hotel-chatbot-launcher {
     display: flex;
@@ -60,7 +48,7 @@ html, body {
     padding: 0 18px;
     height: 60px;
 
-    background: linear-gradient(135deg, #0b7dda, #0a5fb1); /* ← BRAND COLORS */
+    background: linear-gradient(135deg, #0b7dda, #0a5fb1);
     border-radius: 30px;
     border: none;
     cursor: pointer;
@@ -68,7 +56,6 @@ html, body {
 
     pointer-events: all;
 
-    /* subtle floating animation */
     animation: floaty 3s ease-in-out infinite;
     transition: all 0.25s ease;
 
@@ -97,7 +84,7 @@ html, body {
 }
 
 /* ========================================================================
-   CHAT WINDOW CONTAINER
+   CHAT WINDOW
    ======================================================================== */
 #hotel-chatbot {
     position: absolute;
@@ -119,7 +106,6 @@ html, body {
     transition: all 0.35s ease;
 }
 
-/* Smooth open */
 #hotel-chatbot.open {
     display: flex;
     opacity: 1;
@@ -127,10 +113,10 @@ html, body {
 }
 
 /* ========================================================================
-   HEADER (Edit This For Logos, Branding, Title)
+   HEADER
    ======================================================================== */
 #hotel-chatbot-header {
-    background: rgba(11, 125, 218, 0.9); /* ← HEADER COLOR */
+    background: rgba(11, 125, 218, 0.9);
     backdrop-filter: blur(8px);
     color: white;
     padding: 16px 18px;
@@ -143,11 +129,10 @@ html, body {
 #hotel-chatbot-header img {
     width: 36px;
     height: 36px;
-    border-radius: 10px; /* ← Change logo shape here */
+    border-radius: 10px;
     object-fit: cover;
 }
 
-/* Close button */
 #hotel-chatbot-close {
     font-size: 22px;
     color: white;
@@ -265,22 +250,13 @@ html, body {
 
 <div id="chatbot-wrapper">
 
-    <!-- ===================================================================
-         LAUNCHER BUTTON (Client Can Change Text/Icon)
-         =================================================================== -->
     <button id="hotel-chatbot-launcher">
         <span class="launcher-icon">💬</span>
         <span class="launcher-text">Chat with us</span>
     </button>
 
-    <!-- ===================================================================
-         CHAT BOT WINDOW
-         =================================================================== -->
     <div id="hotel-chatbot">
 
-        <!-- ===============================================================
-             HEADER (Client Can Change Logo + Name + Subtitle)
-             =============================================================== -->
         <div id="hotel-chatbot-header">
             <div style="display:flex; align-items:center; gap:12px;">
                 <img src="https://cdn.dribbble.com/userupload/12160645/file/original-e65426dddac4245ad2ae68891780100e.png?format=webp&resize=640x480&vertical=center" />
@@ -294,10 +270,8 @@ html, body {
             <button id="hotel-chatbot-close">×</button>
         </div>
 
-        <!-- Messages -->
         <div id="hotel-chatbot-messages"></div>
 
-        <!-- Input -->
         <div id="hotel-chatbot-input-area">
             <input id="hotel-chatbot-input" placeholder="Ask anything..." />
             <button id="hotel-chatbot-send">Send</button>
@@ -309,7 +283,7 @@ html, body {
 <script>
 
 /* ========================================================================
-   SESSION MEMORY (Do not modify)
+   SESSION MEMORY
    ======================================================================== */
 let sessionId = localStorage.getItem("hotel_session_id");
 if (!sessionId) {
@@ -318,7 +292,7 @@ if (!sessionId) {
 }
 
 /* ========================================================================
-   CONFIG (Clients Only Edit These Lines)
+   CONFIG
    ======================================================================== */
 const INITIAL_GREETING = "Hello 👋 I'm your Automation Expert AI assistant.\nHow can I help today?";
 const WEBHOOK_URL = "https://n8n.srv1106816.hstgr.cloud/webhook/09f5485f-6a59-4540-b8f2-7f52a6811489";
@@ -351,7 +325,7 @@ function appendMessage(text, from="bot", highlight=false) {
 }
 
 /* ========================================================================
-   SEND MESSAGE TO N8N WEBHOOK
+   SEND MESSAGE
    ======================================================================== */
 async function sendMessage() {
     const text = input.value.trim();
@@ -378,19 +352,26 @@ async function sendMessage() {
 }
 
 /* ========================================================================
-   EVENTS
+   OPEN/CLOSE EVENTS WITH postMessage
    ======================================================================== */
 launcher.onclick = () => {
     chat.classList.add("open");
     messages.innerHTML = "";
     appendMessage(INITIAL_GREETING, "bot", true);
+
+    // NEW — notify Wix iframe to expand
+    window.parent.postMessage("chatbot_open", "*");
 };
 
 closeBtn.onclick = () => {
     chat.classList.remove("open");
+
+    // NEW — notify Wix iframe to shrink
+    window.parent.postMessage("chatbot_closed", "*");
 };
 
 sendBtn.onclick = sendMessage;
+
 input.onkeydown = (e) => {
     if (e.key === "Enter") sendMessage();
 };
