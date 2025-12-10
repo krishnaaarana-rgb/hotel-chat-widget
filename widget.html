@@ -1,558 +1,401 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>Mona Montreux Assistant</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta charset="UTF-8" />
+<title>Automation Expert's Assistant</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <style>
-    /* =========================================================================
-       DESIGN TOKENS — premium, natural palette
-    ========================================================================= */
-    :root{
-      /* Brand */
-      --brand-500:#0b7dda;  /* primary */
-      --brand-600:#0a5fb1;  /* hover */
+<style>
 
-      /* Light theme base */
-      --bg:#f6f7fb;         /* chat area */
-      --surface:#ffffff;    /* card/panel */
-      --text:#1f2937;       /* primary text */
-      --muted:#6b7280;      /* secondary text */
-      --border:#e4e7ee;     /* subtle divider */
-      --ring:rgba(11,125,218,.35);
-      --shadow-lg:0 18px 40px rgba(0,0,0,.18);
+/* ========================================================================
+   GLOBAL SETTINGS
+   ======================================================================== */
+html, body {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    overflow: visible;
+    height: 100%;
+    width: 100%;
+    font-family: "Inter", system-ui, sans-serif;
+}
 
-      /* Components */
-      --chip-bg:#e9f3ff;
-      --chip-border:#bcd8f5;
-      --bot-bubble:#ffffff;
-      --bot-bubble-accent:#eff6ff;
-      --user-bubble:#0b7dda;
+/* ========================================================================
+   CHATBOT WRAPPER
+   ======================================================================== */
+#chatbot-wrapper {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    pointer-events: none;
+    z-index: 999999;
 
-      --scrollbar:#cfd6df;
-    }
+    display:flex;
+    flex-direction:column;
+    align-items:flex-end;
+    gap:10px;
+}
 
-    /* Dark mode tuned for readability (not pure black) */
-    @media (prefers-color-scheme: dark){
-      :root{
-        --bg:#0f1318;
-        --surface:#121923;
-        --text:#e8edf5;
-        --muted:#a8b4c2;
-        --border:#1f2a36;
-        --shadow-lg:0 18px 40px rgba(0,0,0,.55);
+/* ========================================================================
+   LAUNCHER BUTTON
+   ======================================================================== */
+#hotel-chatbot-launcher {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
 
-        --chip-bg:#1b2736;
-        --chip-border:#2a3a52;
-        --bot-bubble:#0f1620;
-        --bot-bubble-accent:#182434;
-        --user-bubble:#0b7dda;
+    padding: 0 18px;
+    height: 60px;
 
-        --scrollbar:#364150;
-      }
-    }
+    background: linear-gradient(135deg, #0b7dda, #0a5fb1);
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+    color: #fff;
 
-    /* =========================================================================
-       GLOBAL
-    ========================================================================= */
-    html,body{
-      margin:0; padding:0; height:100%; width:100%; background:transparent;
-      font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans",sans-serif;
-      color:var(--text);
-    }
+    pointer-events: all;
 
-    /* =========================================================================
-       WRAPPER
-    ========================================================================= */
-    #chatbot-wrapper{
-      position:fixed; bottom:24px; right:24px; z-index:999999;
-      display:flex; flex-direction:column; align-items:flex-end; gap:10px;
-      pointer-events:none;
-    }
+    animation: floaty 3s ease-in-out infinite;
+    transition: all 0.25s ease;
 
-    /* =========================================================================
-       LAUNCHER
-    ========================================================================= */
-    #hotel-chatbot-launcher{
-      display:flex; align-items:center; justify-content:center; gap:8px;
-      padding:0 18px; height:60px; border:none; border-radius:30px;
-      background:linear-gradient(135deg,var(--brand-500),var(--brand-600));
-      color:#fff; cursor:pointer; pointer-events:all;
-      box-shadow:0 8px 25px rgba(0,0,0,.20); transition:transform .25s ease, box-shadow .25s ease;
-      position:relative;
-    }
-    #hotel-chatbot-launcher:hover{ transform:translateY(-2px); box-shadow:0 12px 28px rgba(0,0,0,.24); }
-    .launcher-icon{ font-size:22px; }
-    .launcher-text{ font-weight:600; }
+    box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+}
 
-    /* Optional unread dot (hidden by default) */
-    .launcher-unread{ position:absolute; top:6px; right:8px; width:9px; height:9px; border-radius:50%; background:#ff4d4f; box-shadow:0 0 0 2px #fff; display:none; }
-    .launcher-unread.is-visible{ display:block; }
+#hotel-chatbot-launcher:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 10px 28px rgba(0,0,0,0.28);
+}
 
-    /* =========================================================================
-       PANEL
-    ========================================================================= */
-    #hotel-chatbot{
-      position:absolute; bottom:80px; right:0; width:380px; max-width:95vw; height:560px; max-height:80vh;
-      background:var(--surface); border-radius:18px; overflow:hidden; pointer-events:all;
-      display:none; opacity:0; visibility:hidden; transform:translateY(18px);
-      transition:.28s ease; box-shadow:none !important;
-      display:flex; flex-direction:column;
-    }
-    #hotel-chatbot.open{ display:flex; opacity:1; visibility:visible; transform:translateY(0); box-shadow:var(--shadow-lg) !important; }
+.launcher-icon {
+    font-size: 24px;
+}
+.launcher-text {
+    font-size: 15px;
+    font-weight: 500;
+    white-space: nowrap;
+}
 
-    /* =========================================================================
-       HEADER
-    ========================================================================= */
-    #hotel-chatbot-header{
-      background:linear-gradient(135deg,var(--brand-500),var(--brand-600));
-      color:#fff; padding:14px 16px; display:flex; justify-content:space-between; align-items:center;
-    }
-    #hotel-chatbot-header img{ width:36px; height:36px; border-radius:10px; object-fit:cover; }
-    #hotel-chatbot-close{ font-size:22px; color:#fff; background:none; border:none; cursor:pointer; opacity:.95; }
-    #hotel-chatbot-close:hover{ opacity:.75; }
+/* Floating animation */
+@keyframes floaty {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-4px); }
+    100% { transform: translateY(0px); }
+}
 
-    /* =========================================================================
-       MESSAGES
-    ========================================================================= */
-    #hotel-chatbot-messages{
-      flex:1; background:var(--bg); padding:14px; overflow-y:auto; scroll-behavior:smooth;
-    }
-    #hotel-chatbot-messages::-webkit-scrollbar{ width:6px; }
-    #hotel-chatbot-messages::-webkit-scrollbar-thumb{ background:var(--scrollbar); border-radius:10px; }
+/* ========================================================================
+   CHAT WINDOW
+   ======================================================================== */
+#hotel-chatbot {
+    position: absolute;
+    bottom: 80px;
+    right: 0;
+    width: 380px;
+    max-width: 95vw;
+    height: 550px;
+    max-height: 80vh;
+    background: white;
+    border-radius: 18px;
 
-    .chat-message-row{ display:flex; margin-bottom:12px; animation:fadeIn .22s ease; }
-    .chat-message-row.user{ justify-content:flex-end; }
-    .chat-message-row.bot{ justify-content:flex-start; }
-    @keyframes fadeIn{ from{opacity:.0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
+    /* better hiding to avoid Wix ghost outline */
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+    box-shadow: none !important;
 
-    .chat-bubble{
-      padding:12px 16px; border-radius:14px; max-width:80%;
-      font-size:14px; line-height:1.48; background:var(--bot-bubble); color:var(--text);
-      box-shadow:0 2px 6px rgba(0,0,0,.06); white-space:pre-wrap;
-    }
-    .chat-bubble.user{ background:var(--user-bubble); color:#fff; border-bottom-right-radius:4px; }
-    .chat-bubble.bot{ border-bottom-left-radius:4px; }
-    .chat-bubble.bot.highlight{ background:var(--bot-bubble-accent); }
+    flex-direction: column;
+    overflow: hidden;
+    pointer-events: all;
+    transform: translateY(20px);
+    transition: 0.3s ease;
+}
 
-    /* =========================================================================
-       QUICK REPLIES (separate tray below messages)
-    ========================================================================= */
-    #quick-replies{
-      display:flex; flex-wrap:wrap; gap:8px; padding:12px;
-      background:linear-gradient(to top,var(--surface) 75%, rgba(0,0,0,0) 100%);
-      border-top:1px solid var(--border);
-      transition:max-height .22s ease, opacity .18s ease, transform .18s ease;
-    }
-    #quick-replies.qr-hidden{ max-height:0; opacity:0; transform:translateY(8px); pointer-events:none; padding-top:0; padding-bottom:0; border-top-color:transparent; }
+#hotel-chatbot.open {
+    display: flex;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.25) !important;
+}
 
-    .quick-reply{
-      background:var(--chip-bg); border:1px solid var(--chip-border); color:var(--brand-500);
-      padding:8px 14px; border-radius:20px; font-size:13px; cursor:pointer;
-      transition:transform .12s ease, background .18s ease;
-    }
-    .quick-reply:hover{ transform:translateY(-1px); background:#dff0ff; }
-    @media (prefers-color-scheme: dark){
-      .quick-reply{ color:#d9e7ff; }
-      .quick-reply:hover{ background:#22354b; }
-    }
+/* ========================================================================
+   HEADER
+   ======================================================================== */
+#hotel-chatbot-header {
+    background: rgba(11, 125, 218, 0.9);
+    backdrop-filter: blur(8px);
+    color: white;
+    padding: 16px 18px;
 
-    .qr-dismiss{
-      margin-left:auto; font-size:12px; color:var(--muted); cursor:pointer;
-      padding:6px 10px; border-radius:14px; border:1px solid var(--border); background:#f1f4f9;
-    }
-    @media (prefers-color-scheme: dark){ .qr-dismiss{ background:#1a2330; color:#cbd5e1; } }
-    .qr-dismiss:hover{ color:var(--text); }
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
-    /* =========================================================================
-       INPUT
-    ========================================================================= */
-    #hotel-chatbot-input-area{
-      padding:12px; display:flex; gap:10px; border-top:1px solid var(--border); background:var(--surface);
-    }
-    #hotel-chatbot-input{
-      flex:1; border-radius:22px; border:1px solid #c7ccd4; padding:12px 16px; font-size:14px;
-      transition:.18s ease; background:#fff; color:var(--text);
-    }
-    #hotel-chatbot-input:focus{ outline:none; border-color:var(--brand-500); box-shadow:0 0 0 3px var(--ring); }
-    @media (prefers-color-scheme: dark){
-      #hotel-chatbot-input{ background:#0f1620; color:#e8edf5; border-color:#2a3647; }
-    }
-    #hotel-chatbot-send{
-      background:var(--brand-500); color:#fff; border:none; border-radius:22px; padding:12px 20px; font-weight:600; cursor:pointer;
-      transition:background .2s ease, transform .06s ease;
-    }
-    #hotel-chatbot-send:hover{ background:var(--brand-600); }
-    #hotel-chatbot-send:active{ transform:translateY(1px); }
+#hotel-chatbot-header img {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    object-fit: cover;
+}
 
-    /* =========================================================================
-       TYPING INDICATOR & ACTIONS
-    ========================================================================= */
-    .typing{ display:inline-flex; align-items:center; gap:6px; }
-    .typing-dot{ width:6px; height:6px; border-radius:50%; background:var(--muted); opacity:.85; animation:bounce 1s infinite ease-in-out; }
-    .typing-dot:nth-child(2){ animation-delay:.13s; }
-    .typing-dot:nth-child(3){ animation-delay:.26s; }
-    @keyframes bounce{ 0%,80%,100%{ transform:translateY(0); opacity:.55; } 40%{ transform:translateY(-2px); opacity:1; } }
+#hotel-chatbot-close {
+    font-size: 22px;
+    color: white;
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+}
+#hotel-chatbot-close:hover {
+    opacity: 0.7;
+}
 
-    .msg-actions{ display:flex; gap:8px; margin-top:8px; }
-    .msg-action{ font-size:12px; border:1px solid var(--border); color:var(--muted); background:#f3f6fb; padding:6px 10px; border-radius:12px; cursor:pointer; }
-    .msg-action:hover{ color:var(--text); }
-    @media (prefers-color-scheme: dark){ .msg-action{ background:#1a2330; color:#cbd5e1; } }
+/* ========================================================================
+   MESSAGES
+   ======================================================================== */
+#hotel-chatbot-messages {
+    flex: 1;
+    background: #f7f9fb;
+    padding: 14px;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+}
 
-    /* Accessibility: respect reduced motion */
-    @media (prefers-reduced-motion: reduce){ *{ animation:none !important; transition:none !important; } }
-  </style>
+#hotel-chatbot-messages::-webkit-scrollbar {
+    width: 6px;
+}
+#hotel-chatbot-messages::-webkit-scrollbar-thumb {
+    background: #cfd6df;
+    border-radius: 10px;
+}
+
+/* Message rows */
+.chat-message-row {
+    display: flex;
+    margin-bottom: 12px;
+    animation: fadeIn 0.25s ease;
+}
+.chat-message-row.user { justify-content: flex-end; }
+.chat-message-row.bot  { justify-content: flex-start; }
+
+/* Bubbles */
+.chat-bubble {
+    padding: 12px 16px;
+    border-radius: 14px;
+    max-width: 80%;
+    font-size: 14px;
+    line-height: 1.45;
+    background: white;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+}
+.chat-bubble.user {
+    background: #0b7dda;
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+.chat-bubble.bot {
+    background: white;
+    color: #333;
+    border-bottom-left-radius: 4px;
+}
+.chat-bubble.bot.highlight {
+    background: #e9f3ff;
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ========================================================================
+   INPUT AREA
+   ======================================================================== */
+#hotel-chatbot-input-area {
+    padding: 12px;
+    display: flex;
+    gap: 10px;
+    border-top: 1px solid #e0e4ea;
+    background: white;
+}
+
+#hotel-chatbot-input {
+    flex: 1;
+    border-radius: 22px;
+    border: 1px solid #c7ccd4;
+    padding: 12px 16px;
+    font-size: 14px;
+    transition: all 0.2s ease;
+}
+#hotel-chatbot-input:focus {
+    outline: none;
+    border-color: #0b7dda;
+    box-shadow: 0 0 0 3px rgba(11,125,218,0.18);
+}
+
+#hotel-chatbot-send {
+    background: #0b7dda;
+    color: white;
+    border: none;
+    border-radius: 22px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background 0.25s ease;
+}
+#hotel-chatbot-send:hover {
+    background: #095fa9;
+}
+
+</style>
 </head>
 
 <body>
 
 <div id="chatbot-wrapper">
 
-  <!-- Launcher -->
-  <button id="hotel-chatbot-launcher" aria-label="Open chat">
-    <span class="launcher-icon">💬</span>
-    <span class="launcher-text">Chat with us</span>
-    <span id="launcher-unread" class="launcher-unread"></span>
-  </button>
+    <button id="hotel-chatbot-launcher">
+        <span class="launcher-icon">💬</span>
+        <span class="launcher-text">Chat with us</span>
+    </button>
 
-  <!-- Panel -->
-  <div id="hotel-chatbot" role="dialog" aria-modal="true" aria-labelledby="hotel-chatbot-title">
+    <div id="hotel-chatbot">
 
-    <!-- Header -->
-    <div id="hotel-chatbot-header">
-      <div style="display:flex; align-items:center; gap:12px;">
-        <img alt="Mona Montreux logo"
-             src="data:image/png;base64,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" />
-        <div style="display:flex; flex-direction:column;">
-          <span id="hotel-chatbot-title" style="font-size:15px;font-weight:600;">Mona Montreux Assistant</span>
-          <span style="font-size:12px;opacity:.9;">Lakeside Hotel • Montreux</span>
+        <div id="hotel-chatbot-header">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <img src="https://cdn.dribbble.com/userupload/12160645/file/original-e65426dddac4245ad2ae68891780100e.png?format=webp&resize=640x480&vertical=center" />
+                <div style="display:flex; flex-direction:column;">
+                    <span style="font-size:15px;font-weight:600;">Automation Expert’s Assistant</span>
+                    <span style="font-size:12px;opacity:0.85;">Here to help</span>
+                </div>
+            </div>
+
+            <button id="hotel-chatbot-close">×</button>
         </div>
-      </div>
-      <button id="hotel-chatbot-close" aria-label="Close chat">×</button>
+
+        <div id="hotel-chatbot-messages"></div>
+
+        <div id="hotel-chatbot-input-area">
+            <input id="hotel-chatbot-input" placeholder="Ask anything..." />
+            <button id="hotel-chatbot-send">Send</button>
+        </div>
+
     </div>
-
-    <!-- Messages -->
-    <div id="hotel-chatbot-messages" aria-live="polite"></div>
-
-    <!-- Starter options tray -->
-    <div id="quick-replies">
-      <div class="qr-dismiss" id="qr-dismiss" role="button" tabindex="0" aria-label="Hide suggestions">Hide</div>
-      <!-- chips injected by JS -->
-    </div>
-
-    <!-- Input -->
-    <div id="hotel-chatbot-input-area">
-      <input id="hotel-chatbot-input" placeholder="Ask anything..." aria-label="Message input" />
-      <button id="hotel-chatbot-send" aria-label="Send message">Send</button>
-    </div>
-
-  </div>
 </div>
 
 <script>
-/* =========================================================================
-   ELEMENT REFS
-========================================================================= */
-const launcher  = document.getElementById("hotel-chatbot-launcher");
-const chat      = document.getElementById("hotel-chatbot");
-const closeBtn  = document.getElementById("hotel-chatbot-close");
-const messages  = document.getElementById("hotel-chatbot-messages");
-const input     = document.getElementById("hotel-chatbot-input");
-const sendBtn   = document.getElementById("hotel-chatbot-send");
-const quickTray = document.getElementById("quick-replies");
-const qrDismiss = document.getElementById("qr-dismiss");
-const unreadDot = document.getElementById("launcher-unread");
 
-/* =========================================================================
-   STATE / CONFIG
-========================================================================= */
+/* ========================================================================
+   SESSION MEMORY
+   ======================================================================== */
 let sessionId = localStorage.getItem("hotel_session_id");
 if (!sessionId) {
-  sessionId = "sess_" + Math.random().toString(36).substring(2);
-  localStorage.setItem("hotel_session_id", sessionId);
-}
-let chatOpen = false;
-
-const WEBHOOK_URL = "https://n8n.srv1106816.hstgr.cloud/webhook/595269c9-1640-45c9-9c2b-861a69417966";
-
-/* 5 focused starter options */
-const starterOptions = [
-  { label: "Show me the rooms",          payload: "Show me the rooms" },
-  { label: "Dining options",             payload: "Dining options" },
-  { label: "Experiences & activities",   payload: "Experiences & activities" },
-  { label: "Availability & rates",       payload: "Check availability & rates" },
-  { label: "Contact the hotel team",     payload: "Can I speak to the hotel team?" }
-];
-
-/* =========================================================================
-   QUICK REPLIES — show on open, hide on any user input
-========================================================================= */
-function showQuickReplies(){ quickTray.classList.remove("qr-hidden"); }
-function hideQuickReplies(){ quickTray.classList.add("qr-hidden"); }
-
-function loadStarterOptions(){
-  // Remove existing chips (keep the dismiss control)
-  [...quickTray.querySelectorAll(".quick-reply")].forEach(el => el.remove());
-  starterOptions.forEach(({label, payload}) => {
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "quick-reply";
-    btn.textContent = label;
-    btn.setAttribute("aria-label", label);
-    btn.onclick = () => {
-      appendMessage(label, "user");
-      hideQuickReplies();
-      sendOption(payload);
-    };
-    btn.onkeydown = (e) => { if (e.key === "Enter" || e.key === " ") btn.click(); };
-    quickTray.appendChild(btn);
-  });
+    sessionId = "sess_" + Math.random().toString(36).substring(2);
+    localStorage.setItem("hotel_session_id", sessionId);
 }
 
-qrDismiss?.addEventListener("click", hideQuickReplies);
-qrDismiss?.addEventListener("keydown", (e)=>{ if(e.key==="Enter"||e.key===" ") hideQuickReplies(); });
+/* ========================================================================
+   CONFIG
+   ======================================================================== */
+const INITIAL_GREETING =
+    "Hello 👋 I'm your Automation Expert AI assistant.\nHow can I help today?";
 
-/* Hide tray on any typing or when Enter is pressed */
-input.addEventListener("input", hideQuickReplies);
-input.addEventListener("keydown", (e)=>{ if(e.key==="Enter") hideQuickReplies(); });
+const WEBHOOK_URL =
+    "https://n8n.srv1106816.hstgr.cloud/webhook/39c83b8b-cddc-4281-8d13-9c100022c78c";
 
-/* Close tray if user clicks outside chips/input while chat is open */
-document.addEventListener("click",(e)=>{
-  if(!chatOpen) return;
-  if (!quickTray.contains(e.target) && e.target !== input) hideQuickReplies();
-});
+/* ========================================================================
+   ELEMENTS
+   ======================================================================== */
+const launcher = document.getElementById("hotel-chatbot-launcher");
+const chat     = document.getElementById("hotel-chatbot");
+const closeBtn = document.getElementById("hotel-chatbot-close");
+const messages = document.getElementById("hotel-chatbot-messages");
+const input    = document.getElementById("hotel-chatbot-input");
+const sendBtn  = document.getElementById("hotel-chatbot-send");
 
-/* =========================================================================
-   MESSAGE HELPERS (typing + streaming reveal)
-========================================================================= */
-function appendMessage(text, from="bot", highlight=false){
-  const row = document.createElement("div");
-  row.className = "chat-message-row " + from;
+/* ========================================================================
+   MESSAGE APPENDING
+   ======================================================================== */
+function appendMessage(text, from="bot", highlight=false) {
+    const row = document.createElement("div");
+    row.className = "chat-message-row " + from;
 
-  const bubble = document.createElement("div");
-  bubble.className = "chat-bubble " + from;
-  if (highlight) bubble.classList.add("highlight");
-  bubble.textContent = text; // plain text only
+    const bubble = document.createElement("div");
+    bubble.className = "chat-bubble " + from;
+    if (highlight) bubble.classList.add("highlight");
+    bubble.textContent = text;
 
-  row.appendChild(bubble);
-  messages.appendChild(row);
-  messages.scrollTop = messages.scrollHeight;
-
-  // Action chip when official booking link appears (still plain text in bubble)
-  if (from === "bot" && text.includes("https://www.mona-montreux.ch/stay/")) {
-    const actions = document.createElement("div");
-    actions.className = "msg-actions";
-    const copyBtn = document.createElement("button");
-    copyBtn.className = "msg-action";
-    copyBtn.textContent = "Copy booking link";
-    copyBtn.onclick = () => navigator.clipboard.writeText("https://www.mona-montreux.ch/stay/");
-    actions.appendChild(copyBtn);
-    bubble.appendChild(actions);
-  }
-
-  // Unread dot if a bot message comes while closed
-  if (from === "bot" && !chatOpen) unreadDot?.classList.add("is-visible");
-
-  // Trigger contact form when escalation wording appears (kept for parity)
-  if (from === "bot" && text.includes("To connect you with our hotel team, could I have your name, email, phone number, and a short note about what you need help with?")) {
-    showContactForm();
-  }
-}
-
-/* Typing indicator */
-let typingRow;
-function showTyping(){
-  if (typingRow) return;
-  typingRow = document.createElement("div");
-  typingRow.className = "chat-message-row bot";
-  const bubble = document.createElement("div");
-  bubble.className = "chat-bubble bot";
-  const t = document.createElement("div");
-  t.className = "typing";
-  t.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
-  bubble.appendChild(t);
-  typingRow.appendChild(bubble);
-  messages.appendChild(typingRow);
-  messages.scrollTop = messages.scrollHeight;
-}
-function hideTyping(){
-  if (typingRow) { typingRow.remove(); typingRow = null; }
-}
-
-/* Smooth, client‑side "type‑in" reveal of a finished string */
-function appendStreamingMessage(text){
-  const row = document.createElement("div");
-  row.className = "chat-message-row bot";
-  const bubble = document.createElement("div");
-  bubble.className = "chat-bubble bot";
-  row.appendChild(bubble);
-  messages.appendChild(row);
-
-  // Adaptive speed: longer messages reveal faster
-  const len = text.length;
-  let i = 0;
-  const minStep = 2, maxStep = 6;
-  const step = Math.max(minStep, Math.min(maxStep, Math.floor(len / 140)));
-
-  function tick(){
-    bubble.textContent = text.slice(0, i);
-    i += step;
+    row.appendChild(bubble);
+    messages.appendChild(row);
     messages.scrollTop = messages.scrollHeight;
-
-    if (i <= len) {
-      requestAnimationFrame(tick);
-    } else {
-      // Post-finish actions
-      if (text.includes("https://www.mona-montreux.ch/stay/")) {
-        const actions = document.createElement("div");
-        actions.className = "msg-actions";
-        const copyBtn = document.createElement("button");
-        copyBtn.className = "msg-action";
-        copyBtn.textContent = "Copy booking link";
-        copyBtn.onclick = () => navigator.clipboard.writeText("https://www.mona-montreux.ch/stay/");
-        actions.appendChild(copyBtn);
-        bubble.appendChild(actions);
-      }
-      if (!chatOpen) unreadDot?.classList.add("is-visible");
-      if (text.includes("To connect you with our hotel team, could I have your name, email, phone number, and a short note about what you need help with?")) {
-        showContactForm();
-      }
-    }
-  }
-  requestAnimationFrame(tick);
 }
 
-/* =========================================================================
-   CONTACT CARD (for escalation)
-========================================================================= */
-function showContactForm(){
-  const card = document.createElement("div");
-  card.className = "contact-card";
-  card.innerHTML = `
-    <div class="contact-row">
-      <input type="text"    id="ct_name"  placeholder="Name" aria-label="Your name"/>
-      <input type="email"   id="ct_email" placeholder="Email" aria-label="Your email"/>
-    </div>
-    <div class="contact-row">
-      <input type="tel"     id="ct_phone" placeholder="Phone number" aria-label="Your phone number"/>
-    </div>
-    <textarea id="ct_note" placeholder="What do you need help with?" aria-label="Your note"></textarea>
-    <div class="contact-actions">
-      <button class="btn btn-plain" onclick="this.closest('.chat-message-row').remove()">Cancel</button>
-      <button class="btn btn-primary" id="ct_submit">Send to hotel</button>
-    </div>
-  `;
-  const row = document.createElement("div");
-  row.className = "chat-message-row user";
-  const bubble = document.createElement("div");
-  bubble.className = "chat-bubble user";
-  bubble.appendChild(card);
-  row.appendChild(bubble);
-  messages.appendChild(row);
-  messages.scrollTop = messages.scrollHeight;
+/* ========================================================================
+   SEND MESSAGE
+   ======================================================================== */
+async function sendMessage() {
+    const text = input.value.trim();
+    if (!text) return;
 
-  const submitBtn = card.querySelector("#ct_submit");
-  submitBtn.onclick = async () => {
-    const name  = card.querySelector("#ct_name").value.trim();
-    const email = card.querySelector("#ct_email").value.trim();
-    const phone = card.querySelector("#ct_phone").value.trim();
-    const note  = card.querySelector("#ct_note").value.trim();
-
-    if (!name || !email || !phone || !note) {
-      alert("Please provide name, email, phone number, and a short note.");
-      return;
-    }
-
-    submitBtn.disabled = true;
+    appendMessage(text, "user");
+    input.value = "";
 
     try {
-      const data = await postToWebhook({
-        chatInput: `Here are my contact details:\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nNote: ${note}\nPlease share with the hotel team.`,
-        sessionId
-      });
-      appendMessage(data.result || "Thanks. Your details have been shared with our team.");
-    } catch {
-      appendMessage("Sorry — we couldn't send your details. Please try again.", "bot", true);
-    } finally {
-      submitBtn.disabled = false;
+        const res = await fetch(WEBHOOK_URL, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                chatInput: text,
+                sessionId: sessionId
+            })
+        });
+
+        const data = await res.json();
+        appendMessage(data.result || "Sorry, something went wrong.");
+    } catch (e) {
+        appendMessage("Connection error. Please try again.", "bot", true);
     }
-  };
 }
 
-/* =========================================================================
-   NETWORK
-========================================================================= */
-async function postToWebhook(body){
-  const res = await fetch(WEBHOOK_URL, {
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body:JSON.stringify(body)
-  });
-  // If backend responds non-JSON, fail gracefully
-  let data = {};
-  try { data = await res.json(); } catch { /* noop */ }
-  if (!res.ok) throw new Error("Network response was not ok");
-  return data;
-}
-
-async function sendOption(message){
-  try{
-    showTyping();
-    const data = await postToWebhook({ chatInput: message, sessionId });
-    hideTyping();
-    appendStreamingMessage(data.result || "Sorry, something went wrong.");
-  }catch{
-    hideTyping();
-    appendMessage("Connection error. Please try again.", "bot", true);
-  }
-}
-
-async function sendMessage(){
-  const text = input.value.trim();
-  if(!text) return;
-
-  appendMessage(text, "user");
-  input.value = "";
-  hideQuickReplies();
-
-  try{
-    showTyping();
-    const data = await postToWebhook({ chatInput: text, sessionId });
-    hideTyping();
-    appendStreamingMessage(data.result || "Sorry, something went wrong.");
-  }catch{
-    hideTyping();
-    appendMessage("Connection error. Please try again.", "bot", true);
-  }
-}
-
-/* =========================================================================
-   OPEN/CLOSE & INIT
-========================================================================= */
+/* ========================================================================
+   OPEN/CLOSE EVENTS + iframe resize
+   ======================================================================== */
 launcher.onclick = () => {
-  chat.classList.add("open");
-  chatOpen = true;
-  unreadDot?.classList.remove("is-visible");
+    chat.classList.add("open");
+    messages.innerHTML = "";
+    appendMessage(INITIAL_GREETING, "bot", true);
 
-  // reset view
-  messages.innerHTML = "";
-
-  // starter options on open
-  loadStarterOptions();
-  showQuickReplies();
-
-  // focus input for fast typing
-  setTimeout(()=> input.focus(), 60);
+    window.parent.postMessage("chatbot_open", "*");
 };
 
 closeBtn.onclick = () => {
-  chat.classList.remove("open");
-  chatOpen = false;
+    chat.classList.remove("open");
+    window.parent.postMessage("chatbot_closed", "*");
 };
 
 sendBtn.onclick = sendMessage;
-input.onkeydown = (e) => { if (e.key === "Enter") sendMessage(); };
+
+input.onkeydown = (e) => {
+    if (e.key === "Enter") sendMessage();
+};
+
+/* ========================================================================
+   REMOVE WIX IFRAME OUTLINE / SHADOW / BACKGROUND
+   ======================================================================== */
+setTimeout(() => {
+    try {
+        const frame = window.frameElement;
+        if (frame) {
+            frame.style.border = "0";
+            frame.style.boxShadow = "none";
+            frame.style.background = "transparent";
+            frame.style.borderRadius = "0";
+            frame.style.outline = "none";
+        }
+    } catch(e) {}
+}, 50);
+
 </script>
 
 </body>
