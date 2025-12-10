@@ -4,10 +4,38 @@
   <meta charset="UTF-8" />
   <title>Mona Montreux Assistant</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+
   <style>
-    /* ========================================================================
+    /* =========================================================================
+       DESIGN TOKENS
+    ========================================================================= */
+    :root {
+      --brand-500: #0b7dda;
+      --brand-600: #0a5fb1;
+      --bg: #f7f9fb;
+      --surface: #ffffff;
+      --text: #1f2937;
+      --muted: #6b7280;
+      --ring: rgba(11,125,218,0.35);
+      --shadow-lg: 0 18px 40px rgba(0,0,0,0.22);
+      --elev-bg: rgba(255,255,255,0.7);
+      --border: #e0e4ea;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0d1117;
+        --surface: #111827;
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --elev-bg: rgba(17,24,39,0.6);
+        --border: #1f2937;
+        --shadow-lg: 0 18px 40px rgba(0,0,0,0.55);
+      }
+    }
+
+    /* =========================================================================
        GLOBAL
-    ======================================================================== */
+    ========================================================================= */
     html, body {
       margin: 0;
       padding: 0;
@@ -15,12 +43,13 @@
       overflow: visible;
       height: 100%;
       width: 100%;
-      font-family: "Inter", system-ui, sans-serif;
+      font-family: "Inter", system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+      color: var(--text);
     }
 
-    /* ========================================================================
-       CHATBOT WRAPPER
-    ======================================================================== */
+    /* =========================================================================
+       WRAPPER
+    ========================================================================= */
     #chatbot-wrapper {
       position: fixed;
       bottom: 24px;
@@ -33,9 +62,9 @@
       gap: 10px;
     }
 
-    /* ========================================================================
+    /* =========================================================================
        LAUNCHER
-    ======================================================================== */
+    ========================================================================= */
     #hotel-chatbot-launcher {
       display: flex;
       align-items: center;
@@ -43,7 +72,7 @@
       gap: 8px;
       padding: 0 18px;
       height: 60px;
-      background: linear-gradient(135deg, #0b7dda, #0a5fb1);
+      background: linear-gradient(135deg, var(--brand-500), var(--brand-600));
       border-radius: 30px;
       border: none;
       cursor: pointer;
@@ -52,13 +81,26 @@
       animation: floaty 3s ease-in-out infinite;
       transition: all 0.25s ease;
       box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+      position: relative;
     }
     #hotel-chatbot-launcher:hover {
       transform: translateY(-3px) scale(1.05);
       box-shadow: 0 10px 28px rgba(0,0,0,0.28);
     }
     .launcher-icon { font-size: 24px; }
-    .launcher-text { font-size: 15px; font-weight: 500; white-space: nowrap; }
+    .launcher-text { font-size: 15px; font-weight: 600; white-space: nowrap; }
+
+    /* Unread dot */
+    .launcher-unread {
+      position: absolute;
+      top: 6px; right: 8px;
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      background: #ff4d4f;
+      box-shadow: 0 0 0 2px white;
+      display: none;
+    }
+    .launcher-unread.is-visible { display: block; }
 
     @keyframes floaty {
       0% { transform: translateY(0px); }
@@ -66,9 +108,9 @@
       100% { transform: translateY(0); }
     }
 
-    /* ========================================================================
+    /* =========================================================================
        CHAT WINDOW
-    ======================================================================== */
+    ========================================================================= */
     #hotel-chatbot {
       position: absolute;
       bottom: 80px;
@@ -77,7 +119,7 @@
       max-width: 95vw;
       height: 550px;
       max-height: 80vh;
-      background: white;
+      background: var(--surface);
       border-radius: 18px;
       display: none;
       opacity: 0;
@@ -94,15 +136,14 @@
       opacity: 1;
       visibility: visible;
       transform: translateY(0);
-      box-shadow: 0 18px 40px rgba(0,0,0,0.25) !important;
+      box-shadow: var(--shadow-lg) !important;
     }
 
-    /* ========================================================================
+    /* =========================================================================
        HEADER
-    ======================================================================== */
+    ========================================================================= */
     #hotel-chatbot-header {
-      background: rgba(11, 125, 218, 0.9);
-      backdrop-filter: blur(8px);
+      background: linear-gradient(135deg, var(--brand-500), var(--brand-600));
       color: white;
       padding: 16px 18px;
       display: flex;
@@ -125,12 +166,12 @@
     }
     #hotel-chatbot-close:hover { opacity: 0.7; }
 
-    /* ========================================================================
+    /* =========================================================================
        MESSAGES
-    ======================================================================== */
+    ========================================================================= */
     #hotel-chatbot-messages {
       flex: 1;
-      background: #f7f9fb;
+      background: var(--bg);
       padding: 14px;
       overflow-y: auto;
       scroll-behavior: smooth;
@@ -157,16 +198,16 @@
       line-height: 1.45;
       background: white;
       box-shadow: 0 2px 6px rgba(0,0,0,0.07);
-      white-space: pre-wrap; /* preserve newlines */
+      white-space: pre-wrap; /* preserve newlines in text */
     }
     .chat-bubble.user {
-      background: #0b7dda;
+      background: var(--brand-500);
       color: white;
       border-bottom-right-radius: 4px;
     }
     .chat-bubble.bot {
-      background: white;
-      color: #333;
+      background: var(--surface);
+      color: var(--text);
       border-bottom-left-radius: 4px;
     }
     .chat-bubble.bot.highlight { background: #e9f3ff; }
@@ -176,36 +217,67 @@
       to { opacity: 1; transform: translateY(0); }
     }
 
-    /* ========================================================================
-       QUICK REPLIES
-    ======================================================================== */
+    /* =========================================================================
+       QUICK REPLIES (Premium tray)
+    ========================================================================= */
     #quick-replies {
+      position: sticky;
+      bottom: 0;
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
       padding: 12px;
+      background: linear-gradient(to top, var(--bg) 55%, rgba(0,0,0,0) 100%);
+      backdrop-filter: blur(8px);
+      border-top: 1px solid var(--border);
+      z-index: 2;
+      transition: max-height .25s ease, opacity .2s ease, transform .2s ease;
+    }
+    #quick-replies.qr-hidden {
+      max-height: 0;
+      opacity: 0;
+      transform: translateY(8px);
+      pointer-events: none;
+      padding-top: 0;
+      padding-bottom: 0;
+      border-top-color: transparent;
     }
     .quick-reply {
       background: #e9f3ff;
-      color: #0b7dda;
+      color: var(--brand-500);
       padding: 8px 14px;
       border-radius: 20px;
       cursor: pointer;
       font-size: 13px;
       border: 1px solid #bcd8f5;
-      transition: 0.2s;
+      transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
     }
-    .quick-reply:hover { background: #d8ecff; }
+    .quick-reply:hover {
+      background: #d8ecff;
+      transform: translateY(-1px);
+    }
+    .qr-dismiss {
+      margin-left: auto;
+      font-size: 12px;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 6px 10px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background: var(--elev-bg);
+      transition: background .2s ease, color .2s ease;
+    }
+    .qr-dismiss:hover { color: var(--text); }
 
-    /* ========================================================================
-       INPUT
-    ======================================================================== */
+    /* =========================================================================
+       INPUT AREA
+    ========================================================================= */
     #hotel-chatbot-input-area {
       padding: 12px;
       display: flex;
       gap: 10px;
-      border-top: 1px solid #e0e4ea;
-      background: white;
+      border-top: 1px solid var(--border);
+      background: var(--surface);
     }
     #hotel-chatbot-input {
       flex: 1;
@@ -214,14 +286,16 @@
       padding: 12px 16px;
       font-size: 14px;
       transition: all 0.2s ease;
+      background: var(--surface);
+      color: var(--text);
     }
     #hotel-chatbot-input:focus {
       outline: none;
-      border-color: #0b7dda;
-      box-shadow: 0 0 0 3px rgba(11,125,218,0.18);
+      border-color: var(--brand-500);
+      box-shadow: 0 0 0 3px var(--ring);
     }
     #hotel-chatbot-send {
-      background: #0b7dda;
+      background: var(--brand-500);
       color: white;
       border: none;
       border-radius: 22px;
@@ -230,14 +304,14 @@
       font-weight: 600;
       transition: background 0.25s ease;
     }
-    #hotel-chatbot-send:hover { background: #095fa9; }
+    #hotel-chatbot-send:hover { background: var(--brand-600); }
 
-    /* ========================================================================
-       CONTACT CARD
-    ======================================================================== */
+    /* =========================================================================
+       CONTACT CARD (for escalation)
+    ========================================================================= */
     .contact-card {
-      background: #fff;
-      border: 1px solid #e0e4ea;
+      background: var(--surface);
+      border: 1px solid var(--border);
       border-radius: 12px;
       padding: 12px;
       width: 100%;
@@ -254,15 +328,60 @@
       border: 1px solid #c7ccd4;
       padding: 8px 10px;
       font-size: 14px;
+      background: var(--surface);
+      color: var(--text);
     }
     .contact-card textarea { min-height: 70px; resize: vertical; }
     .contact-actions {
       display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px;
     }
     .btn { appearance: none; border: none; border-radius: 10px; padding: 10px 14px; cursor: pointer; font-weight: 600; }
-    .btn-primary { background: #0b7dda; color: #fff; }
+    .btn-primary { background: var(--brand-500); color: #fff; }
     .btn-plain   { background: #eef3f8; color: #1f2937; }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* =========================================================================
+       TYPING INDICATOR & MSG ACTIONS
+    ========================================================================= */
+    .typing {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .typing-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--muted);
+      opacity: .8;
+      animation: bounce 1s infinite ease-in-out;
+    }
+    .typing-dot:nth-child(2){ animation-delay: .15s }
+    .typing-dot:nth-child(3){ animation-delay: .3s }
+    @keyframes bounce {
+      0%, 80%, 100% { transform: translateY(0); opacity: .5; }
+      40% { transform: translateY(-2px); opacity: 1; }
+    }
+
+    .msg-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+    .msg-action {
+      font-size: 12px;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      background: var(--elev-bg);
+      padding: 6px 10px;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background .2s ease, color .2s ease;
+    }
+    .msg-action:hover { color: var(--text); }
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce) {
+      * { animation: none !important; transition: none !important; }
+    }
   </style>
 </head>
 
@@ -273,6 +392,7 @@
   <button id="hotel-chatbot-launcher" aria-label="Open chat">
     <span class="launcher-icon">💬</span>
     <span class="launcher-text">Chat with us</span>
+    <span class="launcher-unread" id="launcher-unread"></span>
   </button>
 
   <div id="hotel-chatbot" role="dialog" aria-modal="true" aria-labelledby="hotel-chatbot-title">
@@ -290,7 +410,12 @@
     </div>
 
     <div id="hotel-chatbot-messages" aria-live="polite"></div>
-    <div id="quick-replies"></div>
+
+    <!-- Premium quick-reply tray -->
+    <div id="quick-replies" class="qr-hidden">
+      <div class="qr-dismiss" id="qr-dismiss">Hide</div>
+      <!-- chips injected here -->
+    </div>
 
     <div id="hotel-chatbot-input-area">
       <input id="hotel-chatbot-input" placeholder="Ask anything..." aria-label="Message input" />
@@ -301,70 +426,37 @@
 </div>
 
 <script>
-/* ========================================================================
-   ELEMENT REFERENCES
+/* =========================================================================
+   REFS
 ========================================================================= */
-const launcher = document.getElementById("hotel-chatbot-launcher");
-const chat     = document.getElementById("hotel-chatbot");
-const closeBtn = document.getElementById("hotel-chatbot-close");
-const messages = document.getElementById("hotel-chatbot-messages");
-const input    = document.getElementById("hotel-chatbot-input");
-const sendBtn  = document.getElementById("hotel-chatbot-send");
+const launcher  = document.getElementById("hotel-chatbot-launcher");
+const chat      = document.getElementById("hotel-chatbot");
+const closeBtn  = document.getElementById("hotel-chatbot-close");
+const messages  = document.getElementById("hotel-chatbot-messages");
+const input     = document.getElementById("hotel-chatbot-input");
+const sendBtn   = document.getElementById("hotel-chatbot-send");
+const quickTray = document.getElementById("quick-replies");
+const qrDismiss = document.getElementById("qr-dismiss");
+const unreadDot = document.getElementById("launcher-unread");
 
-/* ========================================================================
-   SESSION
+/* =========================================================================
+   STATE
 ========================================================================= */
 let sessionId = localStorage.getItem("hotel_session_id");
 if (!sessionId) {
   sessionId = "sess_" + Math.random().toString(36).substring(2);
   localStorage.setItem("hotel_session_id", sessionId);
 }
+let chatOpen = false;
 
-/* ========================================================================
-   CONFIG (frontend only)
+/* =========================================================================
+   CONFIG
 ========================================================================= */
-const INITIAL_GREETING = "Hi there. How can I assist you today?";
-
-/* ✅ n8n webhook URL (no prompt content in payload) */
+const INITIAL_GREETING = "Hi there—how can I help today?";
 const WEBHOOK_URL = "https://n8n.srv1106816.hstgr.cloud/webhook/595269c9-1640-45c9-9c2b-861a69417966";
 
-/* ========================================================================
-   MESSAGE HELPERS
-========================================================================= */
-function appendMessage(text, from = "bot", highlight = false) {
-  const row = document.createElement("div");
-  row.className = "chat-message-row " + from;
-
-  const bubble = document.createElement("div");
-  bubble.className = "chat-bubble " + from;
-  if (highlight) bubble.classList.add("highlight");
-  bubble.textContent = text; // plain text only
-
-  row.appendChild(bubble);
-  messages.appendChild(row);
-  messages.scrollTop = messages.scrollHeight;
-
-  // Auto-show contact form when bot requests details with exact phrasing
-  if (from === "bot" && text.includes("To connect you with our hotel team, could I have your name, email, phone number, and a short note about what you need help with?")) {
-    showContactForm();
-  }
-}
-
-function appendElementMessage(el, from = "bot") {
-  const row = document.createElement("div");
-  row.className = "chat-message-row " + from;
-
-  const bubble = document.createElement("div");
-  bubble.className = "chat-bubble " + from;
-
-  bubble.appendChild(el);
-  row.appendChild(bubble);
-  messages.appendChild(row);
-  messages.scrollTop = messages.scrollHeight;
-}
-
-/* ========================================================================
-   QUICK REPLIES (Hotel-focused)
+/* =========================================================================
+   QUICK REPLIES
 ========================================================================= */
 const starterOptions = [
   { label: "Show me the rooms",            payload: "Show me the rooms" },
@@ -375,67 +467,145 @@ const starterOptions = [
   { label: "Seasonal hours & closures",    payload: "What are the seasonal hours and closures?" }
 ];
 
-function loadStarterOptions() {
-  const qr = document.getElementById("quick-replies");
-  qr.innerHTML = "";
+function showQuickReplies() {
+  quickTray.classList.remove("qr-hidden");
+}
+function hideQuickReplies() {
+  quickTray.classList.add("qr-hidden");
+}
+qrDismiss?.addEventListener('click', hideQuickReplies);
 
+function loadStarterOptions() {
+  // Remove existing chips (except the dismiss control)
+  [...quickTray.querySelectorAll('.quick-reply')].forEach(el => el.remove());
   starterOptions.forEach(({ label, payload }) => {
     const btn = document.createElement("div");
     btn.className = "quick-reply";
     btn.textContent = label;
     btn.onclick = () => {
       appendMessage(label, "user");
+      hideQuickReplies();
       sendOption(payload);
-      qr.innerHTML = ""; // hide after click
     };
-    qr.appendChild(btn);
+    quickTray.appendChild(btn);
   });
 }
 
-/* ========================================================================
-   NETWORK (payload contains ONLY chatInput + sessionId)
+/* Auto-hide tray on user typing, Enter, or outside click */
+input.addEventListener('input', () => hideQuickReplies());
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideQuickReplies(); });
+document.addEventListener('click', (e) => {
+  if (!chatOpen) return;
+  const clickedInsideTray = quickTray.contains(e.target);
+  const clickedOnChip = e.target.classList?.contains('quick-reply');
+  const clickedInput = input.contains(e.target);
+  if (!clickedInsideTray && !clickedOnChip && !clickedInput) hideQuickReplies();
+});
+
+/* =========================================================================
+   MESSAGE HELPERS
 ========================================================================= */
-async function postToWebhook(body) {
-  const res = await fetch(WEBHOOK_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body)
-  });
-  if (!res.ok) throw new Error("Network response was not ok");
-  return res.json();
-}
+function appendMessage(text, from="bot", highlight=false) {
+  const row = document.createElement("div");
+  row.className = "chat-message-row " + from;
 
-async function sendOption(message) {
-  try {
-    const data = await postToWebhook({
-      chatInput: message,
-      sessionId
-    });
-    appendMessage(data.result || "Sorry, something went wrong.");
-  } catch {
-    appendMessage("Connection error. Please try again.", "bot", true);
+  const bubble = document.createElement("div");
+  bubble.className = "chat-bubble " + from;
+  if (highlight) bubble.classList.add("highlight");
+
+  bubble.textContent = text;
+  row.appendChild(bubble);
+  messages.appendChild(row);
+  messages.scrollTop = messages.scrollHeight;
+
+  // Action chip for booking link (message remains plain text)
+  if (from === "bot" && text.includes("https://www.mona-montreux.ch/stay/")) {
+    const actions = document.createElement("div");
+    actions.className = "msg-actions";
+    const copyBtn = document.createElement("button");
+    copyBtn.className = "msg-action";
+    copyBtn.textContent = "Copy booking link";
+    copyBtn.onclick = () => navigator.clipboard.writeText("https://www.mona-montreux.ch/stay/");
+    actions.appendChild(copyBtn);
+    bubble.appendChild(actions);
+  }
+
+  // Show unread dot if a bot message arrives while panel is closed
+  if (from === "bot" && !chatOpen) {
+    unreadDot?.classList.add("is-visible");
+  }
+
+  // Auto-show contact form when bot uses the exact escalation wording
+  if (from === "bot" && text.includes("To connect you with our hotel team, could I have your name, email, phone number, and a short note about what you need help with?")) {
+    showContactForm();
   }
 }
 
-async function sendMessage() {
-  const text = input.value.trim();
-  if (!text) return;
-
-  appendMessage(text, "user");
-  input.value = "";
-
-  try {
-    const data = await postToWebhook({
-      chatInput: text,
-      sessionId
-    });
-    appendMessage(data.result || "Sorry, something went wrong.");
-  } catch {
-    appendMessage("Connection error. Please try again.", "bot", true);
+/* Typing indicator (bot) */
+let typingRow;
+function showTyping() {
+  if (typingRow) return;
+  typingRow = document.createElement("div");
+  typingRow.className = "chat-message-row bot";
+  const bubble = document.createElement("div");
+  bubble.className = "chat-bubble bot";
+  const t = document.createElement("div");
+  t.className = "typing";
+  t.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+  bubble.appendChild(t);
+  typingRow.appendChild(bubble);
+  messages.appendChild(typingRow);
+  messages.scrollTop = messages.scrollHeight;
+}
+function hideTyping() {
+  if (typingRow) {
+    typingRow.remove();
+    typingRow = null;
   }
 }
 
-/* ========================================================================
+/* Client-side streamed reveal for a finished string */
+function appendStreamingMessage(text) {
+  const row = document.createElement("div");
+  row.className = "chat-message-row bot";
+  const bubble = document.createElement("div");
+  bubble.className = "chat-bubble bot";
+  row.appendChild(bubble);
+  messages.appendChild(row);
+
+  let i = 0;
+  const speed = 2; // chars per animation frame
+  function step() {
+    bubble.textContent = text.slice(0, i);
+    i += Math.max(1, speed);
+    messages.scrollTop = messages.scrollHeight;
+
+    if (i <= text.length) {
+      requestAnimationFrame(step);
+    } else {
+      // Post-finish actions
+      if (text.includes("https://www.mona-montreux.ch/stay/")) {
+        const actions = document.createElement("div");
+        actions.className = "msg-actions";
+        const copyBtn = document.createElement("button");
+        copyBtn.className = "msg-action";
+        copyBtn.textContent = "Copy booking link";
+        copyBtn.onclick = () => navigator.clipboard.writeText("https://www.mona-montreux.ch/stay/");
+        actions.appendChild(copyBtn);
+        bubble.appendChild(actions);
+      }
+      if (!chatOpen) unreadDot?.classList.add("is-visible");
+
+      // Trigger contact form if the exact phrasing appears
+      if (text.includes("To connect you with our hotel team, could I have your name, email, phone number, and a short note about what you need help with?")) {
+        showContactForm();
+      }
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+/* =========================================================================
    CONTACT FORM (appears on the exact wording cue)
 ========================================================================= */
 function showContactForm() {
@@ -455,7 +625,15 @@ function showContactForm() {
       <button class="btn btn-primary" id="ct_submit">Send to hotel</button>
     </div>
   `;
-  appendElementMessage(card, "user"); // appears on the right
+  // Appear on the right to feel "user provided"
+  const row = document.createElement("div");
+  row.className = "chat-message-row user";
+  const bubble = document.createElement("div");
+  bubble.className = "chat-bubble user";
+  bubble.appendChild(card);
+  row.appendChild(bubble);
+  messages.appendChild(row);
+  messages.scrollTop = messages.scrollHeight;
 
   const submitBtn = card.querySelector("#ct_submit");
   submitBtn.onclick = async () => {
@@ -472,7 +650,6 @@ function showContactForm() {
     submitBtn.disabled = true;
 
     try {
-      // Include the details in chatInput text so your n8n prompt can pick them up
       const data = await postToWebhook({
         chatInput:
           `Here are my contact details:\nName: ${name}\nEmail: ${email}\nPhone: ${phone}\nNote: ${note}\nPlease share with the hotel team.`,
@@ -487,22 +664,67 @@ function showContactForm() {
   };
 }
 
-/* ========================================================================
+/* =========================================================================
+   NETWORK
+========================================================================= */
+async function postToWebhook(body) {
+  const res = await fetch(WEBHOOK_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) throw new Error("Network response was not ok");
+  return res.json();
+}
+
+async function sendOption(message) {
+  try {
+    showTyping();
+    const data = await postToWebhook({ chatInput: message, sessionId });
+    hideTyping();
+    appendStreamingMessage(data.result || "Sorry, something went wrong.");
+  } catch {
+    hideTyping();
+    appendMessage("Connection error. Please try again.", "bot", true);
+  }
+}
+
+async function sendMessage() {
+  const text = input.value.trim();
+  if (!text) return;
+  appendMessage(text, "user");
+  input.value = "";
+  hideQuickReplies();
+
+  try {
+    showTyping();
+    const data = await postToWebhook({ chatInput: text, sessionId });
+    hideTyping();
+    appendStreamingMessage(data.result || "Sorry, something went wrong.");
+  } catch {
+    hideTyping();
+    appendMessage("Connection error. Please try again.", "bot", true);
+  }
+}
+
+/* =========================================================================
    OPEN/CLOSE + INPUT
 ========================================================================= */
 launcher.onclick = () => {
   chat.classList.add("open");
+  chatOpen = true;
+  unreadDot?.classList.remove("is-visible");
   messages.innerHTML = "";
   appendMessage(INITIAL_GREETING, "bot", true);
   loadStarterOptions();
+  showQuickReplies();
 };
-
-closeBtn.onclick = () => { chat.classList.remove("open"); };
+closeBtn.onclick = () => {
+  chat.classList.remove("open");
+  chatOpen = false;
+};
 sendBtn.onclick  = sendMessage;
 input.onkeydown  = (e) => { if (e.key === "Enter") sendMessage(); };
-document.addEventListener("keydown", (e) => {
-  if (e.key === "Escape") chat.classList.remove("open");
-});
 </script>
 
 </body>
