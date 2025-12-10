@@ -171,6 +171,35 @@
         }
         .chat-bubble.bot.highlight { background: #e9f3ff; }
 
+        /* Typing animation */
+        .typing {
+            width: 50px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 10px 12px;
+            background: white;
+            border-radius: 14px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+        }
+
+        .typing-dot {
+            width: 6px;
+            height: 6px;
+            background: #999;
+            border-radius: 50%;
+            animation: blink 1.4s infinite both;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes blink {
+            0%, 80%, 100% { opacity: .2; }
+            40% { opacity: 1; }
+        }
+
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
@@ -269,9 +298,7 @@
 </div>
 
 <script>
-/* ========================================================================
-   ELEMENT REFERENCES (IMPORTANT)
-========================================================================= */
+/* ELEMENT REFERENCES */
 const launcher = document.getElementById("hotel-chatbot-launcher");
 const chat     = document.getElementById("hotel-chatbot");
 const closeBtn = document.getElementById("hotel-chatbot-close");
@@ -279,28 +306,47 @@ const messages = document.getElementById("hotel-chatbot-messages");
 const input    = document.getElementById("hotel-chatbot-input");
 const sendBtn  = document.getElementById("hotel-chatbot-send");
 
-/* ========================================================================
-   SESSION MEMORY
-========================================================================= */
+/* SESSION MEMORY */
 let sessionId = localStorage.getItem("hotel_session_id");
 if (!sessionId) {
     sessionId = "sess_" + Math.random().toString(36).substring(2);
     localStorage.setItem("hotel_session_id", sessionId);
 }
 
-/* ========================================================================
-   CONFIG
-========================================================================= */
+/* CONFIG */
 const INITIAL_GREETING =
     "Hello 👋 I'm your Automation Expert AI assistant.\nHow can I help today?";
 
 const WEBHOOK_URL =
     "https://n8n.srv1106816.hstgr.cloud/webhook/39c83b8b-cddc-4281-8d13-9c100022c78c";
 
-/* ========================================================================
-   MESSAGE APPENDING
-========================================================================= */
+/* ADD TYPING INDICATOR */
+function showTyping() {
+    const row = document.createElement("div");
+    row.className = "chat-message-row bot";
+    row.id = "typing-row";
+
+    row.innerHTML = `
+        <div class="typing">
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+            <div class="typing-dot"></div>
+        </div>
+    `;
+
+    messages.appendChild(row);
+    messages.scrollTop = messages.scrollHeight;
+}
+
+function hideTyping() {
+    const t = document.getElementById("typing-row");
+    if (t) t.remove();
+}
+
+/* APPEND MESSAGE */
 function appendMessage(text, from="bot", highlight=false) {
+    hideTyping(); // always remove typing before showing new message
+
     const row = document.createElement("div");
     row.className = "chat-message-row " + from;
 
@@ -314,15 +360,17 @@ function appendMessage(text, from="bot", highlight=false) {
     messages.scrollTop = messages.scrollHeight;
 }
 
-/* ========================================================================
-   STARTER OPTIONS
-========================================================================= */
+/* STARTER OPTIONS */
 const starterOptions = [
     "What services do you offer?",
     "Help me automate my workflow",
     "Show me pricing",
     "Talk to support"
 ];
+
+function hideStarterOptions() {
+    document.getElementById("quick-replies").innerHTML = "";
+}
 
 function loadStarterOptions() {
     const qr = document.getElementById("quick-replies");
@@ -334,9 +382,9 @@ function loadStarterOptions() {
         btn.textContent = option;
 
         btn.onclick = () => {
+            hideStarterOptions();
             appendMessage(option, "user");
             sendOption(option);
-            qr.innerHTML = ""; // hide after click
         };
 
         qr.appendChild(btn);
@@ -344,6 +392,8 @@ function loadStarterOptions() {
 }
 
 async function sendOption(message) {
+    showTyping();
+
     try {
         const res = await fetch(WEBHOOK_URL, {
             method: "POST",
@@ -358,15 +408,17 @@ async function sendOption(message) {
     }
 }
 
-/* ========================================================================
-   SEND MESSAGE
-========================================================================= */
+/* SEND MESSAGE */
 async function sendMessage() {
     const text = input.value.trim();
     if (!text) return;
 
+    hideStarterOptions(); // <— REMOVE OPTIONS EVEN IF USER NEVER CLICKS THEM
+
     appendMessage(text, "user");
     input.value = "";
+
+    showTyping();
 
     try {
         const res = await fetch(WEBHOOK_URL, {
@@ -382,9 +434,7 @@ async function sendMessage() {
     }
 }
 
-/* ========================================================================
-   OPEN/CLOSE EVENTS
-========================================================================= */
+/* OPEN/CLOSE EVENTS */
 launcher.onclick = () => {
     chat.classList.add("open");
     messages.innerHTML = "";
@@ -396,12 +446,9 @@ closeBtn.onclick = () => {
     chat.classList.remove("open");
 };
 
-/* ========================================================================
-   INPUT EVENTS
-========================================================================= */
+/* INPUT EVENTS */
 sendBtn.onclick = sendMessage;
 input.onkeydown = (e) => { if (e.key === "Enter") sendMessage(); };
-
 </script>
 
 </body>
