@@ -158,6 +158,8 @@
             line-height: 1.45;
             background: white;
             box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+            /* Preserve line breaks/newlines in messages */
+            white-space: pre-wrap;
         }
         .chat-bubble.user {
             background: #0b7dda;
@@ -238,31 +240,31 @@
 
 <div id="chatbot-wrapper">
 
-    <button id="hotel-chatbot-launcher">
+    <button id="hotel-chatbot-launcher" aria-label="Open chat">
         <span class="launcher-icon">💬</span>
         <span class="launcher-text">Chat with us</span>
     </button>
 
-    <div id="hotel-chatbot">
+    <div id="hotel-chatbot" role="dialog" aria-modal="true" aria-labelledby="hotel-chatbot-title">
 
         <div id="hotel-chatbot-header">
             <div style="display:flex; align-items:center; gap:12px;">
-                <img src="https://cdn.dribbble.com/userupload/12160645/file/original-e65426dddac4245ad2ae68891780100e.png?format=webp&resize=640x480&vertical=center" />
+                <img alt="Assistant logo" src="data:image/png;base64,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" />
                 <div style="display:flex; flex-direction:column;">
-                    <span style="font-size:15px;font-weight:600;">Automation Expert’s Assistant</span>
+                    <span id="hotel-chatbot-title" style="font-size:15px;font-weight:600;">Automation Expert’s Assistant</span>
                     <span style="font-size:12px;opacity:0.85;">Here to help</span>
                 </div>
             </div>
-            <button id="hotel-chatbot-close">×</button>
+            <button id="hotel-chatbot-close" aria-label="Close chat">×</button>
         </div>
 
-        <div id="hotel-chatbot-messages"></div>
+        <div id="hotel-chatbot-messages" aria-live="polite"></div>
 
         <div id="quick-replies"></div>
 
         <div id="hotel-chatbot-input-area">
-            <input id="hotel-chatbot-input" placeholder="Ask anything..." />
-            <button id="hotel-chatbot-send">Send</button>
+            <input id="hotel-chatbot-input" placeholder="Ask anything..." aria-label="Message input" />
+            <button id="hotel-chatbot-send" aria-label="Send message">Send</button>
         </div>
 
     </div>
@@ -294,8 +296,9 @@ if (!sessionId) {
 const INITIAL_GREETING =
     "Hello 👋 I'm your Automation Expert AI assistant.\nHow can I help today?";
 
+/*  ✅ Updated n8n webhook URL */
 const WEBHOOK_URL =
-    "https://n8n.srv1106816.hstgr.cloud/webhook/39c83b8b-cddc-4281-8d13-9c100022c78c";
+    "https://n8n.srv1106816.hstgr.cloud/webhook/595269c9-1640-45c9-9c2b-861a69417966";
 
 /* ========================================================================
    MESSAGE APPENDING
@@ -315,12 +318,20 @@ function appendMessage(text, from="bot", highlight=false) {
 }
 
 /* ========================================================================
-   STARTER OPTIONS
+   STARTER OPTIONS (Hotel-focused)
 ========================================================================= */
 const starterOptions = [
-    "What services do you offer?",
-    "Tell me about pricing",
-    "Talk to support"
+    "Book a room",
+    "Check availability & rates",
+    "Request late checkout",
+    "Amenities & spa",
+    "Restaurant reservation",
+    "Room service menu",
+    "Wi‑Fi help",
+    "Parking & airport shuttle",
+    "Local attractions",
+    "Meeting rooms & events",
+    "Talk to the front desk"
 ];
 
 function loadStarterOptions() {
@@ -400,7 +411,6 @@ closeBtn.onclick = () => {
 ========================================================================= */
 sendBtn.onclick = sendMessage;
 input.onkeydown = (e) => { if (e.key === "Enter") sendMessage(); };
-
 </script>
 
 </body>
