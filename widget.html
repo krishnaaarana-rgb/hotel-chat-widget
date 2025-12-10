@@ -12,24 +12,24 @@
     :root {
       --brand-500: #0b7dda;
       --brand-600: #0a5fb1;
-      --bg: #f7f9fb;
-      --surface: #ffffff;
-      --text: #1f2937;
-      --muted: #6b7280;
+      --bg: #0e1114;          /* slightly deeper dark base for premium contrast */
+      --surface: #111827;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
       --ring: rgba(11,125,218,0.35);
-      --shadow-lg: 0 18px 40px rgba(0,0,0,0.22);
-      --elev-bg: rgba(255,255,255,0.7);
-      --border: #e0e4ea;
+      --shadow-lg: 0 18px 40px rgba(0,0,0,0.55);
+      --elev-bg: rgba(17,24,39,0.6);
+      --border: #1f2937;
     }
-    @media (prefers-color-scheme: dark) {
+    @media (prefers-color-scheme: light) {
       :root {
-        --bg: #0d1117;
-        --surface: #111827;
-        --text: #e5e7eb;
-        --muted: #9ca3af;
-        --elev-bg: rgba(17,24,39,0.6);
-        --border: #1f2937;
-        --shadow-lg: 0 18px 40px rgba(0,0,0,0.55);
+        --bg: #f7f9fb;
+        --surface: #ffffff;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --elev-bg: rgba(255,255,255,0.7);
+        --border: #e0e4ea;
+        --shadow-lg: 0 18px 40px rgba(0,0,0,0.22);
       }
     }
 
@@ -167,7 +167,7 @@
     #hotel-chatbot-close:hover { opacity: 0.7; }
 
     /* =========================================================================
-       MESSAGES
+       MESSAGES + STICKY QUICK-REPLIES INSIDE
     ========================================================================= */
     #hotel-chatbot-messages {
       flex: 1;
@@ -175,10 +175,14 @@
       padding: 14px;
       overflow-y: auto;
       scroll-behavior: smooth;
+
+      /* make quick-replies stay at the bottom inside this scroller */
+      display: flex;
+      flex-direction: column;
     }
     #hotel-chatbot-messages::-webkit-scrollbar { width: 6px; }
     #hotel-chatbot-messages::-webkit-scrollbar-thumb {
-      background: #cfd6df;
+      background: #3a3f45;
       border-radius: 10px;
     }
 
@@ -196,9 +200,13 @@
       max-width: 80%;
       font-size: 14px;
       line-height: 1.45;
-      background: white;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+      background: #0f1620;         /* richer dark bubble */
+      color: #e8edf5;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
       white-space: pre-wrap; /* preserve newlines in text */
+    }
+    @media (prefers-color-scheme: light) {
+      .chat-bubble { background: white; color: var(--text); box-shadow: 0 2px 6px rgba(0,0,0,0.07); }
     }
     .chat-bubble.user {
       background: var(--brand-500);
@@ -206,11 +214,12 @@
       border-bottom-right-radius: 4px;
     }
     .chat-bubble.bot {
-      background: var(--surface);
-      color: var(--text);
       border-bottom-left-radius: 4px;
     }
-    .chat-bubble.bot.highlight { background: #e9f3ff; }
+    .chat-bubble.bot.highlight { background: #182434; }
+    @media (prefers-color-scheme: light) {
+      .chat-bubble.bot.highlight { background: #e9f3ff; }
+    }
 
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(4px); }
@@ -218,9 +227,10 @@
     }
 
     /* =========================================================================
-       QUICK REPLIES (Premium tray)
+       QUICK REPLIES (now inside messages, sticky to bottom)
     ========================================================================= */
     #quick-replies {
+      margin-top: auto;              /* push to bottom of flex column */
       position: sticky;
       bottom: 0;
       display: flex;
@@ -243,18 +253,22 @@
       border-top-color: transparent;
     }
     .quick-reply {
-      background: #e9f3ff;
-      color: var(--brand-500);
+      background: #1d2a3b;
+      color: #d7e7ff;
       padding: 8px 14px;
       border-radius: 20px;
       cursor: pointer;
       font-size: 13px;
-      border: 1px solid #bcd8f5;
+      border: 1px solid #2a3a52;
       transition: transform .15s ease, background .2s ease, box-shadow .2s ease;
     }
     .quick-reply:hover {
-      background: #d8ecff;
+      background: #24354b;
       transform: translateY(-1px);
+    }
+    @media (prefers-color-scheme: light) {
+      .quick-reply { background: #e9f3ff; color: var(--brand-500); border-color: #bcd8f5; }
+      .quick-reply:hover { background: #d8ecff; }
     }
     .qr-dismiss {
       margin-left: auto;
@@ -282,12 +296,12 @@
     #hotel-chatbot-input {
       flex: 1;
       border-radius: 22px;
-      border: 1px solid #c7ccd4;
+      border: 1px solid #2a3647;
       padding: 12px 16px;
       font-size: 14px;
       transition: all 0.2s ease;
-      background: var(--surface);
-      color: var(--text);
+      background: #0f1620;
+      color: #e8edf5;
     }
     #hotel-chatbot-input:focus {
       outline: none;
@@ -325,20 +339,19 @@
     .contact-row > input, .contact-card textarea {
       flex: 1;
       border-radius: 8px;
-      border: 1px solid #c7ccd4;
+      border: 1px solid #2a3647;
       padding: 8px 10px;
       font-size: 14px;
-      background: var(--surface);
-      color: var(--text);
+      background: #0f1620;
+      color: #e8edf5;
     }
     .contact-card textarea { min-height: 70px; resize: vertical; }
-    .contact-actions {
-      display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px;
-    }
+    .contact-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 8px; }
     .btn { appearance: none; border: none; border-radius: 10px; padding: 10px 14px; cursor: pointer; font-weight: 600; }
     .btn-primary { background: var(--brand-500); color: #fff; }
     .btn-plain   { background: #eef3f8; color: #1f2937; }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    @media (prefers-color-scheme: dark) { .btn-plain { background: #222b37; color: #cbd5e1; } }
 
     /* =========================================================================
        TYPING INDICATOR & MSG ACTIONS
@@ -409,12 +422,13 @@
       <button id="hotel-chatbot-close" aria-label="Close chat">×</button>
     </div>
 
-    <div id="hotel-chatbot-messages" aria-live="polite"></div>
-
-    <!-- Premium quick-reply tray -->
-    <div id="quick-replies" class="qr-hidden">
-      <div class="qr-dismiss" id="qr-dismiss">Hide</div>
-      <!-- chips injected here -->
+    <!-- Messages area (quick replies live inside this container now) -->
+    <div id="hotel-chatbot-messages" aria-live="polite">
+      <!-- Premium quick-reply tray (inside messages, sticky to bottom) -->
+      <div id="quick-replies" class="qr-hidden">
+        <div class="qr-dismiss" id="qr-dismiss">Hide</div>
+        <!-- chips injected here -->
+      </div>
     </div>
 
     <div id="hotel-chatbot-input-area">
@@ -452,6 +466,7 @@ let chatOpen = false;
 /* =========================================================================
    CONFIG
 ========================================================================= */
+const SHOW_LOCAL_GREETING = false; // set to true if you want a UI-only greeting bubble
 const INITIAL_GREETING = "Hi there—how can I help today?";
 const WEBHOOK_URL = "https://n8n.srv1106816.hstgr.cloud/webhook/595269c9-1640-45c9-9c2b-861a69417966";
 
@@ -491,7 +506,7 @@ function loadStarterOptions() {
   });
 }
 
-/* Auto-hide tray on user typing, Enter, or outside click */
+/* Auto-hide tray on user typing, Escape, or outside click */
 input.addEventListener('input', () => hideQuickReplies());
 document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideQuickReplies(); });
 document.addEventListener('click', (e) => {
@@ -503,8 +518,16 @@ document.addEventListener('click', (e) => {
 });
 
 /* =========================================================================
-   MESSAGE HELPERS
+   MESSAGE HELPERS  (insert before quickTray to keep tray at bottom)
 ========================================================================= */
+function insertBeforeTray(node) {
+  if (quickTray && quickTray.parentNode === messages) {
+    messages.insertBefore(node, quickTray);
+  } else {
+    messages.appendChild(node);
+  }
+}
+
 function appendMessage(text, from="bot", highlight=false) {
   const row = document.createElement("div");
   row.className = "chat-message-row " + from;
@@ -515,7 +538,8 @@ function appendMessage(text, from="bot", highlight=false) {
 
   bubble.textContent = text;
   row.appendChild(bubble);
-  messages.appendChild(row);
+
+  insertBeforeTray(row);
   messages.scrollTop = messages.scrollHeight;
 
   // Action chip for booking link (message remains plain text)
@@ -554,7 +578,7 @@ function showTyping() {
   t.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
   bubble.appendChild(t);
   typingRow.appendChild(bubble);
-  messages.appendChild(typingRow);
+  insertBeforeTray(typingRow);
   messages.scrollTop = messages.scrollHeight;
 }
 function hideTyping() {
@@ -571,7 +595,7 @@ function appendStreamingMessage(text) {
   const bubble = document.createElement("div");
   bubble.className = "chat-bubble bot";
   row.appendChild(bubble);
-  messages.appendChild(row);
+  insertBeforeTray(row);
 
   let i = 0;
   const speed = 2; // chars per animation frame
@@ -632,7 +656,7 @@ function showContactForm() {
   bubble.className = "chat-bubble user";
   bubble.appendChild(card);
   row.appendChild(bubble);
-  messages.appendChild(row);
+  insertBeforeTray(row);
   messages.scrollTop = messages.scrollHeight;
 
   const submitBtn = card.querySelector("#ct_submit");
@@ -710,19 +734,31 @@ async function sendMessage() {
 /* =========================================================================
    OPEN/CLOSE + INPUT
 ========================================================================= */
+function clearMessagesKeepTray() {
+  // remove only message rows; keep quick-replies element
+  messages.querySelectorAll('.chat-message-row').forEach(el => el.remove());
+}
+
 launcher.onclick = () => {
   chat.classList.add("open");
   chatOpen = true;
   unreadDot?.classList.remove("is-visible");
-  messages.innerHTML = "";
-  appendMessage(INITIAL_GREETING, "bot", true);
+
+  clearMessagesKeepTray();
+
+  if (SHOW_LOCAL_GREETING) {
+    appendMessage(INITIAL_GREETING, "bot", true);
+  }
+
   loadStarterOptions();
   showQuickReplies();
 };
+
 closeBtn.onclick = () => {
   chat.classList.remove("open");
   chatOpen = false;
 };
+
 sendBtn.onclick  = sendMessage;
 input.onkeydown  = (e) => { if (e.key === "Enter") sendMessage(); };
 </script>
