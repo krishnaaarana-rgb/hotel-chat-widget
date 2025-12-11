@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Automation Expert's Assistant</title>
+    <title>Mona Montreux Assistant</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <style>
@@ -158,6 +158,7 @@
             line-height: 1.45;
             background: white;
             box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+            white-space: pre-wrap; /* preserve newlines from the agent */
         }
         .chat-bubble.user {
             background: #0b7dda;
@@ -171,38 +172,30 @@
         }
         .chat-bubble.bot.highlight { background: #e9f3ff; }
 
-        /* Typing animation */
-        .typing {
-            width: 50px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-            padding: 10px 12px;
-            background: white;
-            border-radius: 14px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.07);
-        }
-
-        .typing-dot {
-            width: 6px;
-            height: 6px;
-            background: #999;
-            border-radius: 50%;
-            animation: blink 1.4s infinite both;
-        }
-
-        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
-
-        @keyframes blink {
-            0%, 80%, 100% { opacity: .2; }
-            40% { opacity: 1; }
-        }
-
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========================================================================
+           TYPING INDICATOR
+        ======================================================================== */
+        .typing {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .typing-dot {
+            width: 6px; height: 6px; border-radius: 50%;
+            background: #9aa6b2;
+            opacity: .85;
+            animation: bounce 1s infinite ease-in-out;
+        }
+        .typing-dot:nth-child(2){ animation-delay: .15s }
+        .typing-dot:nth-child(3){ animation-delay: .3s }
+        @keyframes bounce {
+            0%, 80%, 100% { transform: translateY(0); opacity: .55; }
+            40% { transform: translateY(-2px); opacity: 1; }
         }
 
         /* ========================================================================
@@ -223,6 +216,7 @@
             font-size: 13px;
             border: 1px solid #bcd8f5;
             transition: 0.2s;
+            user-select: none;
         }
         .quick-reply:hover { background: #d8ecff; }
 
@@ -276,13 +270,14 @@
 
         <div id="hotel-chatbot-header">
             <div style="display:flex; align-items:center; gap:12px;">
-                <img src="https://cdn.dribbble.com/userupload/12160645/file/original-e65426dddac4245ad2ae68891780100e.png?format=webp&resize=640x480&vertical=center" />
+                <img alt="Mona logo"
+                     src="data:image/png;base64,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" />
                 <div style="display:flex; flex-direction:column;">
-                    <span style="font-size:15px;font-weight:600;">Automation Expert’s Assistant</span>
-                    <span style="font-size:12px;opacity:0.85;">Here to help</span>
+                    <span style="font-size:15px;font-weight:600;">Mona Montreux Assistant</span>
+                    <span style="font-size:12px;opacity:0.85;">Lakeside Hotel • Montreux</span>
                 </div>
             </div>
-            <button id="hotel-chatbot-close">×</button>
+            <button id="hotel-chatbot-close" aria-label="Close chat">×</button>
         </div>
 
         <div id="hotel-chatbot-messages"></div>
@@ -298,55 +293,82 @@
 </div>
 
 <script>
-/* ELEMENT REFERENCES */
+/* ========================================================================
+   ELEMENT REFERENCES
+========================================================================= */
 const launcher = document.getElementById("hotel-chatbot-launcher");
 const chat     = document.getElementById("hotel-chatbot");
 const closeBtn = document.getElementById("hotel-chatbot-close");
 const messages = document.getElementById("hotel-chatbot-messages");
 const input    = document.getElementById("hotel-chatbot-input");
 const sendBtn  = document.getElementById("hotel-chatbot-send");
+const quick    = document.getElementById("quick-replies");
 
-/* SESSION MEMORY */
+/* ========================================================================
+   SESSION
+========================================================================= */
 let sessionId = localStorage.getItem("hotel_session_id");
 if (!sessionId) {
     sessionId = "sess_" + Math.random().toString(36).substring(2);
     localStorage.setItem("hotel_session_id", sessionId);
 }
 
-/* CONFIG */
-const INITIAL_GREETING =
-    "Hello 👋 I'm your Automation Expert AI assistant.\nHow can I help today?";
+/* ========================================================================
+   CONFIG
+========================================================================= */
+const INITIAL_GREETING = "Hi there—how can I help today?";
+const WEBHOOK_URL = "https://n8n.srv1106816.hstgr.cloud/webhook/595269c9-1640-45c9-9c2b-861a69417966";
 
-const WEBHOOK_URL =
-    "https://n8n.srv1106816.hstgr.cloud/webhook/39c83b8b-cddc-4281-8d13-9c100022c78c";
+/* ========================================================================
+   TYPING INDICATOR + STREAM REVEAL
+========================================================================= */
+let typingRow = null;
 
-/* ADD TYPING INDICATOR */
 function showTyping() {
-    const row = document.createElement("div");
-    row.className = "chat-message-row bot";
-    row.id = "typing-row";
-
-    row.innerHTML = `
-        <div class="typing">
-            <div class="typing-dot"></div>
-            <div class="typing-dot"></div>
-            <div class="typing-dot"></div>
-        </div>
-    `;
-
-    messages.appendChild(row);
+    if (typingRow) return;
+    typingRow = document.createElement("div");
+    typingRow.className = "chat-message-row bot";
+    const bubble = document.createElement("div");
+    bubble.className = "chat-bubble bot";
+    const t = document.createElement("div");
+    t.className = "typing";
+    t.innerHTML = '<span class="typing-dot"></span><span class="typing-dot"></span><span class="typing-dot"></span>';
+    bubble.appendChild(t);
+    typingRow.appendChild(bubble);
+    messages.appendChild(typingRow);
     messages.scrollTop = messages.scrollHeight;
 }
-
 function hideTyping() {
-    const t = document.getElementById("typing-row");
-    if (t) t.remove();
+    if (typingRow) { typingRow.remove(); typingRow = null; }
 }
 
-/* APPEND MESSAGE */
-function appendMessage(text, from="bot", highlight=false) {
-    hideTyping(); // always remove typing before showing new message
+function appendStreamingMessage(text) {
+    const row = document.createElement("div");
+    row.className = "chat-message-row bot";
+    const bubble = document.createElement("div");
+    bubble.className = "chat-bubble bot";
+    row.appendChild(bubble);
+    messages.appendChild(row);
 
+    let i = 0;
+    const len = text.length;
+    const step = Math.max(2, Math.min(6, Math.floor(len / 140))); // adaptive speed
+
+    function tick() {
+        bubble.textContent = text.slice(0, i);
+        i += step;
+        messages.scrollTop = messages.scrollHeight;
+        if (i <= len) {
+            requestAnimationFrame(tick);
+        }
+    }
+    requestAnimationFrame(tick);
+}
+
+/* ========================================================================
+   MESSAGE APPENDING
+========================================================================= */
+function appendMessage(text, from="bot", highlight=false) {
     const row = document.createElement("div");
     row.className = "chat-message-row " + from;
 
@@ -360,95 +382,109 @@ function appendMessage(text, from="bot", highlight=false) {
     messages.scrollTop = messages.scrollHeight;
 }
 
-/* STARTER OPTIONS */
+/* ========================================================================
+   STARTER OPTIONS
+========================================================================= */
 const starterOptions = [
-    "What services do you offer?",
-    "Help me automate my workflow",
-    "Show me pricing",
-    "Talk to support"
+    "Show me the rooms",
+    "Dining options",
+    "Experiences & activities",
+    "Availability & rates",
+    "Contact the hotel team"
 ];
 
-function hideStarterOptions() {
-    document.getElementById("quick-replies").innerHTML = "";
-}
-
-function loadStarterOptions() {
-    const qr = document.getElementById("quick-replies");
-    qr.innerHTML = "";
-
+function showStarterOptions() {
+    quick.innerHTML = "";
     starterOptions.forEach(option => {
         const btn = document.createElement("div");
         btn.className = "quick-reply";
         btn.textContent = option;
-
         btn.onclick = () => {
-            hideStarterOptions();
             appendMessage(option, "user");
+            hideStarterOptions();
             sendOption(option);
         };
-
-        qr.appendChild(btn);
+        quick.appendChild(btn);
     });
+}
+function hideStarterOptions() {
+    quick.innerHTML = ""; // remove chips entirely
+}
+
+/* ========================================================================
+   SEND HELPERS
+========================================================================= */
+async function postToWebhook(payload) {
+    const res = await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    return data;
 }
 
 async function sendOption(message) {
-    showTyping();
-
     try {
-        const res = await fetch(WEBHOOK_URL, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ chatInput: message, sessionId })
-        });
-
-        const data = await res.json();
-        appendMessage(data.result || "Sorry, something went wrong.");
+        showTyping();
+        const data = await postToWebhook({ chatInput: message, sessionId });
+        hideTyping();
+        appendStreamingMessage(data.result || "Sorry, something went wrong.");
     } catch {
+        hideTyping();
         appendMessage("Connection error. Please try again.", "bot", true);
     }
 }
 
-/* SEND MESSAGE */
+/* ========================================================================
+   SEND MESSAGE
+========================================================================= */
 async function sendMessage() {
     const text = input.value.trim();
     if (!text) return;
 
-    hideStarterOptions(); // <— REMOVE OPTIONS EVEN IF USER NEVER CLICKS THEM
-
     appendMessage(text, "user");
     input.value = "";
 
-    showTyping();
+    // Hide starter chips as soon as the user sends any message
+    hideStarterOptions();
 
     try {
-        const res = await fetch(WEBHOOK_URL, {
-            method: "POST",
-            headers: {"Content-Type": "application/json"},
-            body: JSON.stringify({ chatInput: text, sessionId })
-        });
-
-        const data = await res.json();
-        appendMessage(data.result || "Sorry, something went wrong.");
+        showTyping();
+        const data = await postToWebhook({ chatInput: text, sessionId });
+        hideTyping();
+        appendStreamingMessage(data.result || "Sorry, something went wrong.");
     } catch {
+        hideTyping();
         appendMessage("Connection error. Please try again.", "bot", true);
     }
 }
 
-/* OPEN/CLOSE EVENTS */
+/* Also hide chips when user starts typing (nice UX) */
+input.addEventListener("input", () => {
+    if (quick.children.length) hideStarterOptions();
+});
+
+/* ========================================================================
+   OPEN/CLOSE EVENTS
+========================================================================= */
 launcher.onclick = () => {
     chat.classList.add("open");
     messages.innerHTML = "";
     appendMessage(INITIAL_GREETING, "bot", true);
-    loadStarterOptions();
+    showStarterOptions();
 };
 
 closeBtn.onclick = () => {
     chat.classList.remove("open");
 };
 
-/* INPUT EVENTS */
+/* ========================================================================
+   INPUT EVENTS
+========================================================================= */
 sendBtn.onclick = sendMessage;
 input.onkeydown = (e) => { if (e.key === "Enter") sendMessage(); };
+
 </script>
 
 </body>
