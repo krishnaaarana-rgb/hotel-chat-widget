@@ -13,7 +13,6 @@
            DESIGN SYSTEM & VARIABLES
         ======================================================================== */
         :root {
-            /* Purple gradient matching your request */
             --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
             --glass-bg: rgba(255, 255, 255, 0.85);
             --glass-border: rgba(255, 255, 255, 0.6);
@@ -54,7 +53,6 @@
         ======================================================================== */
         #hotel-chatbot-launcher {
             height: 60px;
-            /* Auto width allows it to be a pill */
             width: auto;
             min-width: 60px;
             padding: 0 24px;
@@ -71,7 +69,6 @@
             transform-origin: center right;
         }
 
-        /* Text inside launcher */
         .launcher-label {
             color: white;
             font-weight: 600;
@@ -82,14 +79,12 @@
             transition: all 0.3s var(--bezier-smooth);
         }
 
-        /* Icon Container */
         .icon-container {
             position: relative;
             width: 24px; height: 24px;
             display: flex; align-items: center; justify-content: center;
         }
 
-        /* Icons */
         #hotel-chatbot-launcher svg {
             width: 24px; height: 24px; stroke: white; fill: none; stroke-width: 2.5;
             transition: transform 0.5s var(--bezier-smooth), opacity 0.3s ease;
@@ -99,21 +94,17 @@
         #launcher-close-icon { opacity: 0; transform: scale(0.5) rotate(-90deg); }
         #launcher-chat-icon { opacity: 1; transform: scale(1) rotate(0deg); }
 
-        /* HOVER STATE */
         #hotel-chatbot-launcher:hover { 
             transform: translateY(-4px); 
             box-shadow: 0 20px 35px rgba(124, 58, 237, 0.5); 
         }
 
-        /* ACTIVE (OPEN) STATE */
         #hotel-chatbot-launcher.active {
-            /* Morph to circle */
             width: 60px; 
             padding: 0; 
             border-radius: 50%;
         }
 
-        /* Hide text when active */
         #hotel-chatbot-launcher.active .launcher-label {
             opacity: 0;
             width: 0;
@@ -121,7 +112,6 @@
             transform: translateX(20px);
         }
 
-        /* Swap icons when active */
         #hotel-chatbot-launcher.active #launcher-close-icon { opacity: 1; transform: scale(1) rotate(0deg); }
         #hotel-chatbot-launcher.active #launcher-chat-icon { opacity: 0; transform: scale(0.5) rotate(90deg); }
 
@@ -215,14 +205,12 @@
             background: linear-gradient(180deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%);
         }
 
-        /* Scrollbar aesthetics */
         #hotel-chatbot-messages::-webkit-scrollbar { width: 6px; }
         #hotel-chatbot-messages::-webkit-scrollbar-track { background: transparent; }
         #hotel-chatbot-messages::-webkit-scrollbar-thumb {
             background: rgba(0,0,0,0.1); border-radius: 10px;
         }
 
-        /* Message Rows */
         .message-row {
             display: flex; width: 100%;
             animation: messageEnter 0.4s var(--bezier-smooth) forwards;
@@ -234,7 +222,6 @@
         .message-row.user { justify-content: flex-end; }
         .message-row.bot { justify-content: flex-start; }
 
-        /* Bubbles */
         .bubble {
             max-width: 80%;
             padding: 14px 18px;
@@ -459,18 +446,23 @@
     let isTyping = false;
     let typingElement = null;
 
-    // --- Toggle Chat ---
+    // --- Toggle Chat (UPDATED WITH POSTMESSAGE) ---
     function toggleChat() {
         const isOpen = chatWindow.classList.contains("open");
         if (isOpen) {
             // Close logic
             chatWindow.classList.remove("open");
             launcher.classList.remove("active");
+            // NOTIFY WEBSITE TO SHRINK IFRAME
+            window.parent.postMessage("chat-close", "*");
         } else {
             // Open logic
             chatWindow.classList.add("open");
             launcher.classList.add("active");
             inputField.focus();
+            
+            // NOTIFY WEBSITE TO EXPAND IFRAME
+            window.parent.postMessage("chat-open", "*");
             
             // Initial boot
             if (messagesContainer.children.length === 0) {
@@ -639,5 +631,3 @@
 </script>
 </body>
 </html>
-
-
