@@ -10,688 +10,232 @@
 
     <style>
         /* ========================================================================
-           ULTRA PREMIUM LUXURY DESIGN - NO COMPROMISES
+           ULTRA PREMIUM LUXURY DESIGN (CSS REMAINS UNTOUCHED)
         ======================================================================== */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
 
         html, body {
-            margin: 0;
-            padding: 0;
-            background: transparent;
-            overflow: visible;
-            height: 100%;
-            width: 100%;
+            margin: 0; padding: 0; background: transparent;
+            overflow: visible; height: 100%; width: 100%;
             font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
+            -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
         }
 
-        /* ========================================================================
-           ANIMATED GRADIENT BACKGROUND
-        ======================================================================== */
+        /* ANIMATED GRADIENT BACKGROUND */
         @keyframes gradientShift {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        /* ========================================================================
-           CHATBOT WRAPPER
-        ======================================================================== */
+        /* CHATBOT WRAPPER */
         #chatbot-wrapper {
-            position: fixed;
-            bottom: 32px;
-            right: 32px;
-            pointer-events: none;
-            z-index: 999999;
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 20px;
+            position: fixed; bottom: 32px; right: 32px;
+            pointer-events: none; z-index: 999999;
+            display: flex; flex-direction: column; align-items: flex-end; gap: 20px;
         }
 
         @media (max-width: 768px) {
-            #chatbot-wrapper {
-                bottom: 20px;
-                right: 20px;
-            }
+            #chatbot-wrapper { bottom: 20px; right: 20px; }
         }
 
-        /* ========================================================================
-           ULTRA PREMIUM LAUNCHER WITH GLOW EFFECT
-        ======================================================================== */
+        /* ULTRA PREMIUM LAUNCHER */
         #hotel-chatbot-launcher {
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 12px;
-            padding: 0 32px;
-            height: 68px;
-            background: linear-gradient(135deg, 
-                #667eea 0%, 
-                #764ba2 25%, 
-                #f093fb 50%, 
-                #4facfe 75%, 
-                #00f2fe 100%);
-            background-size: 300% 300%;
-            animation: gradientShift 8s ease infinite;
-            border-radius: 34px;
-            border: none;
-            cursor: pointer;
-            color: #fff;
-            pointer-events: all;
-            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 
-                0 20px 60px rgba(102, 126, 234, 0.4),
-                0 0 0 1px rgba(255, 255, 255, 0.3) inset,
-                0 0 40px rgba(118, 75, 162, 0.3);
+            position: relative; display: flex; align-items: center; justify-content: center;
+            gap: 12px; padding: 0 32px; height: 68px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+            background-size: 300% 300%; animation: gradientShift 8s ease infinite;
+            border-radius: 34px; border: none; cursor: pointer; color: #fff;
+            pointer-events: all; transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.3) inset, 0 0 40px rgba(118, 75, 162, 0.3);
             overflow: hidden;
         }
-
         #hotel-chatbot-launcher::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
+            content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
             background: radial-gradient(circle, rgba(255,255,255,0.3) 0%, transparent 70%);
-            opacity: 0;
-            transition: opacity 0.5s ease;
+            opacity: 0; transition: opacity 0.5s ease;
         }
-
-        #hotel-chatbot-launcher:hover::before {
-            opacity: 1;
-            animation: rotate 3s linear infinite;
-        }
-
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
+        #hotel-chatbot-launcher:hover::before { opacity: 1; animation: rotate 3s linear infinite; }
+        @keyframes rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         #hotel-chatbot-launcher:hover {
             transform: translateY(-6px) scale(1.05);
-            box-shadow: 
-                0 30px 80px rgba(102, 126, 234, 0.5),
-                0 0 0 1px rgba(255, 255, 255, 0.4) inset,
-                0 0 60px rgba(118, 75, 162, 0.5);
+            box-shadow: 0 30px 80px rgba(102, 126, 234, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.4) inset, 0 0 60px rgba(118, 75, 162, 0.5);
         }
+        #hotel-chatbot-launcher:active { transform: translateY(-3px) scale(1.02); }
+        .launcher-icon { font-size: 28px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); animation: float 3s ease-in-out infinite; }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-5px); } }
+        .launcher-text { font-size: 16px; font-weight: 700; white-space: nowrap; letter-spacing: 0.5px; text-transform: uppercase; text-shadow: 0 2px 8px rgba(0,0,0,0.3); }
 
-        #hotel-chatbot-launcher:active {
-            transform: translateY(-3px) scale(1.02);
-        }
-
-        .launcher-icon { 
-            font-size: 28px; 
-            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
-            animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-5px); }
-        }
-
-        .launcher-text { 
-            font-size: 16px; 
-            font-weight: 700; 
-            white-space: nowrap;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
-        }
-
-        /* ========================================================================
-           ULTRA LUXURY CHAT WINDOW
-        ======================================================================== */
+        /* ULTRA LUXURY CHAT WINDOW */
         #hotel-chatbot {
-            position: absolute;
-            bottom: 100px;
-            right: 0;
-            width: 450px;
-            max-width: calc(100vw - 64px);
-            height: 700px;
-            max-height: calc(100vh - 150px);
+            position: absolute; bottom: 100px; right: 0;
+            width: 450px; max-width: calc(100vw - 64px); height: 700px; max-height: calc(100vh - 150px);
             background: linear-gradient(145deg, #ffffff 0%, #f8f9ff 100%);
-            border-radius: 32px;
-            display: none;
-            opacity: 0;
-            visibility: hidden;
-            flex-direction: column;
-            overflow: hidden;
-            pointer-events: all;
-            transform: translateY(30px) scale(0.9);
-            transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 
-                0 40px 100px rgba(102, 126, 234, 0.25),
-                0 0 0 1px rgba(255, 255, 255, 0.8) inset,
-                0 20px 60px rgba(0, 0, 0, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(20px);
+            border-radius: 32px; display: none; opacity: 0; visibility: hidden;
+            flex-direction: column; overflow: hidden; pointer-events: all;
+            transform: translateY(30px) scale(0.9); transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 40px 100px rgba(102, 126, 234, 0.25), 0 0 0 1px rgba(255, 255, 255, 0.8) inset, 0 20px 60px rgba(0, 0, 0, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.5); backdrop-filter: blur(20px);
         }
+        #hotel-chatbot.open { display: flex; opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+        @media (max-width: 768px) { #hotel-chatbot { width: calc(100vw - 40px); height: calc(100vh - 120px); } }
 
-        #hotel-chatbot.open {
-            display: flex;
-            opacity: 1;
-            visibility: visible;
-            transform: translateY(0) scale(1);
-        }
-
-        @media (max-width: 768px) {
-            #hotel-chatbot {
-                width: calc(100vw - 40px);
-                height: calc(100vh - 120px);
-            }
-        }
-
-        /* ========================================================================
-           STUNNING GRADIENT HEADER
-        ======================================================================== */
+        /* GRADIENT HEADER */
         #hotel-chatbot-header {
-            position: relative;
-            background: linear-gradient(135deg, 
-                #667eea 0%, 
-                #764ba2 50%, 
-                #f093fb 100%);
-            background-size: 200% 200%;
-            animation: gradientShift 6s ease infinite;
-            color: white;
-            padding: 24px 28px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
-            overflow: hidden;
+            position: relative; background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            background-size: 200% 200%; animation: gradientShift 6s ease infinite;
+            color: white; padding: 24px 28px; display: flex; justify-content: space-between;
+            align-items: center; border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3); overflow: hidden;
         }
-
         #hotel-chatbot-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent, 
-                rgba(255, 255, 255, 0.2), 
-                transparent);
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
             animation: shimmer 3s infinite;
         }
-
-        @keyframes shimmer {
-            0% { left: -100%; }
-            100% { left: 200%; }
-        }
-
+        @keyframes shimmer { 0% { left: -100%; } 100% { left: 200%; } }
         #hotel-chatbot-header::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%);
-            pointer-events: none;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%); pointer-events: none;
         }
-
-        .header-info {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            position: relative;
-            z-index: 1;
-        }
-
+        .header-info { display: flex; align-items: center; gap: 16px; position: relative; z-index: 1; }
         #hotel-chatbot-header img {
-            width: 52px;
-            height: 52px;
-            border-radius: 16px;
-            object-fit: cover;
-            box-shadow: 
-                0 8px 24px rgba(0, 0, 0, 0.3),
-                0 0 0 3px rgba(255, 255, 255, 0.3);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-            transition: all 0.3s ease;
+            width: 52px; height: 52px; border-radius: 16px; object-fit: cover;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3), 0 0 0 3px rgba(255, 255, 255, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.5); transition: all 0.3s ease;
         }
-
-        #hotel-chatbot-header img:hover {
-            transform: scale(1.05) rotate(5deg);
-        }
-
-        .header-text {
-            display: flex;
-            flex-direction: column;
-            gap: 6px;
-        }
-
+        #hotel-chatbot-header img:hover { transform: scale(1.05) rotate(5deg); }
+        .header-text { display: flex; flex-direction: column; gap: 6px; }
         .header-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 19px;
-            font-weight: 700;
-            letter-spacing: -0.03em;
-            text-shadow: 0 2px 12px rgba(0,0,0,0.2);
+            font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700;
+            letter-spacing: -0.03em; text-shadow: 0 2px 12px rgba(0,0,0,0.2);
             background: linear-gradient(135deg, #ffffff 0%, #f0f0f0 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
         }
-
-        .header-subtitle {
-            font-size: 13px;
-            font-weight: 500;
-            opacity: 0.95;
-            letter-spacing: 0.3px;
-            text-shadow: 0 1px 4px rgba(0,0,0,0.2);
-        }
-
+        .header-subtitle { font-size: 13px; font-weight: 500; opacity: 0.95; letter-spacing: 0.3px; text-shadow: 0 1px 4px rgba(0,0,0,0.2); }
         #hotel-chatbot-close {
-            position: relative;
-            z-index: 1;
-            font-size: 28px;
-            color: white;
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            width: 44px;
-            height: 44px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            line-height: 1;
-            font-weight: 300;
+            position: relative; z-index: 1; font-size: 28px; color: white;
+            background: rgba(255, 255, 255, 0.15); backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.3); cursor: pointer; width: 44px; height: 44px;
+            border-radius: 14px; display: flex; align-items: center; justify-content: center;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); line-height: 1; font-weight: 300;
         }
+        #hotel-chatbot-close:hover { background: rgba(255, 255, 255, 0.25); transform: scale(1.1) rotate(90deg); box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); }
+        #hotel-chatbot-close:active { transform: scale(0.95) rotate(90deg); }
 
-        #hotel-chatbot-close:hover { 
-            background: rgba(255, 255, 255, 0.25);
-            transform: scale(1.1) rotate(90deg);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-        }
-
-        #hotel-chatbot-close:active {
-            transform: scale(0.95) rotate(90deg);
-        }
-
-        /* ========================================================================
-           MESSAGES AREA WITH SUBTLE PATTERN
-        ======================================================================== */
+        /* MESSAGES AREA */
         #hotel-chatbot-messages {
-            flex: 1;
-            background: 
-                radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.03) 0%, transparent 50%),
-                radial-gradient(circle at 80% 20%, rgba(240, 147, 251, 0.03) 0%, transparent 50%),
-                linear-gradient(180deg, #fafbff 0%, #f5f7ff 100%);
-            padding: 24px;
-            overflow-y: auto;
-            scroll-behavior: smooth;
-            position: relative;
+            flex: 1; background: radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.03) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(240, 147, 251, 0.03) 0%, transparent 50%), linear-gradient(180deg, #fafbff 0%, #f5f7ff 100%);
+            padding: 24px; overflow-y: auto; scroll-behavior: smooth; position: relative;
         }
-
         #hotel-chatbot-messages::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 40px;
-            background: linear-gradient(180deg, #fafbff 0%, transparent 100%);
-            pointer-events: none;
-            z-index: 1;
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 40px;
+            background: linear-gradient(180deg, #fafbff 0%, transparent 100%); pointer-events: none; z-index: 1;
         }
-
-        #hotel-chatbot-messages::-webkit-scrollbar { 
-            width: 10px; 
-        }
-
-        #hotel-chatbot-messages::-webkit-scrollbar-track {
-            background: rgba(102, 126, 234, 0.05);
-            border-radius: 10px;
-            margin: 8px 0;
-        }
-
+        #hotel-chatbot-messages::-webkit-scrollbar { width: 10px; }
+        #hotel-chatbot-messages::-webkit-scrollbar-track { background: rgba(102, 126, 234, 0.05); border-radius: 10px; margin: 8px 0; }
         #hotel-chatbot-messages::-webkit-scrollbar-thumb {
             background: linear-gradient(180deg, #667eea 0%, #764ba2 100%);
-            border-radius: 10px;
-            border: 2px solid transparent;
-            background-clip: padding-box;
-            transition: all 0.3s ease;
+            border-radius: 10px; border: 2px solid transparent; background-clip: padding-box; transition: all 0.3s ease;
         }
+        #hotel-chatbot-messages::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, #764ba2 0%, #667eea 100%); background-clip: padding-box; }
 
-        #hotel-chatbot-messages::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(180deg, #764ba2 0%, #667eea 100%);
-            background-clip: padding-box;
-        }
-
-        .chat-message-row {
-            display: flex;
-            margin-bottom: 20px;
-            animation: messageSlideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-        }
-
-        .chat-message-row.user { 
-            justify-content: flex-end;
-        }
-
-        .chat-message-row.bot { 
-            justify-content: flex-start;
-        }
-
-        @keyframes messageSlideIn {
-            0% { 
-                opacity: 0; 
-                transform: translateY(20px) scale(0.8);
-            }
-            100% { 
-                opacity: 1; 
-                transform: translateY(0) scale(1);
-            }
-        }
+        .chat-message-row { display: flex; margin-bottom: 20px; animation: messageSlideIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .chat-message-row.user { justify-content: flex-end; }
+        .chat-message-row.bot { justify-content: flex-start; }
+        @keyframes messageSlideIn { 0% { opacity: 0; transform: translateY(20px) scale(0.8); } 100% { opacity: 1; transform: translateY(0) scale(1); } }
 
         .chat-bubble {
-            padding: 16px 20px;
-            border-radius: 20px;
-            max-width: 85%;
-            font-size: 15px;
-            line-height: 1.6;
-            font-weight: 400;
-            letter-spacing: -0.01em;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            position: relative;
-            transition: all 0.3s ease;
+            padding: 16px 20px; border-radius: 20px; max-width: 85%; font-size: 15px; line-height: 1.6;
+            font-weight: 400; letter-spacing: -0.01em; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: break-word;
+            position: relative; transition: all 0.3s ease;
         }
-
-        .chat-bubble:hover {
-            transform: translateY(-2px);
-        }
-
+        .chat-bubble:hover { transform: translateY(-2px); }
         .chat-bubble.user {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #ffffff;
-            border-bottom-right-radius: 6px;
-            box-shadow: 
-                0 8px 24px rgba(102, 126, 234, 0.3),
-                0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #ffffff;
+            border-bottom-right-radius: 6px; box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.2) inset;
             animation: userMessagePop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
-
-        @keyframes userMessagePop {
-            0% { transform: scale(0) rotate(-5deg); }
-            50% { transform: scale(1.1) rotate(2deg); }
-            100% { transform: scale(1) rotate(0deg); }
-        }
-
+        @keyframes userMessagePop { 0% { transform: scale(0) rotate(-5deg); } 50% { transform: scale(1.1) rotate(2deg); } 100% { transform: scale(1) rotate(0deg); } }
         .chat-bubble.bot {
-            background: linear-gradient(145deg, #ffffff 0%, #f8f9ff 100%);
-            color: #2d3748;
-            border-bottom-left-radius: 6px;
-            box-shadow: 
-                0 8px 24px rgba(102, 126, 234, 0.08),
-                0 0 0 1px rgba(102, 126, 234, 0.1);
-            border: 1px solid rgba(102, 126, 234, 0.1);
-            animation: botMessageSlide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9ff 100%); color: #2d3748;
+            border-bottom-left-radius: 6px; box-shadow: 0 8px 24px rgba(102, 126, 234, 0.08), 0 0 0 1px rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.1); animation: botMessageSlide 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        @keyframes botMessageSlide { 0% { transform: translateX(-30px); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+        .chat-bubble.bot.highlight {
+            background: linear-gradient(145deg, #e8eeff 0%, #f0f4ff 100%); border-color: rgba(102, 126, 234, 0.3);
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15), 0 0 0 1px rgba(102, 126, 234, 0.2) inset;
         }
 
-        @keyframes botMessageSlide {
-            0% { transform: translateX(-30px); opacity: 0; }
-            100% { transform: translateX(0); opacity: 1; }
-        }
-
-        .chat-bubble.bot.highlight { 
-            background: linear-gradient(145deg, #e8eeff 0%, #f0f4ff 100%);
-            border-color: rgba(102, 126, 234, 0.3);
-            box-shadow: 
-                0 8px 24px rgba(102, 126, 234, 0.15),
-                0 0 0 1px rgba(102, 126, 234, 0.2) inset;
-        }
-
-        /* ========================================================================
-           PREMIUM TYPING INDICATOR WITH GRADIENT DOTS
-        ======================================================================== */
-        .typing {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            padding: 4px 0;
-        }
-
+        /* TYPING INDICATOR */
+        .typing { display: inline-flex; align-items: center; gap: 8px; padding: 4px 0; }
         .typing-dot {
-            width: 10px; 
-            height: 10px; 
-            border-radius: 50%;
+            width: 10px; height: 10px; border-radius: 50%;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.5);
             animation: luxuryBounce 1.4s infinite ease-in-out;
         }
-
-        .typing-dot:nth-child(1) { 
-            animation-delay: 0s; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        }
-        
-        .typing-dot:nth-child(2) { 
-            animation-delay: 0.2s;
-            background: linear-gradient(135deg, #764ba2 0%, #f093fb 100%);
-        }
-        
-        .typing-dot:nth-child(3) { 
-            animation-delay: 0.4s;
-            background: linear-gradient(135deg, #f093fb 0%, #667eea 100%);
-        }
-
+        .typing-dot:nth-child(1) { animation-delay: 0s; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; background: linear-gradient(135deg, #764ba2 0%, #f093fb 100%); }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; background: linear-gradient(135deg, #f093fb 0%, #667eea 100%); }
         @keyframes luxuryBounce {
-            0%, 60%, 100% { 
-                transform: translateY(0) scale(1); 
-                opacity: 0.7; 
-            }
-            30% { 
-                transform: translateY(-12px) scale(1.2); 
-                opacity: 1; 
-                box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6);
-            }
+            0%, 60%, 100% { transform: translateY(0) scale(1); opacity: 0.7; }
+            30% { transform: translateY(-12px) scale(1.2); opacity: 1; box-shadow: 0 8px 20px rgba(102, 126, 234, 0.6); }
         }
 
-        /* ========================================================================
-           FLOATING ANIMATED QUICK REPLIES
-        ======================================================================== */
-        #quick-replies {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            padding: 20px 24px;
-            background: transparent;
-            border-top: none;
-            animation: fadeInUp 0.6s ease;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
+        /* QUICK REPLIES */
+        #quick-replies { display: flex; flex-wrap: wrap; gap: 12px; padding: 20px 24px; background: transparent; border-top: none; animation: fadeInUp 0.6s ease; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .quick-reply {
-            position: relative;
-            background: linear-gradient(145deg, #ffffff 0%, #f8f9ff 100%);
-            color: #667eea;
-            padding: 12px 20px;
-            border-radius: 28px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: 600;
-            border: 2px solid rgba(102, 126, 234, 0.2);
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            user-select: none;
-            letter-spacing: -0.01em;
-            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.1);
-            overflow: hidden;
+            position: relative; background: linear-gradient(145deg, #ffffff 0%, #f8f9ff 100%); color: #667eea;
+            padding: 12px 20px; border-radius: 28px; cursor: pointer; font-size: 14px; font-weight: 600;
+            border: 2px solid rgba(102, 126, 234, 0.2); transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            user-select: none; letter-spacing: -0.01em; box-shadow: 0 4px 16px rgba(102, 126, 234, 0.1); overflow: hidden;
         }
-
         .quick-reply::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            transform: translate(-50%, -50%);
-            transition: width 0.5s ease, height 0.5s ease;
-            z-index: 0;
+            content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0; border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); transform: translate(-50%, -50%); transition: width 0.5s ease, height 0.5s ease; z-index: 0;
         }
+        .quick-reply:hover::before { width: 300px; height: 300px; }
+        .quick-reply:hover { color: white; border-color: #667eea; transform: translateY(-4px) scale(1.05); box-shadow: 0 12px 32px rgba(102, 126, 234, 0.3); }
+        .quick-reply span { position: relative; z-index: 1; }
+        .quick-reply:active { transform: translateY(-2px) scale(1.02); }
 
-        .quick-reply:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        .quick-reply:hover { 
-            color: white;
-            border-color: #667eea;
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: 0 12px 32px rgba(102, 126, 234, 0.3);
-        }
-
-        .quick-reply span {
-            position: relative;
-            z-index: 1;
-        }
-
-        .quick-reply:active {
-            transform: translateY(-2px) scale(1.02);
-        }
-
-        /* ========================================================================
-           LUXURY INPUT AREA WITH GLASSMORPHISM
-        ======================================================================== */
+        /* LUXURY INPUT AREA */
         #hotel-chatbot-input-area {
-            padding: 20px 24px 24px;
-            display: flex;
-            gap: 14px;
-            border-top: 2px solid rgba(102, 126, 234, 0.1);
-            background: linear-gradient(180deg, 
-                rgba(255, 255, 255, 0.95) 0%, 
-                rgba(248, 249, 255, 0.95) 100%);
-            backdrop-filter: blur(20px);
-            box-shadow: 0 -8px 32px rgba(102, 126, 234, 0.08);
+            padding: 20px 24px 24px; display: flex; gap: 14px; border-top: 2px solid rgba(102, 126, 234, 0.1);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(248, 249, 255, 0.95) 100%);
+            backdrop-filter: blur(20px); box-shadow: 0 -8px 32px rgba(102, 126, 234, 0.08);
         }
-
         #hotel-chatbot-input {
-            flex: 1;
-            border-radius: 28px;
-            border: 2px solid rgba(102, 126, 234, 0.2);
-            padding: 16px 24px;
-            font-size: 15px;
-            font-family: inherit;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            background: linear-gradient(145deg, #ffffff 0%, #f8f9ff 100%);
-            color: #2d3748;
-            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.08) inset;
+            flex: 1; border-radius: 28px; border: 2px solid rgba(102, 126, 234, 0.2); padding: 16px 24px;
+            font-size: 15px; font-family: inherit; transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            background: linear-gradient(145deg, #ffffff 0%, #f8f9ff 100%); color: #2d3748; box-shadow: 0 4px 16px rgba(102, 126, 234, 0.08) inset;
         }
-
-        #hotel-chatbot-input::placeholder {
-            color: #a0aec0;
-            font-weight: 400;
-        }
-
+        #hotel-chatbot-input::placeholder { color: #a0aec0; font-weight: 400; }
         #hotel-chatbot-input:focus {
-            outline: none;
-            border-color: #667eea;
-            background: #ffffff;
-            box-shadow: 
-                0 0 0 4px rgba(102, 126, 234, 0.1),
-                0 4px 16px rgba(102, 126, 234, 0.15) inset;
-            transform: translateY(-2px);
+            outline: none; border-color: #667eea; background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1), 0 4px 16px rgba(102, 126, 234, 0.15) inset; transform: translateY(-2px);
         }
-
         #hotel-chatbot-send {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 28px;
-            padding: 16px 32px;
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 15px;
-            font-family: inherit;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            box-shadow: 
-                0 8px 24px rgba(102, 126, 234, 0.4),
-                0 0 0 1px rgba(255, 255, 255, 0.2) inset;
-            position: relative;
-            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 28px;
+            padding: 16px 32px; cursor: pointer; font-weight: 700; font-size: 15px; font-family: inherit;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1); letter-spacing: 0.5px; text-transform: uppercase;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2) inset; position: relative; overflow: hidden;
         }
-
         #hotel-chatbot-send::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            width: 0;
-            height: 0;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s ease, height 0.6s ease;
+            content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0; border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3); transform: translate(-50%, -50%); transition: width 0.6s ease, height 0.6s ease;
         }
+        #hotel-chatbot-send:hover::before { width: 300px; height: 300px; }
+        #hotel-chatbot-send:hover { transform: translateY(-4px) scale(1.05); box-shadow: 0 12px 36px rgba(102, 126, 234, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.3) inset; }
+        #hotel-chatbot-send:active { transform: translateY(-2px) scale(1.02); }
+        #hotel-chatbot-send:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-        #hotel-chatbot-send:hover::before {
-            width: 300px;
-            height: 300px;
-        }
-
-        #hotel-chatbot-send:hover { 
-            transform: translateY(-4px) scale(1.05);
-            box-shadow: 
-                0 12px 36px rgba(102, 126, 234, 0.5),
-                0 0 0 1px rgba(255, 255, 255, 0.3) inset;
-        }
-
-        #hotel-chatbot-send:active {
-            transform: translateY(-2px) scale(1.02);
-        }
-
-        #hotel-chatbot-send:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none;
-        }
-
-        /* ========================================================================
-           SPARKLE EFFECTS
-        ======================================================================== */
-        @keyframes sparkle {
-            0%, 100% { opacity: 0; transform: scale(0); }
-            50% { opacity: 1; transform: scale(1); }
-        }
-
-        .sparkle {
-            position: absolute;
-            width: 4px;
-            height: 4px;
-            background: white;
-            border-radius: 50%;
-            pointer-events: none;
-            animation: sparkle 1.5s ease-in-out infinite;
-        }
+        /* SPARKLE EFFECTS */
+        @keyframes sparkle { 0%, 100% { opacity: 0; transform: scale(0); } 50% { opacity: 1; transform: scale(1); } }
+        .sparkle { position: absolute; width: 4px; height: 4px; background: white; border-radius: 50%; pointer-events: none; animation: sparkle 1.5s ease-in-out infinite; }
     </style>
 </head>
 
@@ -708,7 +252,7 @@
 
         <div id="hotel-chatbot-header">
             <div class="header-info">
-                <img alt="Mona logo" src="https://placehold.co/100x100?text=Logo" />
+                <img alt="Mona logo" src="data:image/png;base64,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" />
                 <div class="header-text">
                     <span class="header-title">Mona Montreux</span>
                     <span class="header-subtitle">Lakeside Hotel • Montreux</span>
@@ -722,7 +266,7 @@
         <div id="quick-replies"></div>
 
         <div id="hotel-chatbot-input-area">
-            <input id="hotel-chatbot-input" placeholder="Type your message..." />
+            <input id="hotel-chatbot-input" placeholder="Ask anything..." />
             <button id="hotel-chatbot-send">Send</button>
         </div>
 
@@ -757,7 +301,7 @@ const INITIAL_GREETING = "Hi there, how can I help today?";
 const WEBHOOK_URL = "https://n8n.srv1106816.hstgr.cloud/webhook/595269c9-1640-45c9-9c2b-861a69417966";
 
 /* ========================================================================
-   TYPING INDICATOR
+   TYPING INDICATOR + STREAM REVEAL
 ========================================================================= */
 let typingRow = null;
 
@@ -790,8 +334,7 @@ function appendStreamingMessage(text) {
 
     let i = 0;
     const len = text.length;
-    // Dynamic typing speed based on message length
-    const step = Math.max(3, Math.min(8, Math.floor(len / 120)));
+    const step = Math.max(2, Math.min(6, Math.floor(len / 140))); // adaptive speed
 
     function tick() {
         bubble.textContent = text.slice(0, i);
@@ -800,6 +343,7 @@ function appendStreamingMessage(text) {
         if (i <= len) {
             requestAnimationFrame(tick);
         } else {
+            // Ensure full text is shown at the end
             bubble.textContent = text;
             messages.scrollTop = messages.scrollHeight;
         }
@@ -839,121 +383,125 @@ function showStarterOptions() {
     starterOptions.forEach(option => {
         const btn = document.createElement("div");
         btn.className = "quick-reply";
-        btn.innerHTML = `<span>${option}</span>`; // Span needed for z-index effect
-        btn.onclick = () => sendMessage(option);
+        btn.innerHTML = `<span>${option}</span>`; // span needed for Lux CSS
+        btn.onclick = () => {
+            appendMessage(option, "user");
+            hideStarterOptions();
+            sendOption(option);
+        };
         quick.appendChild(btn);
     });
 }
+function hideStarterOptions() {
+    quick.innerHTML = ""; // remove chips entirely
+}
 
 /* ========================================================================
-   MAIN LOGIC - SENDING & RECEIVING
+   SEND HELPERS
 ========================================================================= */
-async function sendMessage(text) {
-    if (!text || text.trim() === "") return;
+async function postToWebhook(payload) {
+    const res = await fetch(WEBHOOK_URL, {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    return data;
+}
 
-    // 1. User Message UI
+async function sendOption(message) {
+    try {
+        showTyping();
+        const data = await postToWebhook({ chatInput: message, sessionId });
+        hideTyping();
+        
+        // Handle n8n response variations (result, output, or text)
+        const reply = data.result || data.output || data.text || "Sorry, I couldn't process that.";
+        appendStreamingMessage(reply);
+    } catch (e) {
+        console.error(e);
+        hideTyping();
+        appendMessage("Connection error. Please try again.", "bot", true);
+    }
+}
+
+/* ========================================================================
+   SEND MESSAGE
+========================================================================= */
+async function sendMessage() {
+    const text = input.value.trim();
+    if (!text) return;
+
     appendMessage(text, "user");
     input.value = "";
-    quick.innerHTML = ""; // Clear quick replies to clean up UI
 
-    // 2. Show Typing Indicator
-    showTyping();
+    // Hide starter chips as soon as the user sends any message
+    hideStarterOptions();
 
-    // 3. Network Request
     try {
-        const response = await fetch(WEBHOOK_URL, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                sessionId: sessionId,
-                chatInput: text
-            })
-        });
-
-        const data = await response.json();
-        
-        // 4. Hide Typing
+        showTyping();
+        const data = await postToWebhook({ chatInput: text, sessionId });
         hideTyping();
 
-        // 5. Parse n8n Response 
-        // Adapting to common n8n return structures (output, text, or data array)
-        let botResponse = "I apologize, but I couldn't process that.";
-        
-        if (data.output) {
-            botResponse = data.output;
-        } else if (data.text) {
-            botResponse = data.text;
-        } else if (Array.isArray(data) && data[0]?.output) {
-            botResponse = data[0].output;
-        } else if (typeof data === 'string') {
-            botResponse = data;
-        }
-
-        // 6. Stream the response to the UI
-        appendStreamingMessage(botResponse);
-
-    } catch (error) {
-        console.error("Chat Error:", error);
+        // Handle n8n response variations
+        const reply = data.result || data.output || data.text || "Sorry, I couldn't process that.";
+        appendStreamingMessage(reply);
+    } catch (e) {
+        console.error(e);
         hideTyping();
-        appendMessage("I'm having a little trouble connecting to the concierge service right now. Please try again in a moment.", "bot");
+        appendMessage("Connection error. Please try again.", "bot", true);
     }
 }
 
+/* Also hide chips when user starts typing (nice UX) */
+input.addEventListener("input", () => {
+    if (quick.children.length) hideStarterOptions();
+});
+
 /* ========================================================================
-   EVENT LISTENERS
+   OPEN/CLOSE EVENTS
 ========================================================================= */
-
-// Toggle Chat Window
-function toggleChat() {
-    const isOpen = chat.classList.contains("open");
-    if (isOpen) {
-        chat.classList.remove("open");
-    } else {
+launcher.onclick = () => {
+    // Only toggle if not already open
+    if (!chat.classList.contains("open")) {
         chat.classList.add("open");
-        input.focus();
         
-        // If chat is empty, send initial greeting and show options
+        // If chat is empty, initialize
         if (messages.children.length === 0) {
-            appendStreamingMessage(INITIAL_GREETING);
-            setTimeout(showStarterOptions, 800);
+            appendMessage(INITIAL_GREETING, "bot", true);
+            showStarterOptions();
         }
+        input.focus();
+    } else {
+        chat.classList.remove("open");
     }
-}
+};
 
-launcher.addEventListener("click", toggleChat);
-closeBtn.addEventListener("click", toggleChat);
-
-// Send Button Click
-sendBtn.addEventListener("click", () => {
-    sendMessage(input.value);
-});
-
-// Enter Key Press
-input.addEventListener("keypress", (e) => {
-    if (e.key === "Enter") {
-        sendMessage(input.value);
-    }
-});
+closeBtn.onclick = () => {
+    chat.classList.remove("open");
+};
 
 /* ========================================================================
-   BONUS: SPARKLE MOUSE TRAIL (Luxury Touch)
+   INPUT EVENTS
+========================================================================= */
+sendBtn.onclick = sendMessage;
+input.onkeydown = (e) => { if (e.key === "Enter") sendMessage(); };
+
+/* ========================================================================
+   BONUS: SPARKLE MOUSE TRAIL (Kept from Design)
 ========================================================================= */
 document.addEventListener('mousemove', function(e) {
-    // Only create sparkles occasionally to prevent lag
     if(Math.random() > 0.9) { 
         const sparkle = document.createElement('div');
         sparkle.className = 'sparkle';
         sparkle.style.left = (e.pageX - 2) + 'px';
         sparkle.style.top = (e.pageY - 2) + 'px';
         document.body.appendChild(sparkle);
-
-        // Cleanup
-        setTimeout(() => {
-            sparkle.remove();
-        }, 1500);
+        setTimeout(() => { sparkle.remove(); }, 1500);
     }
 });
 
 </script>
+
 </body>
 </html>
