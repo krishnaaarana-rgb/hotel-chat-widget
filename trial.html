@@ -13,8 +13,9 @@
            DESIGN SYSTEM & VARIABLES
         ======================================================================== */
         :root {
-            --primary-gradient: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
-            --glass-bg: rgba(255, 255, 255, 0.75);
+            /* Purple gradient matching your request */
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --glass-bg: rgba(255, 255, 255, 0.85);
             --glass-border: rgba(255, 255, 255, 0.6);
             --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
             --text-dark: #1e293b;
@@ -29,26 +30,8 @@
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background: transparent; /* Allows embedding on other sites */
-            overflow: hidden; /* Prevent body scroll if embedded */
-        }
-
-        /* ========================================================================
-           BACKGROUND FX (Purely for standalone demo aesthetics)
-        ======================================================================== */
-        .ambient-glow {
-            position: fixed;
-            width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(124, 58, 237, 0.15) 0%, rgba(79, 70, 229, 0.05) 50%, transparent 70%);
-            border-radius: 50%;
-            pointer-events: none;
-            z-index: -1;
-            animation: floatGlow 10s ease-in-out infinite alternate;
-        }
-
-        @keyframes floatGlow {
-            0% { transform: translate(0, 0); }
-            100% { transform: translate(50px, 50px); }
+            background: transparent;
+            overflow: hidden;
         }
 
         /* ========================================================================
@@ -59,50 +42,88 @@
             z-index: 9999999;
             display: flex; flex-direction: column; align-items: flex-end;
             font-family: 'Plus Jakarta Sans', sans-serif;
+            pointer-events: none; /* Let clicks pass through wrapper area */
+        }
+        
+        #chatbot-wrapper > * {
+            pointer-events: auto; /* Re-enable clicks on children */
         }
 
         /* ========================================================================
-           LAUNCHER ORB
+           LAUNCHER BUTTON (Dynamic Pill to Circle)
         ======================================================================== */
         #hotel-chatbot-launcher {
-            width: 64px; height: 64px;
-            border-radius: 50%;
+            height: 60px;
+            /* Auto width allows it to be a pill */
+            width: auto;
+            min-width: 60px;
+            padding: 0 24px;
+            border-radius: 30px;
             border: none;
             background: var(--primary-gradient);
-            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.4), 0 0 0 1px rgba(255,255,255,0.2) inset;
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4), 0 0 0 1px rgba(255,255,255,0.2) inset;
             cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            transition: all 0.4s var(--bezier-bounce);
+            gap: 12px;
+            transition: all 0.5s var(--bezier-bounce);
             position: relative;
             overflow: hidden;
+            transform-origin: center right;
         }
 
-        /* Icon Animation */
+        /* Text inside launcher */
+        .launcher-label {
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            white-space: nowrap;
+            opacity: 1;
+            transform: translateX(0);
+            transition: all 0.3s var(--bezier-smooth);
+        }
+
+        /* Icon Container */
+        .icon-container {
+            position: relative;
+            width: 24px; height: 24px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        /* Icons */
         #hotel-chatbot-launcher svg {
-            width: 32px; height: 32px; stroke: white; fill: none; stroke-width: 2;
-            transition: transform 0.4s var(--bezier-smooth), opacity 0.3s ease;
+            width: 24px; height: 24px; stroke: white; fill: none; stroke-width: 2.5;
+            transition: transform 0.5s var(--bezier-smooth), opacity 0.3s ease;
+            position: absolute;
         }
         
-        #launcher-close-icon { position: absolute; opacity: 0; transform: scale(0.5) rotate(-90deg); }
-        #launcher-chat-icon { position: absolute; opacity: 1; transform: scale(1) rotate(0deg); }
+        #launcher-close-icon { opacity: 0; transform: scale(0.5) rotate(-90deg); }
+        #launcher-chat-icon { opacity: 1; transform: scale(1) rotate(0deg); }
 
+        /* HOVER STATE */
+        #hotel-chatbot-launcher:hover { 
+            transform: translateY(-4px); 
+            box-shadow: 0 20px 35px rgba(124, 58, 237, 0.5); 
+        }
+
+        /* ACTIVE (OPEN) STATE */
+        #hotel-chatbot-launcher.active {
+            /* Morph to circle */
+            width: 60px; 
+            padding: 0; 
+            border-radius: 50%;
+        }
+
+        /* Hide text when active */
+        #hotel-chatbot-launcher.active .launcher-label {
+            opacity: 0;
+            width: 0;
+            margin: 0;
+            transform: translateX(20px);
+        }
+
+        /* Swap icons when active */
         #hotel-chatbot-launcher.active #launcher-close-icon { opacity: 1; transform: scale(1) rotate(0deg); }
         #hotel-chatbot-launcher.active #launcher-chat-icon { opacity: 0; transform: scale(0.5) rotate(90deg); }
-
-        #hotel-chatbot-launcher:hover { transform: scale(1.1) translateY(-4px); box-shadow: 0 20px 35px rgba(79, 70, 229, 0.5); }
-        #hotel-chatbot-launcher:active { transform: scale(0.95); }
-
-        /* Pulse Ring */
-        #hotel-chatbot-launcher::after {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            border-radius: 50%; border: 1px solid rgba(255,255,255,0.5);
-            animation: pulseRing 2s infinite; opacity: 0;
-        }
-
-        @keyframes pulseRing {
-            0% { transform: scale(1); opacity: 0.5; }
-            100% { transform: scale(1.6); opacity: 0; }
-        }
 
         /* ========================================================================
            MAIN CHAT CONTAINER
@@ -111,9 +132,9 @@
             position: absolute; bottom: 85px; right: 0;
             width: 400px; height: 700px;
             max-width: calc(100vw - 40px); max-height: calc(100vh - 120px);
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
             border-radius: 24px;
             border: 1px solid var(--glass-border);
             box-shadow: 
@@ -138,8 +159,8 @@
         ======================================================================== */
         #hotel-chatbot-header {
             padding: 20px 24px;
-            background: rgba(255,255,255,0.5);
-            border-bottom: 1px solid rgba(0,0,0,0.05);
+            background: rgba(255,255,255,0.6);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
             display: flex; align-items: center; justify-content: space-between;
             z-index: 10;
         }
@@ -191,7 +212,7 @@
             overflow-y: auto;
             scroll-behavior: smooth;
             display: flex; flex-direction: column; gap: 16px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0) 100%);
+            background: linear-gradient(180deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%);
         }
 
         /* Scrollbar aesthetics */
@@ -200,7 +221,6 @@
         #hotel-chatbot-messages::-webkit-scrollbar-thumb {
             background: rgba(0,0,0,0.1); border-radius: 10px;
         }
-        #hotel-chatbot-messages::-webkit-scrollbar-thumb:hover { background: rgba(0,0,0,0.2); }
 
         /* Message Rows */
         .message-row {
@@ -240,13 +260,9 @@
             background: var(--primary-gradient);
             color: white;
             border-bottom-right-radius: 4px;
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.2);
             text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
-
-        /* Link handling in bot messages */
-        .bubble.bot a { color: #4F46E5; text-decoration: none; font-weight: 600; }
-        .bubble.bot a:hover { text-decoration: underline; }
 
         /* ========================================================================
            TYPING INDICATOR
@@ -269,22 +285,22 @@
         @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
 
         /* ========================================================================
-           QUICK REPLIES (CHIPS)
+           QUICK REPLIES
         ======================================================================== */
         #quick-replies {
             display: flex; gap: 8px; padding: 0 24px 16px 24px;
             overflow-x: auto; flex-wrap: wrap;
-            scrollbar-width: none; /* Firefox */
+            scrollbar-width: none;
         }
         #quick-replies::-webkit-scrollbar { display: none; }
 
         .chip {
-            background: rgba(255,255,255,0.6);
-            border: 1px solid rgba(79, 70, 229, 0.2);
+            background: rgba(255,255,255,0.7);
+            border: 1px solid rgba(139, 92, 246, 0.2);
             padding: 10px 16px;
             border-radius: 50px;
             font-size: 13px; font-weight: 600;
-            color: #4F46E5;
+            color: #6366f1;
             cursor: pointer;
             white-space: nowrap;
             transition: all 0.3s var(--bezier-smooth);
@@ -292,9 +308,9 @@
         }
         
         .chip:hover {
-            background: #4F46E5; color: white;
+            background: #6366f1; color: white;
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
 
         @keyframes chipFadeIn {
@@ -307,7 +323,7 @@
         ======================================================================== */
         #input-area {
             padding: 16px 24px 24px 24px;
-            background: rgba(255,255,255,0.9);
+            background: rgba(255,255,255,0.95);
             border-top: 1px solid rgba(0,0,0,0.05);
             display: flex; gap: 12px; align-items: center;
         }
@@ -322,8 +338,8 @@
         
         .input-wrapper:focus-within {
             background: white;
-            border-color: #4F46E5;
-            box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
         }
 
         #chat-input {
@@ -340,20 +356,16 @@
             color: white; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
             transition: all 0.3s var(--bezier-bounce);
-            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
         }
         
-        #send-btn:hover { transform: scale(1.1) rotate(-10deg); box-shadow: 0 8px 20px rgba(79, 70, 229, 0.35); }
+        #send-btn:hover { transform: scale(1.1) rotate(-10deg); box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35); }
         #send-btn:active { transform: scale(0.95); }
         #send-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.5; margin-left: -2px; }
-        
-        #send-btn:disabled { background: #cbd5e1; cursor: default; transform: none; box-shadow: none; }
 
     </style>
 </head>
 <body>
-
-<div class="ambient-glow"></div>
 
 <div id="chatbot-wrapper">
     
@@ -362,7 +374,7 @@
         <div id="hotel-chatbot-header">
             <div class="brand">
                 <div class="avatar-container">
-                    <img src="https://ui-avatars.com/api/?name=Mona+Montreux&background=4F46E5&color=fff&size=128" alt="Mona" class="avatar-img">
+                    <img src="data:image/png;base64,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" alt="Mona" class="avatar-img">
                     <div class="status-dot"></div>
                 </div>
                 <div class="header-info">
@@ -394,13 +406,16 @@
     </div>
 
     <button id="hotel-chatbot-launcher">
-        <svg id="launcher-chat-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-        </svg>
-        <svg id="launcher-close-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18"></line>
-            <line x1="6" y1="6" x2="18" y2="18"></line>
-        </svg>
+        <div class="icon-container">
+            <svg id="launcher-chat-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </svg>
+            <svg id="launcher-close-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </div>
+        <span class="launcher-label">try out demo</span>
     </button>
 
 </div>
@@ -448,16 +463,17 @@
     function toggleChat() {
         const isOpen = chatWindow.classList.contains("open");
         if (isOpen) {
+            // Close logic
             chatWindow.classList.remove("open");
             launcher.classList.remove("active");
         } else {
+            // Open logic
             chatWindow.classList.add("open");
             launcher.classList.add("active");
             inputField.focus();
             
             // Initial boot
             if (messagesContainer.children.length === 0) {
-                // Small delay for effect
                 setTimeout(() => {
                     appendMessage(INITIAL_GREETING, "bot");
                     showStarterOptions();
@@ -523,14 +539,14 @@
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
-    // --- Streaming Text Logic (The "Buttery" Reveal) ---
+    // --- Streaming Text Logic ---
     function appendStreamingMessage(text) {
         const { row, bubble } = createMessageElement("", "bot");
         messagesContainer.appendChild(row);
         
         let index = 0;
         const length = text.length;
-        // Adaptive speed: faster for long text, slower for short
+        // Adaptive speed
         const speed = length > 100 ? 5 : 15; 
 
         function typeChar() {
@@ -538,7 +554,7 @@
                 bubble.textContent += text.charAt(index);
                 index++;
                 scrollToBottom();
-                setTimeout(typeChar, speed); // Using timeout for variable speed control if needed
+                setTimeout(typeChar, speed);
             }
         }
         
