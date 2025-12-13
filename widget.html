@@ -7,6 +7,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
     <style>
         /* ========================================================================
@@ -14,7 +16,7 @@
         ======================================================================== */
         :root {
             --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            --glass-bg: rgba(255, 255, 255, 0.85);
+            --glass-bg: rgba(255, 255, 255, 0.95); /* Slightly less transparent for readability */
             --glass-border: rgba(255, 255, 255, 0.6);
             --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
             --text-dark: #1e293b;
@@ -47,6 +49,48 @@
         #chatbot-wrapper > * {
             pointer-events: auto; /* Re-enable clicks on children */
         }
+
+        /* ========================================================================
+           PROACTIVE NUDGE (TOOLTIP - NEW)
+        ======================================================================== */
+        #proactive-nudge {
+            background: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            margin-bottom: 15px;
+            margin-right: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            opacity: 0;
+            transform: translateY(10px) scale(0.9);
+            transition: all 0.4s var(--bezier-bounce);
+            position: relative;
+            cursor: pointer;
+            border: 1px solid rgba(0,0,0,0.05);
+            display: flex; align-items: center; gap: 8px;
+            white-space: nowrap; /* Keep text on one line */
+        }
+
+        #proactive-nudge.visible {
+            opacity: 1; transform: translateY(0) scale(1);
+        }
+
+        /* Tooltip Arrow */
+        #proactive-nudge::after {
+            content: ''; position: absolute; bottom: -6px; right: 24px;
+            width: 12px; height: 12px; background: white;
+            transform: rotate(45deg);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            border-right: 1px solid rgba(0,0,0,0.05);
+        }
+
+        #proactive-nudge .close-nudge {
+            margin-left: 8px; color: #94a3b8; cursor: pointer;
+            font-size: 16px; line-height: 1;
+        }
+        #proactive-nudge .close-nudge:hover { color: var(--text-dark); }
 
         /* ========================================================================
            LAUNCHER BUTTON (Dynamic Pill to Circle)
@@ -122,7 +166,7 @@
             position: absolute; bottom: 85px; right: 0;
             width: 400px; height: 700px;
             max-width: calc(100vw - 40px); max-height: calc(100vh - 120px);
-            background: rgba(255, 255, 255, 0.9);
+            background: var(--glass-bg);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border-radius: 24px;
@@ -149,7 +193,7 @@
         ======================================================================== */
         #hotel-chatbot-header {
             padding: 20px 24px;
-            background: rgba(255,255,255,0.6);
+            background: rgba(255,255,255,0.8);
             border-bottom: 1px solid rgba(0,0,0,0.06);
             display: flex; align-items: center; justify-content: space-between;
             z-index: 10;
@@ -186,12 +230,14 @@
         .header-info h3 { margin: 0; font-size: 17px; font-weight: 700; color: var(--text-dark); letter-spacing: -0.02em; }
         .header-info p { margin: 2px 0 0; font-size: 13px; color: var(--text-light); font-weight: 500; }
 
-        .header-actions button {
+        .header-actions { display: flex; gap: 8px; }
+
+        .action-btn {
             background: transparent; border: none; cursor: pointer;
             padding: 8px; border-radius: 50%; color: var(--text-light);
             transition: background 0.2s;
         }
-        .header-actions button:hover { background: rgba(0,0,0,0.05); color: var(--text-dark); }
+        .action-btn:hover { background: rgba(0,0,0,0.05); color: var(--text-dark); }
 
         /* ========================================================================
            MESSAGES AREA
@@ -223,7 +269,7 @@
         .message-row.bot { justify-content: flex-start; }
 
         .bubble {
-            max-width: 80%;
+            max-width: 85%;
             padding: 14px 18px;
             border-radius: 18px;
             font-size: 14px;
@@ -232,9 +278,17 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.03);
             white-space: pre-wrap;
             transition: transform 0.2s;
+            word-wrap: break-word; /* Important for long links */
         }
         
-        .bubble:hover { transform: translateY(-1px); }
+        /* --- MARKDOWN STYLES (NEW) --- */
+        .bubble p { margin: 0 0 8px 0; }
+        .bubble p:last-child { margin: 0; }
+        .bubble ul, .bubble ol { margin: 8px 0; padding-left: 20px; }
+        .bubble li { margin-bottom: 4px; }
+        .bubble strong { font-weight: 700; color: inherit; } 
+        .bubble a { color: #6366f1; text-decoration: none; font-weight: 600; border-bottom: 1px solid transparent; }
+        .bubble a:hover { border-bottom-color: #6366f1; }
 
         .bubble.bot {
             background: white;
@@ -250,6 +304,9 @@
             box-shadow: 0 4px 15px rgba(124, 58, 237, 0.2);
             text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
+        
+        /* Ensure user text is readable on gradient background */
+        .bubble.user p, .bubble.user strong, .bubble.user a { color: white !important; }
 
         /* ========================================================================
            TYPING INDICATOR
@@ -356,6 +413,11 @@
 
 <div id="chatbot-wrapper">
     
+    <div id="proactive-nudge" onclick="toggleChat()">
+        <span>👋 Need help planning your stay?</span>
+        <span class="close-nudge" onclick="event.stopPropagation(); closeNudge()">×</span>
+    </div>
+
     <div id="hotel-chatbot">
         
         <div id="hotel-chatbot-header">
@@ -370,15 +432,16 @@
                 </div>
             </div>
             <div class="header-actions">
-                <button id="minimize-btn" title="Minimize">
+                <button class="action-btn" id="reset-btn" title="Start New Chat">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+                <button class="action-btn" id="minimize-btn" title="Minimize">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                 </button>
             </div>
         </div>
 
-        <div id="hotel-chatbot-messages">
-            </div>
-
+        <div id="hotel-chatbot-messages"></div>
         <div id="quick-replies"></div>
 
         <div id="input-area">
@@ -409,21 +472,19 @@
 
 <script>
     /** * MONA MONTREUX CORE LOGIC
-     * Strictly preserving the functionality requested:
-     * - Webhook integration
-     * - Streaming response
-     * - Session persistence
-     * - Quick reply logic
+     * Features: Markdown, Nudge, Reset, Streaming
      */
 
     // --- References ---
     const launcher = document.getElementById("hotel-chatbot-launcher");
     const chatWindow = document.getElementById("hotel-chatbot");
     const minimizeBtn = document.getElementById("minimize-btn");
+    const resetBtn = document.getElementById("reset-btn"); // New
     const messagesContainer = document.getElementById("hotel-chatbot-messages");
     const inputField = document.getElementById("chat-input");
     const sendButton = document.getElementById("send-btn");
     const quickRepliesContainer = document.getElementById("quick-replies");
+    const nudge = document.getElementById("proactive-nudge"); // New
 
     // --- Configuration ---
     const WEBHOOK_URL = "https://n8n.srv1106816.hstgr.cloud/webhook/595269c9-1640-45c9-9c2b-861a69417966";
@@ -435,11 +496,30 @@
         "Contact reception"
     ];
 
+    // --- Configure Marked (Markdown) ---
+    // Ensure links open in a new tab
+    const renderer = new marked.Renderer();
+    renderer.link = function(href, title, text) {
+        return `<a href="${href}" target="_blank" rel="noopener noreferrer" title="${title || ''}">${text}</a>`;
+    };
+    marked.setOptions({ renderer: renderer });
+
     // --- Session Management ---
     let sessionId = localStorage.getItem("hotel_session_id");
     if (!sessionId) {
         sessionId = "sess_" + Math.random().toString(36).substring(2) + Date.now().toString(36);
         localStorage.setItem("hotel_session_id", sessionId);
+    }
+
+    // --- Proactive Nudge Logic (Show after 5s) ---
+    setTimeout(() => {
+        if (!chatWindow.classList.contains("open")) {
+            nudge.classList.add("visible");
+        }
+    }, 5000);
+
+    function closeNudge() {
+        nudge.classList.remove("visible");
     }
 
     // --- State ---
@@ -448,6 +528,8 @@
 
     // --- Toggle Chat (UPDATED WITH POSTMESSAGE) ---
     function toggleChat() {
+        closeNudge(); // Always hide nudge when interacting
+
         const isOpen = chatWindow.classList.contains("open");
         if (isOpen) {
             // Close logic
@@ -474,6 +556,20 @@
         }
     }
 
+    // --- Reset Session (New Feature) ---
+    resetBtn.addEventListener("click", () => {
+        // Generate new session ID
+        sessionId = "sess_" + Math.random().toString(36).substring(2) + Date.now().toString(36);
+        localStorage.setItem("hotel_session_id", sessionId);
+        
+        // Clear UI
+        messagesContainer.innerHTML = "";
+        
+        // Restart chat
+        appendMessage(INITIAL_GREETING, "bot");
+        showStarterOptions();
+    });
+
     launcher.addEventListener("click", toggleChat);
     minimizeBtn.addEventListener("click", toggleChat);
 
@@ -485,7 +581,13 @@
         
         const bubble = document.createElement("div");
         bubble.className = `bubble ${sender}`;
-        bubble.textContent = text;
+        
+        // UPGRADE: Render Markdown for bot messages
+        if (sender === "bot") {
+            bubble.innerHTML = marked.parse(text);
+        } else {
+            bubble.textContent = text;
+        }
         
         row.appendChild(bubble);
         return { row, bubble };
@@ -536,6 +638,7 @@
         const { row, bubble } = createMessageElement("", "bot");
         messagesContainer.appendChild(row);
         
+        let rawText = "";
         let index = 0;
         const length = text.length;
         // Adaptive speed
@@ -543,7 +646,9 @@
 
         function typeChar() {
             if (index < length) {
-                bubble.textContent += text.charAt(index);
+                rawText += text.charAt(index);
+                // Render markdown on the fly
+                bubble.innerHTML = marked.parse(rawText);
                 index++;
                 scrollToBottom();
                 setTimeout(typeChar, speed);
