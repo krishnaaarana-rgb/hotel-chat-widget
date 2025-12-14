@@ -487,34 +487,40 @@
         "Contact reception"
     ];
 
-    // --- Configure Marked (Markdown) - THE AGGRESSIVE LINK FIXER ---
+    // --- Configure Marked (Markdown) - THE SMART LINKER ---
     const renderer = new marked.Renderer();
     renderer.link = function(href, title, text) {
-        // 1. Get clean strings
-        let cleanHref = href ? href.toString() : "";
-        let cleanText = text ? text.toString() : "";
+        let cleanHref = (href || "").toString().trim();
+        let cleanText = (text || "").toString().trim();
 
-        // 2. BLOCK "UNDEFINED": If the visible text is "undefined", hide it completely.
-        if (cleanText.toLowerCase().includes("undefined")) {
-            return ""; 
-        }
-
-        // 3. Clean the URL (remove parens/dots from AI hallucinations)
+        // 1. CLEANUP: Remove AI artifacts like trailing dots/parens from URL
         cleanHref = cleanHref.replace(/^[(\s]+/, '').replace(/[).,\s]+$/, '');
 
-        // 4. BLOCK BAD URLS: If URL contains "undefined", return just the text (not clickable)
-        if (cleanHref.toLowerCase().includes("undefined")) {
+        // 2. CHECK: Is the URL broken? (Contains "undefined", "null", or is empty)
+        const isUrlBroken = !cleanHref || 
+                            cleanHref.toLowerCase().includes("undefined") || 
+                            cleanHref.toLowerCase().includes("null") ||
+                            cleanHref === 'https://';
+
+        if (isUrlBroken) {
+            // OPTION A: URL is broken. 
+            // If the text is generic (like "More info"), hide it entirely.
+            if (["more info", "undefined", "link", "click here"].includes(cleanText.toLowerCase())) {
+                return ""; 
+            }
+            // If the text is specific (like "Mona Suite"), show it as plain text (no link).
             return cleanText;
         }
 
-        // 5. Force HTTPS if missing
-        if (cleanHref && !/^https?:\/\//i.test(cleanHref) && !cleanHref.startsWith('mailto:') && !cleanHref.startsWith('tel:')) {
+        // OPTION B: URL is Valid.
+        // Fix the Text: If the text is "undefined", change it to "View Room"
+        if (cleanText.toLowerCase().includes("undefined") || !cleanText) {
+            cleanText = "View Details";
+        }
+        
+        // Force HTTPS
+        if (!/^https?:\/\//i.test(cleanHref) && !cleanHref.startsWith('mailto:') && !cleanHref.startsWith('tel:')) {
             cleanHref = 'https://' + cleanHref;
-        }
-
-        // 6. Safety Check: If link is empty, return plain text
-        if (!cleanHref || cleanHref === 'https://') {
-            return cleanText;
         }
 
         return `<a href="${cleanHref}" target="_blank" rel="noopener noreferrer" title="${title || ''}">${cleanText}</a>`;
@@ -586,7 +592,6 @@
         
         if (sender === "bot") {
             try {
-                // Initial parse
                 bubble.innerHTML = marked.parse(text || "");
             } catch(e) {
                 bubble.textContent = text;
@@ -653,7 +658,6 @@
             if (index < length) {
                 rawText += text.charAt(index);
                 try {
-                    // Update markdown preview occasionally (every 3 chars) for smoothness
                     if (index % 3 === 0 || index === length - 1) {
                          bubble.innerHTML = marked.parse(rawText);
                     }
@@ -720,7 +724,6 @@
 
             let botText = "I apologize, I am having trouble connecting.";
             
-            // Handle n8n Array vs Object response
             if (Array.isArray(data) && data.length > 0) {
                 botText = data[0].output || data[0].result || data[0].reply || data[0].text || botText;
             } else if (typeof data === 'object') {
