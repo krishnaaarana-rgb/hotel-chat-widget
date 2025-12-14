@@ -570,19 +570,29 @@ function createMessageElement(text, sender) {
         try {
             // Parse markdown and set innerHTML
             const parsed = marked.parse(text || "");
+            console.log("=== MARKDOWN DEBUG ===");
+            console.log("Original text:", text);
+            console.log("Parsed HTML:", parsed);
             bubble.innerHTML = parsed;
             
             // CRITICAL FIX: Ensure all links have proper event handling
-            // This prevents any interference from parent elements
             setTimeout(() => {
                 const links = bubble.querySelectorAll('a');
-                links.forEach(link => {
+                console.log("Found links:", links.length);
+                links.forEach((link, idx) => {
+                    console.log(`Link ${idx}:`, {
+                        href: link.href,
+                        text: link.textContent,
+                        target: link.target
+                    });
                     // Ensure click events work properly
                     link.addEventListener('click', function(e) {
+                        console.log("Link clicked!", link.href);
                         e.stopPropagation();
                         // Let the browser handle the link naturally
                     });
                 });
+                console.log("===================");
             }, 0);
             
         } catch(e) {
