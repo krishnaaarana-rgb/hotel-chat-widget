@@ -471,23 +471,22 @@
 </div>
 
 <script>
-    /** * MONA MONTREUX CORE LOGIC
-     * Features: Markdown, Nudge, Reset, Streaming
-     */
+    /** * MONA MONTREUX CORE LOGIC * */
 
     // --- References ---
     const launcher = document.getElementById("hotel-chatbot-launcher");
     const chatWindow = document.getElementById("hotel-chatbot");
     const minimizeBtn = document.getElementById("minimize-btn");
-    const resetBtn = document.getElementById("reset-btn"); // New
+    const resetBtn = document.getElementById("reset-btn");
     const messagesContainer = document.getElementById("hotel-chatbot-messages");
     const inputField = document.getElementById("chat-input");
     const sendButton = document.getElementById("send-btn");
     const quickRepliesContainer = document.getElementById("quick-replies");
-    const nudge = document.getElementById("proactive-nudge"); // New
+    const nudge = document.getElementById("proactive-nudge");
 
     // --- Configuration ---
-    const WEBHOOK_URL = "https://n8n.srv1106816.hstgr.cloud/webhook/595269c9-1640-45c9-9c2b-861a69417966";
+    // REPLACE THIS WITH YOUR WEBHOOK URL
+    const WEBHOOK_URL = "https://n8n.srv1106816.hstgr.cloud/webhook/595269c9-1640-45c9-9c2b-861a69417966"; 
     const INITIAL_GREETING = "Bonjour! Welcome to Mona Montreux. How may I assist with your stay today?";
     const STARTER_OPTIONS = [
         "Show me the rooms",
@@ -496,20 +495,22 @@
         "Contact reception"
     ];
 
-    // --- Configure Marked (Markdown) ---
-    // Ensure links open in a new tab
-    // --- Configure Marked (Markdown) ---
-    // Ensure links are absolute and open in a new tab
+    // --- Configure Marked (Markdown) - THE LINK FIXER ---
     const renderer = new marked.Renderer();
     renderer.link = function(href, title, text) {
-        let cleanHref = href.trim();
+        let cleanHref = href ? href.trim() : "";
         
-        // 1. Fix AI error: Removing trailing periods or parenthesis often included by accident
+        // 1. Remove trailing punctuation (periods, commas, closing parens) often added by AI
         cleanHref = cleanHref.replace(/[).,]+$/, '');
 
-        // 2. Fix AI error: Add https:// if the AI forgot it (prevents broken relative links)
-        if (!/^https?:\/\//i.test(cleanHref) && !cleanHref.startsWith('mailto:') && !cleanHref.startsWith('tel:')) {
+        // 2. Force https:// if missing (prevents broken relative links)
+        if (cleanHref && !/^https?:\/\//i.test(cleanHref) && !cleanHref.startsWith('mailto:') && !cleanHref.startsWith('tel:')) {
             cleanHref = 'https://' + cleanHref;
+        }
+
+        // 3. Safety Check: If the link is empty or just protocol, don't break the UI
+        if (!cleanHref || cleanHref === 'https://' || cleanHref === 'http://') {
+            return text;
         }
 
         return `<a href="${cleanHref}" target="_blank" rel="noopener noreferrer" title="${title || ''}">${text}</a>`;
@@ -523,7 +524,7 @@
         localStorage.setItem("hotel_session_id", sessionId);
     }
 
-    // --- Proactive Nudge Logic (Show after 5s) ---
+    // --- Proactive Nudge ---
     setTimeout(() => {
         if (!chatWindow.classList.contains("open")) {
             nudge.classList.add("visible");
@@ -538,27 +539,20 @@
     let isTyping = false;
     let typingElement = null;
 
-    // --- Toggle Chat (UPDATED WITH POSTMESSAGE) ---
+    // --- Toggle Chat ---
     function toggleChat() {
-        closeNudge(); // Always hide nudge when interacting
-
+        closeNudge();
         const isOpen = chatWindow.classList.contains("open");
         if (isOpen) {
-            // Close logic
             chatWindow.classList.remove("open");
             launcher.classList.remove("active");
-            // NOTIFY WEBSITE TO SHRINK IFRAME
             window.parent.postMessage("chat-close", "*");
         } else {
-            // Open logic
             chatWindow.classList.add("open");
             launcher.classList.add("active");
             inputField.focus();
-            
-            // NOTIFY WEBSITE TO EXPAND IFRAME
             window.parent.postMessage("chat-open", "*");
             
-            // Initial boot
             if (messagesContainer.children.length === 0) {
                 setTimeout(() => {
                     appendMessage(INITIAL_GREETING, "bot");
@@ -568,16 +562,10 @@
         }
     }
 
-    // --- Reset Session (New Feature) ---
     resetBtn.addEventListener("click", () => {
-        // Generate new session ID
         sessionId = "sess_" + Math.random().toString(36).substring(2) + Date.now().toString(36);
         localStorage.setItem("hotel_session_id", sessionId);
-        
-        // Clear UI
         messagesContainer.innerHTML = "";
-        
-        // Restart chat
         appendMessage(INITIAL_GREETING, "bot");
         showStarterOptions();
     });
@@ -586,17 +574,15 @@
     minimizeBtn.addEventListener("click", toggleChat);
 
     // --- UI Helpers ---
-
     function createMessageElement(text, sender) {
         const row = document.createElement("div");
         row.className = `message-row ${sender}`;
-        
         const bubble = document.createElement("div");
         bubble.className = `bubble ${sender}`;
         
-        // UPGRADE: Render Markdown for bot messages
         if (sender === "bot") {
-            bubble.innerHTML = marked.parse(text);
+            // Render basic markdown, advanced parsing happens in streaming
+            bubble.innerHTML = marked.parse(text || "");
         } else {
             bubble.textContent = text;
         }
@@ -614,19 +600,12 @@
     function showTypingIndicator() {
         if (isTyping) return;
         isTyping = true;
-        
         const row = document.createElement("div");
         row.className = "message-row bot";
         row.id = "typing-row";
-        
         const indicator = document.createElement("div");
         indicator.className = "typing-indicator";
-        indicator.innerHTML = `
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
-        `;
-        
+        indicator.innerHTML = `<div class="dot"></div><div class="dot"></div><div class="dot"></div>`;
         row.appendChild(indicator);
         messagesContainer.appendChild(row);
         scrollToBottom();
@@ -645,28 +624,45 @@
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
-    // --- Streaming Text Logic ---
+    // --- Streaming Text Logic (Optimized) ---
     function appendStreamingMessage(text) {
         const { row, bubble } = createMessageElement("", "bot");
         messagesContainer.appendChild(row);
-        
+
+        // Safety: If text is huge, just render it instantly to prevent crashing
+        if (text.length > 2000) {
+            bubble.innerHTML = marked.parse(text);
+            scrollToBottom();
+            return;
+        }
+
         let rawText = "";
         let index = 0;
         const length = text.length;
-        // Adaptive speed
-        const speed = length > 100 ? 5 : 15; 
+        // Faster speed for longer text to prevent "lag"
+        const speed = length > 200 ? 3 : 10; 
 
         function typeChar() {
             if (index < length) {
                 rawText += text.charAt(index);
-                // Render markdown on the fly
-                bubble.innerHTML = marked.parse(rawText);
+                // Wrap in try-catch to prevent loop crash on partial markdown
+                try {
+                    bubble.innerHTML = marked.parse(rawText);
+                } catch (e) {
+                    // console.warn("Markdown parse error during stream", e);
+                }
                 index++;
-                scrollToBottom();
+                
+                // Scroll only every 5 frames to save performance
+                if (index % 5 === 0) scrollToBottom();
+                
                 setTimeout(typeChar, speed);
+            } else {
+                // Final render to ensure everything is clean
+                bubble.innerHTML = marked.parse(text);
+                scrollToBottom();
             }
         }
-        
         requestAnimationFrame(typeChar);
     }
 
@@ -677,8 +673,7 @@
             const chip = document.createElement("button");
             chip.className = "chip";
             chip.textContent = opt;
-            chip.style.animationDelay = `${idx * 0.1}s`; // Staggered entrance
-            
+            chip.style.animationDelay = `${idx * 0.1}s`;
             chip.onclick = () => {
                 handleUserSend(opt);
                 clearQuickReplies();
@@ -710,7 +705,6 @@
     async function handleUserSend(text) {
         if (!text || !text.trim()) return;
 
-        // UI Updates
         appendMessage(text, "user");
         inputField.value = "";
         clearQuickReplies();
@@ -720,9 +714,17 @@
             const data = await postToWebhook({ chatInput: text, sessionId });
             removeTypingIndicator();
 
-            // Extract response (handling various n8n output formats)
-            const botText = data.output || data.result || data.text || "I apologize, I am having trouble connecting to the concierge.";
+            // DATA HANDLING FIX: Handle both Array and Object responses
+            let botText = "I apologize, I am having trouble connecting.";
             
+            if (Array.isArray(data) && data.length > 0) {
+                // Handle Array case (n8n default)
+                botText = data[0].output || data[0].result || data[0].reply || data[0].text || botText;
+            } else if (typeof data === 'object') {
+                // Handle Object case
+                botText = data.output || data.result || data.reply || data.text || botText;
+            }
+
             appendStreamingMessage(botText);
             
         } catch (error) {
@@ -733,16 +735,11 @@
 
     // --- Event Listeners ---
     sendButton.addEventListener("click", () => handleUserSend(inputField.value));
-    
     inputField.addEventListener("keydown", (e) => {
         if (e.key === "Enter") handleUserSend(inputField.value);
     });
-
-    // Hide quick replies when user starts typing manually
     inputField.addEventListener("input", () => {
-        if (inputField.value.length > 0 && quickRepliesContainer.children.length > 0) {
-            clearQuickReplies();
-        }
+        if (inputField.value.length > 0) clearQuickReplies();
     });
 
 </script>
