@@ -464,6 +464,8 @@
 </div>
 
 <script>
+/** * MONA MONTREUX CORE LOGIC * */
+
 // --- References ---
 const launcher = document.getElementById("hotel-chatbot-launcher");
 const chatWindow = document.getElementById("hotel-chatbot");
@@ -732,13 +734,18 @@ async function handleUserSend(text) {
         const data = await postToWebhook({ chatInput: text, sessionId });
         removeTypingIndicator();
 
-        let botText = "I apologize, I am having trouble connecting.";
+                    let botText = "I apologize, I am having trouble connecting.";
         
-        // ROBUST DATA HANDLING
+        // ROBUST DATA HANDLING - check all possible response formats
         if (Array.isArray(data) && data.length > 0) {
-            botText = data[0].output || data[0].text || data[0].reply || data[0].result || botText;
+            botText = data[0].result || data[0].output || data[0].text || data[0].reply || botText;
         } else if (typeof data === 'object') {
-            botText = data.output || data.text || data.reply || data.result || botText;
+            botText = data.result || data.output || data.text || data.reply || botText;
+        }
+        
+        // Safety: Ensure it's a string
+        if (typeof botText !== 'string') {
+            botText = String(botText);
         }
 
         appendStreamingMessage(botText);
