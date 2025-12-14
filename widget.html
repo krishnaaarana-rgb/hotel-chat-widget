@@ -498,9 +498,21 @@
 
     // --- Configure Marked (Markdown) ---
     // Ensure links open in a new tab
+    // --- Configure Marked (Markdown) ---
+    // Ensure links are absolute and open in a new tab
     const renderer = new marked.Renderer();
     renderer.link = function(href, title, text) {
-        return `<a href="${href}" target="_blank" rel="noopener noreferrer" title="${title || ''}">${text}</a>`;
+        let cleanHref = href.trim();
+        
+        // 1. Fix AI error: Removing trailing periods or parenthesis often included by accident
+        cleanHref = cleanHref.replace(/[).,]+$/, '');
+
+        // 2. Fix AI error: Add https:// if the AI forgot it (prevents broken relative links)
+        if (!/^https?:\/\//i.test(cleanHref) && !cleanHref.startsWith('mailto:') && !cleanHref.startsWith('tel:')) {
+            cleanHref = 'https://' + cleanHref;
+        }
+
+        return `<a href="${cleanHref}" target="_blank" rel="noopener noreferrer" title="${title || ''}">${text}</a>`;
     };
     marked.setOptions({ renderer: renderer });
 
