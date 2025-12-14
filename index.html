@@ -464,261 +464,299 @@
 </div>
 
 <script>
-    /** * MONA MONTREUX CORE LOGIC * */
+// --- References ---
+const launcher = document.getElementById("hotel-chatbot-launcher");
+const chatWindow = document.getElementById("hotel-chatbot");
+const minimizeBtn = document.getElementById("minimize-btn");
+const resetBtn = document.getElementById("reset-btn");
+const messagesContainer = document.getElementById("hotel-chatbot-messages");
+const inputField = document.getElementById("chat-input");
+const sendButton = document.getElementById("send-btn");
+const quickRepliesContainer = document.getElementById("quick-replies");
+const nudge = document.getElementById("proactive-nudge");
 
-    // --- References ---
-    const launcher = document.getElementById("hotel-chatbot-launcher");
-    const chatWindow = document.getElementById("hotel-chatbot");
-    const minimizeBtn = document.getElementById("minimize-btn");
-    const resetBtn = document.getElementById("reset-btn");
-    const messagesContainer = document.getElementById("hotel-chatbot-messages");
-    const inputField = document.getElementById("chat-input");
-    const sendButton = document.getElementById("send-btn");
-    const quickRepliesContainer = document.getElementById("quick-replies");
-    const nudge = document.getElementById("proactive-nudge");
+// --- Configuration ---
+const WEBHOOK_URL = "https://n8n.srv1106816.hstgr.cloud/webhook/595269c9-1640-45c9-9c2b-861a69417966"; 
+const INITIAL_GREETING = "Bonjour! Welcome to Mona Montreux. How may I assist with your stay today?";
+const STARTER_OPTIONS = [
+    "Show me the rooms",
+    "Dining options",
+    "Experiences",
+    "Contact reception"
+];
 
-    // --- Configuration ---
-    const WEBHOOK_URL = "https://n8n.srv1106816.hstgr.cloud/webhook/595269c9-1640-45c9-9c2b-861a69417966"; 
-    const INITIAL_GREETING = "Bonjour! Welcome to Mona Montreux. How may I assist with your stay today?";
-    const STARTER_OPTIONS = [
-        "Show me the rooms",
-        "Dining options",
-        "Experiences",
-        "Contact reception"
-    ];
+// --- Configure Marked (Markdown) - FIXED RENDERER ---
+const renderer = new marked.Renderer();
+renderer.link = function(href, title, text) {
+    // Ensure href is properly escaped and formatted
+    const cleanHref = href || '#';
+    const cleanTitle = title || '';
+    const cleanText = text || cleanHref;
+    return `<a href="${cleanHref}" target="_blank" rel="noopener noreferrer" title="${cleanTitle}">${cleanText}</a>`;
+};
 
-    // --- Configure Marked (Markdown) - STANDARD RENDERER ---
-    // Since your backend data is now clean, we just need to ensure links open in new tabs.
-    const renderer = new marked.Renderer();
-    renderer.link = function(href, title, text) {
-        return `<a href="${href}" target="_blank" rel="noopener noreferrer" title="${title || ''}">${text}</a>`;
-    };
-    marked.setOptions({ renderer: renderer });
+marked.setOptions({ 
+    renderer: renderer,
+    breaks: true,
+    gfm: true
+});
 
-    // --- Session Management ---
-    let sessionId = localStorage.getItem("hotel_session_id");
-    if (!sessionId) {
-        sessionId = "sess_" + Math.random().toString(36).substring(2) + Date.now().toString(36);
-        localStorage.setItem("hotel_session_id", sessionId);
+// --- Session Management ---
+let sessionId = localStorage.getItem("hotel_session_id");
+if (!sessionId) {
+    sessionId = "sess_" + Math.random().toString(36).substring(2) + Date.now().toString(36);
+    localStorage.setItem("hotel_session_id", sessionId);
+}
+
+// --- Proactive Nudge ---
+setTimeout(() => {
+    if (!chatWindow.classList.contains("open")) {
+        nudge.classList.add("visible");
     }
+}, 5000);
 
-    // --- Proactive Nudge ---
-    setTimeout(() => {
-        if (!chatWindow.classList.contains("open")) {
-            nudge.classList.add("visible");
-        }
-    }, 5000);
+function closeNudge() {
+    nudge.classList.remove("visible");
+}
 
-    function closeNudge() {
-        nudge.classList.remove("visible");
-    }
+// --- State ---
+let isTyping = false;
+let typingElement = null;
 
-    // --- State ---
-    let isTyping = false;
-    let typingElement = null;
-
-    // --- Toggle Chat ---
-    function toggleChat() {
-        closeNudge();
-        const isOpen = chatWindow.classList.contains("open");
-        if (isOpen) {
-            chatWindow.classList.remove("open");
-            launcher.classList.remove("active");
-            try { window.parent.postMessage("chat-close", "*"); } catch(e){}
-        } else {
-            chatWindow.classList.add("open");
-            launcher.classList.add("active");
-            inputField.focus();
-            try { window.parent.postMessage("chat-open", "*"); } catch(e){}
-            
-            if (messagesContainer.children.length === 0) {
-                setTimeout(() => {
-                    appendMessage(INITIAL_GREETING, "bot");
-                    showStarterOptions();
-                }, 400);
-            }
-        }
-    }
-
-    resetBtn.addEventListener("click", () => {
-        sessionId = "sess_" + Math.random().toString(36).substring(2) + Date.now().toString(36);
-        localStorage.setItem("hotel_session_id", sessionId);
-        messagesContainer.innerHTML = "";
-        appendMessage(INITIAL_GREETING, "bot");
-        showStarterOptions();
-    });
-
-    launcher.addEventListener("click", toggleChat);
-    minimizeBtn.addEventListener("click", toggleChat);
-
-    // --- UI Helpers ---
-    function createMessageElement(text, sender) {
-        const row = document.createElement("div");
-        row.className = `message-row ${sender}`;
-        const bubble = document.createElement("div");
-        bubble.className = `bubble ${sender}`;
+// --- Toggle Chat ---
+function toggleChat() {
+    closeNudge();
+    const isOpen = chatWindow.classList.contains("open");
+    if (isOpen) {
+        chatWindow.classList.remove("open");
+        launcher.classList.remove("active");
+        try { window.parent.postMessage("chat-close", "*"); } catch(e){}
+    } else {
+        chatWindow.classList.add("open");
+        launcher.classList.add("active");
+        inputField.focus();
+        try { window.parent.postMessage("chat-open", "*"); } catch(e){}
         
-        if (sender === "bot") {
-            try {
-                // Parse the clean markdown from n8n
-                bubble.innerHTML = marked.parse(text || "");
-            } catch(e) {
-                console.error("Markdown Error:", e);
-                bubble.textContent = text;
-            }
-        } else {
+        if (messagesContainer.children.length === 0) {
+            setTimeout(() => {
+                appendMessage(INITIAL_GREETING, "bot");
+                showStarterOptions();
+            }, 400);
+        }
+    }
+}
+
+resetBtn.addEventListener("click", () => {
+    sessionId = "sess_" + Math.random().toString(36).substring(2) + Date.now().toString(36);
+    localStorage.setItem("hotel_session_id", sessionId);
+    messagesContainer.innerHTML = "";
+    appendMessage(INITIAL_GREETING, "bot");
+    showStarterOptions();
+});
+
+launcher.addEventListener("click", toggleChat);
+minimizeBtn.addEventListener("click", toggleChat);
+
+// --- UI Helpers ---
+function createMessageElement(text, sender) {
+    const row = document.createElement("div");
+    row.className = `message-row ${sender}`;
+    const bubble = document.createElement("div");
+    bubble.className = `bubble ${sender}`;
+    
+    if (sender === "bot") {
+        try {
+            // Parse markdown and set innerHTML
+            const parsed = marked.parse(text || "");
+            bubble.innerHTML = parsed;
+            
+            // CRITICAL FIX: Ensure all links have proper event handling
+            // This prevents any interference from parent elements
+            setTimeout(() => {
+                const links = bubble.querySelectorAll('a');
+                links.forEach(link => {
+                    // Ensure click events work properly
+                    link.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                        // Let the browser handle the link naturally
+                    });
+                });
+            }, 0);
+            
+        } catch(e) {
+            console.error("Markdown Error:", e);
             bubble.textContent = text;
         }
+    } else {
+        bubble.textContent = text;
+    }
+    
+    row.appendChild(bubble);
+    return { row, bubble };
+}
+
+function appendMessage(text, sender) {
+    const { row } = createMessageElement(text, sender);
+    messagesContainer.appendChild(row);
+    scrollToBottom();
+}
+
+function showTypingIndicator() {
+    if (isTyping) return;
+    isTyping = true;
+    const row = document.createElement("div");
+    row.className = "message-row bot";
+    row.id = "typing-row";
+    const indicator = document.createElement("div");
+    indicator.className = "typing-indicator";
+    indicator.innerHTML = `<div class="dot"></div><div class="dot"></div><div class="dot"></div>`;
+    row.appendChild(indicator);
+    messagesContainer.appendChild(row);
+    scrollToBottom();
+    typingElement = row;
+}
+
+function removeTypingIndicator() {
+    if (typingElement) {
+        typingElement.remove();
+        typingElement = null;
+    }
+    isTyping = false;
+}
+
+function scrollToBottom() {
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}
+
+// --- Streaming Text Logic ---
+function appendStreamingMessage(text) {
+    const { row, bubble } = createMessageElement("", "bot");
+    messagesContainer.appendChild(row);
+
+    // Safety: If text is huge, render instantly
+    if (text.length > 2000) {
+        bubble.innerHTML = marked.parse(text);
         
-        row.appendChild(bubble);
-        return { row, bubble };
-    }
-
-    function appendMessage(text, sender) {
-        const { row } = createMessageElement(text, sender);
-        messagesContainer.appendChild(row);
-        scrollToBottom();
-    }
-
-    function showTypingIndicator() {
-        if (isTyping) return;
-        isTyping = true;
-        const row = document.createElement("div");
-        row.className = "message-row bot";
-        row.id = "typing-row";
-        const indicator = document.createElement("div");
-        indicator.className = "typing-indicator";
-        indicator.innerHTML = `<div class="dot"></div><div class="dot"></div><div class="dot"></div>`;
-        row.appendChild(indicator);
-        messagesContainer.appendChild(row);
-        scrollToBottom();
-        typingElement = row;
-    }
-
-    function removeTypingIndicator() {
-        if (typingElement) {
-            typingElement.remove();
-            typingElement = null;
-        }
-        isTyping = false;
-    }
-
-    function scrollToBottom() {
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }
-
-    // --- Streaming Text Logic ---
-    function appendStreamingMessage(text) {
-        const { row, bubble } = createMessageElement("", "bot");
-        messagesContainer.appendChild(row);
-
-        // Safety: If text is huge, render instantly
-        if (text.length > 2000) {
-            bubble.innerHTML = marked.parse(text);
-            scrollToBottom();
-            return;
-        }
-
-        let rawText = "";
-        let index = 0;
-        const length = text.length;
-        const speed = length > 200 ? 3 : 10; 
-
-        function typeChar() {
-            if (index < length) {
-                rawText += text.charAt(index);
-                try {
-                    // Update markdown preview occasionally
-                    if (index % 3 === 0 || index === length - 1) {
-                         bubble.innerHTML = marked.parse(rawText);
-                    }
-                } catch (e) {}
-                index++;
-                
-                if (index % 5 === 0) scrollToBottom();
-                setTimeout(typeChar, speed);
-            } else {
-                bubble.innerHTML = marked.parse(text);
-                scrollToBottom();
-            }
-        }
-        requestAnimationFrame(typeChar);
-    }
-
-    // --- Quick Replies ---
-    function showStarterOptions() {
-        quickRepliesContainer.innerHTML = "";
-        STARTER_OPTIONS.forEach((opt, idx) => {
-            const chip = document.createElement("button");
-            chip.className = "chip";
-            chip.textContent = opt;
-            chip.style.animationDelay = `${idx * 0.1}s`;
-            chip.onclick = () => {
-                handleUserSend(opt);
-                clearQuickReplies();
-            };
-            quickRepliesContainer.appendChild(chip);
-        });
-    }
-
-    function clearQuickReplies() {
-        quickRepliesContainer.innerHTML = "";
-    }
-
-    // --- Networking ---
-    async function postToWebhook(payload) {
-        try {
-            const response = await fetch(WEBHOOK_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
+        // Fix links after rendering
+        const links = bubble.querySelectorAll('a');
+        links.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.stopPropagation();
             });
-            return await response.json();
-        } catch (error) {
-            console.error("Webhook error:", error);
-            throw error;
-        }
+        });
+        
+        scrollToBottom();
+        return;
     }
 
-    // --- Main Send Logic ---
-    async function handleUserSend(text) {
-        if (!text || !text.trim()) return;
+    let rawText = "";
+    let index = 0;
+    const length = text.length;
+    const speed = length > 200 ? 3 : 10; 
 
-        appendMessage(text, "user");
-        inputField.value = "";
-        clearQuickReplies();
-        showTypingIndicator();
-
-        try {
-            const data = await postToWebhook({ chatInput: text, sessionId });
-            removeTypingIndicator();
-
-            let botText = "I apologize, I am having trouble connecting.";
+    function typeChar() {
+        if (index < length) {
+            rawText += text.charAt(index);
+            try {
+                // Update markdown preview occasionally
+                if (index % 3 === 0 || index === length - 1) {
+                     bubble.innerHTML = marked.parse(rawText);
+                }
+            } catch (e) {}
+            index++;
             
-            // ROBUST DATA HANDLING
-            // Checks for 'output', 'text', 'reply', or 'result' in both Array and Object formats
-            if (Array.isArray(data) && data.length > 0) {
-                botText = data[0].output || data[0].text || data[0].reply || data[0].result || botText;
-            } else if (typeof data === 'object') {
-                botText = data.output || data.text || data.reply || data.result || botText;
-            }
-
-            appendStreamingMessage(botText);
+            if (index % 5 === 0) scrollToBottom();
+            setTimeout(typeChar, speed);
+        } else {
+            bubble.innerHTML = marked.parse(text);
             
-        } catch (error) {
-            removeTypingIndicator();
-            appendMessage("Connection issue. Please try again.", "bot");
+            // CRITICAL: Fix links after streaming completes
+            const links = bubble.querySelectorAll('a');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            });
+            
+            scrollToBottom();
         }
     }
+    requestAnimationFrame(typeChar);
+}
 
-    // --- Event Listeners ---
-    sendButton.addEventListener("click", () => handleUserSend(inputField.value));
-    inputField.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") handleUserSend(inputField.value);
+// --- Quick Replies ---
+function showStarterOptions() {
+    quickRepliesContainer.innerHTML = "";
+    STARTER_OPTIONS.forEach((opt, idx) => {
+        const chip = document.createElement("button");
+        chip.className = "chip";
+        chip.textContent = opt;
+        chip.style.animationDelay = `${idx * 0.1}s`;
+        chip.onclick = () => {
+            handleUserSend(opt);
+            clearQuickReplies();
+        };
+        quickRepliesContainer.appendChild(chip);
     });
-    inputField.addEventListener("input", () => {
-        if (inputField.value.length > 0) clearQuickReplies();
-    });
+}
+
+function clearQuickReplies() {
+    quickRepliesContainer.innerHTML = "";
+}
+
+// --- Networking ---
+async function postToWebhook(payload) {
+    try {
+        const response = await fetch(WEBHOOK_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(payload)
+        });
+        return await response.json();
+    } catch (error) {
+        console.error("Webhook error:", error);
+        throw error;
+    }
+}
+
+// --- Main Send Logic ---
+async function handleUserSend(text) {
+    if (!text || !text.trim()) return;
+
+    appendMessage(text, "user");
+    inputField.value = "";
+    clearQuickReplies();
+    showTypingIndicator();
+
+    try {
+        const data = await postToWebhook({ chatInput: text, sessionId });
+        removeTypingIndicator();
+
+        let botText = "I apologize, I am having trouble connecting.";
+        
+        // ROBUST DATA HANDLING
+        if (Array.isArray(data) && data.length > 0) {
+            botText = data[0].output || data[0].text || data[0].reply || data[0].result || botText;
+        } else if (typeof data === 'object') {
+            botText = data.output || data.text || data.reply || data.result || botText;
+        }
+
+        appendStreamingMessage(botText);
+        
+    } catch (error) {
+        removeTypingIndicator();
+        appendMessage("Connection issue. Please try again.", "bot");
+    }
+}
+
+// --- Event Listeners ---
+sendButton.addEventListener("click", () => handleUserSend(inputField.value));
+inputField.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") handleUserSend(inputField.value);
+});
+inputField.addEventListener("input", () => {
+    if (inputField.value.length > 0) clearQuickReplies();
+});
 
 </script>
 </body>
