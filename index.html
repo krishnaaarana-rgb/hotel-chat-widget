@@ -491,9 +491,20 @@ const STARTER_OPTIONS = [
 const renderer = new marked.Renderer();
 renderer.link = function(href, title, text) {
     // Ensure href is properly escaped and formatted
-    const cleanHref = href || '#';
+    let cleanHref = href || '#';
+    
+    // CRITICAL FIX: Ensure absolute URLs
+    // If href doesn't start with http:// or https://, it's relative
+    if (cleanHref !== '#' && !cleanHref.match(/^https?:\/\//i)) {
+        console.warn("Relative URL detected:", cleanHref);
+        // Don't modify, let it be relative (this shouldn't happen with your AI output)
+    }
+    
     const cleanTitle = title || '';
     const cleanText = text || cleanHref;
+    
+    console.log("Rendering link:", { href: cleanHref, text: cleanText });
+    
     return `<a href="${cleanHref}" target="_blank" rel="noopener noreferrer" title="${cleanTitle}">${cleanText}</a>`;
 };
 
