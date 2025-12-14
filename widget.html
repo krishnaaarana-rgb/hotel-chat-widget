@@ -487,42 +487,45 @@
         "Contact reception"
     ];
 
-    // --- Configure Marked (Markdown) - THE SMART LINKER ---
+    // --- Configure Marked (Markdown) - THE SAFETY LINKER ---
     const renderer = new marked.Renderer();
     renderer.link = function(href, title, text) {
         let cleanHref = (href || "").toString().trim();
         let cleanText = (text || "").toString().trim();
 
-        // 1. CLEANUP: Remove AI artifacts like trailing dots/parens from URL
+        // 1. CLEANUP: Remove trailing dots/parens from URL (AI hallucinations)
         cleanHref = cleanHref.replace(/^[(\s]+/, '').replace(/[).,\s]+$/, '');
 
-        // 2. CHECK: Is the URL broken? (Contains "undefined", "null", or is empty)
+        // 2. DETECT BROKEN URL
+        // A URL is broken if it's missing, "undefined", "null", or just "https://"
         const isUrlBroken = !cleanHref || 
                             cleanHref.toLowerCase().includes("undefined") || 
                             cleanHref.toLowerCase().includes("null") ||
                             cleanHref === 'https://';
 
+        // 3. LOGIC: TO LINK OR NOT TO LINK?
         if (isUrlBroken) {
-            // OPTION A: URL is broken. 
-            // If the text is generic (like "More info"), hide it entirely.
-            if (["more info", "undefined", "link", "click here"].includes(cleanText.toLowerCase())) {
+            // Case A: Broken URL + Generic Text -> HIDE IT (Return empty)
+            if (["more info", "undefined", "link", "click here", "view details"].includes(cleanText.toLowerCase())) {
                 return ""; 
             }
-            // If the text is specific (like "Mona Suite"), show it as plain text (no link).
+            // Case B: Broken URL + Specific Text (e.g., "Mona Suite") -> SHOW PLAIN TEXT (No <a> tag)
             return cleanText;
         }
 
-        // OPTION B: URL is Valid.
-        // Fix the Text: If the text is "undefined", change it to "View Room"
+        // 4. URL IS VALID: Prepare the link
+        
+        // Fix generic text if it says "undefined"
         if (cleanText.toLowerCase().includes("undefined") || !cleanText) {
             cleanText = "View Details";
         }
         
-        // Force HTTPS
+        // Ensure HTTPS
         if (!/^https?:\/\//i.test(cleanHref) && !cleanHref.startsWith('mailto:') && !cleanHref.startsWith('tel:')) {
             cleanHref = 'https://' + cleanHref;
         }
 
+        // Return clickable link
         return `<a href="${cleanHref}" target="_blank" rel="noopener noreferrer" title="${title || ''}">${cleanText}</a>`;
     };
     marked.setOptions({ renderer: renderer });
