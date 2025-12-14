@@ -490,20 +490,26 @@ const STARTER_OPTIONS = [
 // --- Configure Marked (Markdown) - FIXED RENDERER ---
 const renderer = new marked.Renderer();
 renderer.link = function(href, title, text) {
-    // Ensure href is properly escaped and formatted
-    let cleanHref = href || '#';
+    // CRITICAL FIX: Convert href to string if it's an object
+    let cleanHref = '#';
     
-    // CRITICAL FIX: Ensure absolute URLs
-    // If href doesn't start with http:// or https://, it's relative
-    if (cleanHref !== '#' && !cleanHref.match(/^https?:\/\//i)) {
-        console.warn("Relative URL detected:", cleanHref);
-        // Don't modify, let it be relative (this shouldn't happen with your AI output)
+    if (href) {
+        // If href is an object, try to extract URL properties
+        if (typeof href === 'object') {
+            cleanHref = href.url || href.href || href.link || '#';
+            console.warn("Link href is an object:", href);
+        } else {
+            cleanHref = String(href);
+        }
     }
     
-    const cleanTitle = title || '';
-    const cleanText = text || cleanHref;
+    // Ensure it's a valid URL
+    if (cleanHref !== '#' && !cleanHref.match(/^https?:\/\//i)) {
+        console.warn("Relative URL detected:", cleanHref);
+    }
     
-    console.log("Rendering link:", { href: cleanHref, text: cleanText });
+    const cleanTitle = title ? String(title) : '';
+    const cleanText = text ? String(text) : cleanHref;
     
     return `<a href="${cleanHref}" target="_blank" rel="noopener noreferrer" title="${cleanTitle}">${cleanText}</a>`;
 };
