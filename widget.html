@@ -487,26 +487,37 @@
         "Contact reception"
     ];
 
-    // --- Configure Marked (Markdown) - THE ULTIMATE LINK FIXER ---
+    // --- Configure Marked (Markdown) - THE AGGRESSIVE LINK FIXER ---
     const renderer = new marked.Renderer();
     renderer.link = function(href, title, text) {
-        // 1. Safety check for null/undefined
+        // 1. Get clean strings
         let cleanHref = href ? href.toString() : "";
-        
-        // 2. Remove whitespace and surrounding punctuation from BOTH ends
+        let cleanText = text ? text.toString() : "";
+
+        // 2. BLOCK "UNDEFINED": If the visible text is "undefined", hide it completely.
+        if (cleanText.toLowerCase().includes("undefined")) {
+            return ""; 
+        }
+
+        // 3. Clean the URL (remove parens/dots from AI hallucinations)
         cleanHref = cleanHref.replace(/^[(\s]+/, '').replace(/[).,\s]+$/, '');
 
-        // 3. Force https:// if missing (and not a mailto/tel link)
+        // 4. BLOCK BAD URLS: If URL contains "undefined", return just the text (not clickable)
+        if (cleanHref.toLowerCase().includes("undefined")) {
+            return cleanText;
+        }
+
+        // 5. Force HTTPS if missing
         if (cleanHref && !/^https?:\/\//i.test(cleanHref) && !cleanHref.startsWith('mailto:') && !cleanHref.startsWith('tel:')) {
             cleanHref = 'https://' + cleanHref;
         }
 
-        // 4. Dead Link Prevention: If the link is empty or just "https://", show plain text
-        if (!cleanHref || cleanHref.toLowerCase() === 'https://' || cleanHref.toLowerCase() === 'http://') {
-            return text;
+        // 6. Safety Check: If link is empty, return plain text
+        if (!cleanHref || cleanHref === 'https://') {
+            return cleanText;
         }
 
-        return `<a href="${cleanHref}" target="_blank" rel="noopener noreferrer" title="${title || ''}">${text}</a>`;
+        return `<a href="${cleanHref}" target="_blank" rel="noopener noreferrer" title="${title || ''}">${cleanText}</a>`;
     };
     marked.setOptions({ renderer: renderer });
 
@@ -575,6 +586,7 @@
         
         if (sender === "bot") {
             try {
+                // Initial parse
                 bubble.innerHTML = marked.parse(text || "");
             } catch(e) {
                 bubble.textContent = text;
@@ -641,7 +653,7 @@
             if (index < length) {
                 rawText += text.charAt(index);
                 try {
-                    // Only re-render if we hit a space or punctuation to save resources
+                    // Update markdown preview occasionally (every 3 chars) for smoothness
                     if (index % 3 === 0 || index === length - 1) {
                          bubble.innerHTML = marked.parse(rawText);
                     }
@@ -706,14 +718,12 @@
             const data = await postToWebhook({ chatInput: text, sessionId });
             removeTypingIndicator();
 
-            // FIXED DATA HANDLING: Support both Array and Object formats
             let botText = "I apologize, I am having trouble connecting.";
             
+            // Handle n8n Array vs Object response
             if (Array.isArray(data) && data.length > 0) {
-                // n8n often returns an array: [{ "result": "..." }]
                 botText = data[0].output || data[0].result || data[0].reply || data[0].text || botText;
             } else if (typeof data === 'object') {
-                // Sometimes it returns an object: { "result": "..." }
                 botText = data.output || data.result || data.reply || data.text || botText;
             }
 
