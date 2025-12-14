@@ -16,7 +16,7 @@
         ======================================================================== */
         :root {
             --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-            --glass-bg: rgba(255, 255, 255, 0.95); /* Slightly less transparent for readability */
+            --glass-bg: rgba(255, 255, 255, 0.95);
             --glass-border: rgba(255, 255, 255, 0.6);
             --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
             --text-dark: #1e293b;
@@ -43,15 +43,15 @@
             z-index: 9999999;
             display: flex; flex-direction: column; align-items: flex-end;
             font-family: 'Plus Jakarta Sans', sans-serif;
-            pointer-events: none; /* Let clicks pass through wrapper area */
+            pointer-events: none;
         }
         
         #chatbot-wrapper > * {
-            pointer-events: auto; /* Re-enable clicks on children */
+            pointer-events: auto;
         }
 
         /* ========================================================================
-           PROACTIVE NUDGE (TOOLTIP - NEW)
+           PROACTIVE NUDGE
         ======================================================================== */
         #proactive-nudge {
             background: white;
@@ -70,14 +70,13 @@
             cursor: pointer;
             border: 1px solid rgba(0,0,0,0.05);
             display: flex; align-items: center; gap: 8px;
-            white-space: nowrap; /* Keep text on one line */
+            white-space: nowrap;
         }
 
         #proactive-nudge.visible {
             opacity: 1; transform: translateY(0) scale(1);
         }
 
-        /* Tooltip Arrow */
         #proactive-nudge::after {
             content: ''; position: absolute; bottom: -6px; right: 24px;
             width: 12px; height: 12px; background: white;
@@ -93,7 +92,7 @@
         #proactive-nudge .close-nudge:hover { color: var(--text-dark); }
 
         /* ========================================================================
-           LAUNCHER BUTTON (Dynamic Pill to Circle)
+           LAUNCHER BUTTON
         ======================================================================== */
         #hotel-chatbot-launcher {
             height: 60px;
@@ -150,10 +149,7 @@
         }
 
         #hotel-chatbot-launcher.active .launcher-label {
-            opacity: 0;
-            width: 0;
-            margin: 0;
-            transform: translateX(20px);
+            opacity: 0; width: 0; margin: 0; transform: translateX(20px);
         }
 
         #hotel-chatbot-launcher.active #launcher-close-icon { opacity: 1; transform: scale(1) rotate(0deg); }
@@ -171,9 +167,7 @@
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border-radius: 24px;
             border: 1px solid var(--glass-border);
-            box-shadow: 
-                0 20px 50px rgba(0,0,0,0.1),
-                0 0 0 1px rgba(255,255,255,0.5) inset;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.5) inset;
             display: flex; flex-direction: column;
             transform-origin: bottom right;
             transform: scale(0.9) translateY(20px);
@@ -278,10 +272,10 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.03);
             white-space: pre-wrap;
             transition: transform 0.2s;
-            word-wrap: break-word; /* Important for long links */
+            word-wrap: break-word;
         }
         
-        /* --- MARKDOWN STYLES (NEW) --- */
+        /* MARKDOWN STYLES */
         .bubble p { margin: 0 0 8px 0; }
         .bubble p:last-child { margin: 0; }
         .bubble ul, .bubble ol { margin: 8px 0; padding-left: 20px; }
@@ -305,7 +299,6 @@
             text-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
         
-        /* Ensure user text is readable on gradient background */
         .bubble.user p, .bubble.user strong, .bubble.user a { color: white !important; }
 
         /* ========================================================================
@@ -485,7 +478,6 @@
     const nudge = document.getElementById("proactive-nudge");
 
     // --- Configuration ---
-    // REPLACE THIS WITH YOUR WEBHOOK URL
     const WEBHOOK_URL = "https://n8n.srv1106816.hstgr.cloud/webhook/595269c9-1640-45c9-9c2b-861a69417966"; 
     const INITIAL_GREETING = "Bonjour! Welcome to Mona Montreux. How may I assist with your stay today?";
     const STARTER_OPTIONS = [
@@ -495,21 +487,22 @@
         "Contact reception"
     ];
 
-    // --- Configure Marked (Markdown) - THE LINK FIXER ---
+    // --- Configure Marked (Markdown) - THE ULTIMATE LINK FIXER ---
     const renderer = new marked.Renderer();
     renderer.link = function(href, title, text) {
-        let cleanHref = href ? href.trim() : "";
+        // 1. Safety check for null/undefined
+        let cleanHref = href ? href.toString() : "";
         
-        // 1. Remove trailing punctuation (periods, commas, closing parens) often added by AI
-        cleanHref = cleanHref.replace(/[).,]+$/, '');
+        // 2. Remove whitespace and surrounding punctuation from BOTH ends
+        cleanHref = cleanHref.replace(/^[(\s]+/, '').replace(/[).,\s]+$/, '');
 
-        // 2. Force https:// if missing (prevents broken relative links)
+        // 3. Force https:// if missing (and not a mailto/tel link)
         if (cleanHref && !/^https?:\/\//i.test(cleanHref) && !cleanHref.startsWith('mailto:') && !cleanHref.startsWith('tel:')) {
             cleanHref = 'https://' + cleanHref;
         }
 
-        // 3. Safety Check: If the link is empty or just protocol, don't break the UI
-        if (!cleanHref || cleanHref === 'https://' || cleanHref === 'http://') {
+        // 4. Dead Link Prevention: If the link is empty or just "https://", show plain text
+        if (!cleanHref || cleanHref.toLowerCase() === 'https://' || cleanHref.toLowerCase() === 'http://') {
             return text;
         }
 
@@ -546,12 +539,12 @@
         if (isOpen) {
             chatWindow.classList.remove("open");
             launcher.classList.remove("active");
-            window.parent.postMessage("chat-close", "*");
+            try { window.parent.postMessage("chat-close", "*"); } catch(e){}
         } else {
             chatWindow.classList.add("open");
             launcher.classList.add("active");
             inputField.focus();
-            window.parent.postMessage("chat-open", "*");
+            try { window.parent.postMessage("chat-open", "*"); } catch(e){}
             
             if (messagesContainer.children.length === 0) {
                 setTimeout(() => {
@@ -581,8 +574,11 @@
         bubble.className = `bubble ${sender}`;
         
         if (sender === "bot") {
-            // Render basic markdown, advanced parsing happens in streaming
-            bubble.innerHTML = marked.parse(text || "");
+            try {
+                bubble.innerHTML = marked.parse(text || "");
+            } catch(e) {
+                bubble.textContent = text;
+            }
         } else {
             bubble.textContent = text;
         }
@@ -624,12 +620,12 @@
         messagesContainer.scrollTop = messagesContainer.scrollHeight;
     }
 
-    // --- Streaming Text Logic (Optimized) ---
+    // --- Streaming Text Logic ---
     function appendStreamingMessage(text) {
         const { row, bubble } = createMessageElement("", "bot");
         messagesContainer.appendChild(row);
 
-        // Safety: If text is huge, just render it instantly to prevent crashing
+        // Safety: If text is huge, render instantly
         if (text.length > 2000) {
             bubble.innerHTML = marked.parse(text);
             scrollToBottom();
@@ -639,26 +635,22 @@
         let rawText = "";
         let index = 0;
         const length = text.length;
-        // Faster speed for longer text to prevent "lag"
         const speed = length > 200 ? 3 : 10; 
 
         function typeChar() {
             if (index < length) {
                 rawText += text.charAt(index);
-                // Wrap in try-catch to prevent loop crash on partial markdown
                 try {
-                    bubble.innerHTML = marked.parse(rawText);
-                } catch (e) {
-                    // console.warn("Markdown parse error during stream", e);
-                }
+                    // Only re-render if we hit a space or punctuation to save resources
+                    if (index % 3 === 0 || index === length - 1) {
+                         bubble.innerHTML = marked.parse(rawText);
+                    }
+                } catch (e) {}
                 index++;
                 
-                // Scroll only every 5 frames to save performance
                 if (index % 5 === 0) scrollToBottom();
-                
                 setTimeout(typeChar, speed);
             } else {
-                // Final render to ensure everything is clean
                 bubble.innerHTML = marked.parse(text);
                 scrollToBottom();
             }
@@ -714,14 +706,14 @@
             const data = await postToWebhook({ chatInput: text, sessionId });
             removeTypingIndicator();
 
-            // DATA HANDLING FIX: Handle both Array and Object responses
+            // FIXED DATA HANDLING: Support both Array and Object formats
             let botText = "I apologize, I am having trouble connecting.";
             
             if (Array.isArray(data) && data.length > 0) {
-                // Handle Array case (n8n default)
+                // n8n often returns an array: [{ "result": "..." }]
                 botText = data[0].output || data[0].result || data[0].reply || data[0].text || botText;
             } else if (typeof data === 'object') {
-                // Handle Object case
+                // Sometimes it returns an object: { "result": "..." }
                 botText = data.output || data.result || data.reply || data.text || botText;
             }
 
