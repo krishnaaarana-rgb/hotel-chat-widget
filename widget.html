@@ -487,46 +487,11 @@
         "Contact reception"
     ];
 
-    // --- Configure Marked (Markdown) - THE SAFETY LINKER ---
+    // --- Configure Marked (Markdown) - STANDARD RENDERER ---
+    // Since your backend data is now clean, we just need to ensure links open in new tabs.
     const renderer = new marked.Renderer();
     renderer.link = function(href, title, text) {
-        let cleanHref = (href || "").toString().trim();
-        let cleanText = (text || "").toString().trim();
-
-        // 1. CLEANUP: Remove trailing dots/parens from URL (AI hallucinations)
-        cleanHref = cleanHref.replace(/^[(\s]+/, '').replace(/[).,\s]+$/, '');
-
-        // 2. DETECT BROKEN URL
-        // A URL is broken if it's missing, "undefined", "null", or just "https://"
-        const isUrlBroken = !cleanHref || 
-                            cleanHref.toLowerCase().includes("undefined") || 
-                            cleanHref.toLowerCase().includes("null") ||
-                            cleanHref === 'https://';
-
-        // 3. LOGIC: TO LINK OR NOT TO LINK?
-        if (isUrlBroken) {
-            // Case A: Broken URL + Generic Text -> HIDE IT (Return empty)
-            if (["more info", "undefined", "link", "click here", "view details"].includes(cleanText.toLowerCase())) {
-                return ""; 
-            }
-            // Case B: Broken URL + Specific Text (e.g., "Mona Suite") -> SHOW PLAIN TEXT (No <a> tag)
-            return cleanText;
-        }
-
-        // 4. URL IS VALID: Prepare the link
-        
-        // Fix generic text if it says "undefined"
-        if (cleanText.toLowerCase().includes("undefined") || !cleanText) {
-            cleanText = "View Details";
-        }
-        
-        // Ensure HTTPS
-        if (!/^https?:\/\//i.test(cleanHref) && !cleanHref.startsWith('mailto:') && !cleanHref.startsWith('tel:')) {
-            cleanHref = 'https://' + cleanHref;
-        }
-
-        // Return clickable link
-        return `<a href="${cleanHref}" target="_blank" rel="noopener noreferrer" title="${title || ''}">${cleanText}</a>`;
+        return `<a href="${href}" target="_blank" rel="noopener noreferrer" title="${title || ''}">${text}</a>`;
     };
     marked.setOptions({ renderer: renderer });
 
@@ -595,8 +560,10 @@
         
         if (sender === "bot") {
             try {
+                // Parse the clean markdown from n8n
                 bubble.innerHTML = marked.parse(text || "");
             } catch(e) {
+                console.error("Markdown Error:", e);
                 bubble.textContent = text;
             }
         } else {
@@ -661,6 +628,7 @@
             if (index < length) {
                 rawText += text.charAt(index);
                 try {
+                    // Update markdown preview occasionally
                     if (index % 3 === 0 || index === length - 1) {
                          bubble.innerHTML = marked.parse(rawText);
                     }
@@ -727,10 +695,12 @@
 
             let botText = "I apologize, I am having trouble connecting.";
             
+            // ROBUST DATA HANDLING
+            // Checks for 'output', 'text', 'reply', or 'result' in both Array and Object formats
             if (Array.isArray(data) && data.length > 0) {
-                botText = data[0].output || data[0].result || data[0].reply || data[0].text || botText;
+                botText = data[0].output || data[0].text || data[0].reply || data[0].result || botText;
             } else if (typeof data === 'object') {
-                botText = data.output || data.result || data.reply || data.text || botText;
+                botText = data.output || data.text || data.reply || data.result || botText;
             }
 
             appendStreamingMessage(botText);
