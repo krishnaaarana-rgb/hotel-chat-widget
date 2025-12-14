@@ -1,11 +1,725 @@
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="en">
+<head>
     <meta charset="UTF-8" />
-    <title>Hotel Chat Widget</title>
-  </head>
-  <body>
-    <h1>Hotel Chat Widget CDN</h1>
-    <p>Your widget file is hosted here.</p>
-  </body>
+    <title>Mona Montreux | Concierge</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <style>
+        /* ========================================================================
+           DESIGN SYSTEM & VARIABLES
+        ======================================================================== */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            --glass-bg: rgba(255, 255, 255, 0.95);
+            --glass-border: rgba(255, 255, 255, 0.6);
+            --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --white: #ffffff;
+            --bezier-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+            --bezier-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: transparent;
+            overflow: hidden;
+        }
+
+        /* ========================================================================
+           WRAPPER
+        ======================================================================== */
+        #chatbot-wrapper {
+            position: fixed; bottom: 30px; right: 30px;
+            z-index: 9999999;
+            display: flex; flex-direction: column; align-items: flex-end;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            pointer-events: none;
+        }
+        
+        #chatbot-wrapper > * {
+            pointer-events: auto;
+        }
+
+        /* ========================================================================
+           PROACTIVE NUDGE
+        ======================================================================== */
+        #proactive-nudge {
+            background: white;
+            padding: 12px 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            margin-bottom: 15px;
+            margin-right: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-dark);
+            opacity: 0;
+            transform: translateY(10px) scale(0.9);
+            transition: all 0.4s var(--bezier-bounce);
+            position: relative;
+            cursor: pointer;
+            border: 1px solid rgba(0,0,0,0.05);
+            display: flex; align-items: center; gap: 8px;
+            white-space: nowrap;
+        }
+
+        #proactive-nudge.visible {
+            opacity: 1; transform: translateY(0) scale(1);
+        }
+
+        #proactive-nudge::after {
+            content: ''; position: absolute; bottom: -6px; right: 24px;
+            width: 12px; height: 12px; background: white;
+            transform: rotate(45deg);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            border-right: 1px solid rgba(0,0,0,0.05);
+        }
+
+        #proactive-nudge .close-nudge {
+            margin-left: 8px; color: #94a3b8; cursor: pointer;
+            font-size: 16px; line-height: 1;
+        }
+        #proactive-nudge .close-nudge:hover { color: var(--text-dark); }
+
+        /* ========================================================================
+           LAUNCHER BUTTON
+        ======================================================================== */
+        #hotel-chatbot-launcher {
+            height: 60px;
+            width: auto;
+            min-width: 60px;
+            padding: 0 24px;
+            border-radius: 30px;
+            border: none;
+            background: var(--primary-gradient);
+            box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4), 0 0 0 1px rgba(255,255,255,0.2) inset;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            gap: 12px;
+            transition: all 0.5s var(--bezier-bounce);
+            position: relative;
+            overflow: hidden;
+            transform-origin: center right;
+        }
+
+        .launcher-label {
+            color: white;
+            font-weight: 600;
+            font-size: 16px;
+            white-space: nowrap;
+            opacity: 1;
+            transform: translateX(0);
+            transition: all 0.3s var(--bezier-smooth);
+        }
+
+        .icon-container {
+            position: relative;
+            width: 24px; height: 24px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        #hotel-chatbot-launcher svg {
+            width: 24px; height: 24px; stroke: white; fill: none; stroke-width: 2.5;
+            transition: transform 0.5s var(--bezier-smooth), opacity 0.3s ease;
+            position: absolute;
+        }
+        
+        #launcher-close-icon { opacity: 0; transform: scale(0.5) rotate(-90deg); }
+        #launcher-chat-icon { opacity: 1; transform: scale(1) rotate(0deg); }
+
+        #hotel-chatbot-launcher:hover { 
+            transform: translateY(-4px); 
+            box-shadow: 0 20px 35px rgba(124, 58, 237, 0.5); 
+        }
+
+        #hotel-chatbot-launcher.active {
+            width: 60px; 
+            padding: 0; 
+            border-radius: 50%;
+        }
+
+        #hotel-chatbot-launcher.active .launcher-label {
+            opacity: 0; width: 0; margin: 0; transform: translateX(20px);
+        }
+
+        #hotel-chatbot-launcher.active #launcher-close-icon { opacity: 1; transform: scale(1) rotate(0deg); }
+        #hotel-chatbot-launcher.active #launcher-chat-icon { opacity: 0; transform: scale(0.5) rotate(90deg); }
+
+        /* ========================================================================
+           MAIN CHAT CONTAINER
+        ======================================================================== */
+        #hotel-chatbot {
+            position: absolute; bottom: 85px; right: 0;
+            width: 400px; height: 700px;
+            max-width: calc(100vw - 40px); max-height: calc(100vh - 120px);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border-radius: 24px;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.1), 0 0 0 1px rgba(255,255,255,0.5) inset;
+            display: flex; flex-direction: column;
+            transform-origin: bottom right;
+            transform: scale(0.9) translateY(20px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s var(--bezier-smooth);
+            overflow: hidden;
+        }
+
+        #hotel-chatbot.open {
+            opacity: 1; visibility: visible;
+            transform: scale(1) translateY(0);
+        }
+
+        /* ========================================================================
+           HEADER
+        ======================================================================== */
+        #hotel-chatbot-header {
+            padding: 20px 24px;
+            background: rgba(255,255,255,0.8);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            display: flex; align-items: center; justify-content: space-between;
+            z-index: 10;
+        }
+
+        .brand { display: flex; align-items: center; gap: 14px; }
+        
+        .avatar-container {
+            position: relative;
+            width: 48px; height: 48px;
+        }
+
+        .avatar-img {
+            width: 100%; height: 100%;
+            border-radius: 16px;
+            object-fit: cover;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .status-dot {
+            position: absolute; bottom: -2px; right: -2px;
+            width: 14px; height: 14px;
+            background: #10B981;
+            border: 2px solid white;
+            border-radius: 50%;
+            animation: breathe 3s infinite ease-in-out;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+            50% { transform: scale(1.1); box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.2); }
+        }
+
+        .header-info h3 { margin: 0; font-size: 17px; font-weight: 700; color: var(--text-dark); letter-spacing: -0.02em; }
+        .header-info p { margin: 2px 0 0; font-size: 13px; color: var(--text-light); font-weight: 500; }
+
+        .header-actions { display: flex; gap: 8px; }
+
+        .action-btn {
+            background: transparent; border: none; cursor: pointer;
+            padding: 8px; border-radius: 50%; color: var(--text-light);
+            transition: background 0.2s;
+        }
+        .action-btn:hover { background: rgba(0,0,0,0.05); color: var(--text-dark); }
+
+        /* ========================================================================
+           MESSAGES AREA
+        ======================================================================== */
+        #hotel-chatbot-messages {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+            display: flex; flex-direction: column; gap: 16px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%);
+        }
+
+        #hotel-chatbot-messages::-webkit-scrollbar { width: 6px; }
+        #hotel-chatbot-messages::-webkit-scrollbar-track { background: transparent; }
+        #hotel-chatbot-messages::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.1); border-radius: 10px;
+        }
+
+        .message-row {
+            display: flex; width: 100%;
+            animation: messageEnter 0.4s var(--bezier-smooth) forwards;
+            opacity: 0; transform: translateY(10px);
+        }
+        
+        @keyframes messageEnter { to { opacity: 1; transform: translateY(0); } }
+
+        .message-row.user { justify-content: flex-end; }
+        .message-row.bot { justify-content: flex-start; }
+
+        .bubble {
+            max-width: 85%;
+            padding: 14px 18px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.55;
+            position: relative;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+            white-space: pre-wrap;
+            transition: transform 0.2s;
+            word-wrap: break-word;
+        }
+        
+        /* MARKDOWN STYLES */
+        .bubble p { margin: 0 0 8px 0; }
+        .bubble p:last-child { margin: 0; }
+        .bubble ul, .bubble ol { margin: 8px 0; padding-left: 20px; }
+        .bubble li { margin-bottom: 4px; }
+        .bubble strong { font-weight: 700; color: inherit; } 
+        .bubble a { color: #6366f1; text-decoration: none; font-weight: 600; border-bottom: 1px solid transparent; }
+        .bubble a:hover { border-bottom-color: #6366f1; }
+
+        .bubble.bot {
+            background: white;
+            color: var(--text-dark);
+            border-bottom-left-radius: 4px;
+            border: 1px solid rgba(0,0,0,0.04);
+        }
+
+        .bubble.user {
+            background: var(--primary-gradient);
+            color: white;
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 4px 15px rgba(124, 58, 237, 0.2);
+            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .bubble.user p, .bubble.user strong, .bubble.user a { color: white !important; }
+
+        /* ========================================================================
+           TYPING INDICATOR
+        ======================================================================== */
+        .typing-indicator {
+            padding: 12px 16px; background: white;
+            border-radius: 18px; border-bottom-left-radius: 4px;
+            display: inline-flex; gap: 5px; align-items: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            width: fit-content;
+        }
+
+        .dot {
+            width: 6px; height: 6px; background: #94a3b8; border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
+        }
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0); } 40% { transform: scale(1); } }
+
+        /* ========================================================================
+           QUICK REPLIES
+        ======================================================================== */
+        #quick-replies {
+            display: flex; gap: 8px; padding: 0 24px 16px 24px;
+            overflow-x: auto; flex-wrap: wrap;
+            scrollbar-width: none;
+        }
+        #quick-replies::-webkit-scrollbar { display: none; }
+
+        .chip {
+            background: rgba(255,255,255,0.7);
+            border: 1px solid rgba(139, 92, 246, 0.2);
+            padding: 10px 16px;
+            border-radius: 50px;
+            font-size: 13px; font-weight: 600;
+            color: #6366f1;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.3s var(--bezier-smooth);
+            animation: chipFadeIn 0.4s ease backwards;
+        }
+        
+        .chip:hover {
+            background: #6366f1; color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+        }
+
+        @keyframes chipFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ========================================================================
+           INPUT AREA
+        ======================================================================== */
+        #input-area {
+            padding: 16px 24px 24px 24px;
+            background: rgba(255,255,255,0.95);
+            border-top: 1px solid rgba(0,0,0,0.05);
+            display: flex; gap: 12px; align-items: center;
+        }
+
+        .input-wrapper {
+            flex: 1; position: relative;
+            background: #f1f5f9;
+            border-radius: 24px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .input-wrapper:focus-within {
+            background: white;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.1);
+        }
+
+        #chat-input {
+            width: 100%; padding: 14px 20px;
+            border: none; background: transparent;
+            font-family: inherit; font-size: 15px; color: var(--text-dark);
+            outline: none;
+        }
+        
+        #send-btn {
+            width: 48px; height: 48px;
+            border-radius: 50%; border: none;
+            background: var(--primary-gradient);
+            color: white; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s var(--bezier-bounce);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.2);
+        }
+        
+        #send-btn:hover { transform: scale(1.1) rotate(-10deg); box-shadow: 0 8px 20px rgba(99, 102, 241, 0.35); }
+        #send-btn:active { transform: scale(0.95); }
+        #send-btn svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2.5; margin-left: -2px; }
+
+    </style>
+</head>
+<body>
+
+<div id="chatbot-wrapper">
+    
+    <div id="proactive-nudge" onclick="toggleChat()">
+        <span>👋 Need help planning your stay?</span>
+        <span class="close-nudge" onclick="event.stopPropagation(); closeNudge()">×</span>
+    </div>
+
+    <div id="hotel-chatbot">
+        
+        <div id="hotel-chatbot-header">
+            <div class="brand">
+                <div class="avatar-container">
+                    <img src="data:image/png;base64,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" alt="Mona" class="avatar-img">
+                    <div class="status-dot"></div>
+                </div>
+                <div class="header-info">
+                    <h3>Mona Montreux</h3>
+                    <p>Concierge</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="action-btn" id="reset-btn" title="Start New Chat">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+                <button class="action-btn" id="minimize-btn" title="Minimize">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="hotel-chatbot-messages"></div>
+        <div id="quick-replies"></div>
+
+        <div id="input-area">
+            <div class="input-wrapper">
+                <input type="text" id="chat-input" placeholder="Type a message..." autocomplete="off">
+            </div>
+            <button id="send-btn">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" /></svg>
+            </button>
+        </div>
+
+    </div>
+
+    <button id="hotel-chatbot-launcher">
+        <div class="icon-container">
+            <svg id="launcher-chat-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </svg>
+            <svg id="launcher-close-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </div>
+        <span class="launcher-label">Try Our Demo</span>
+    </button>
+
+</div>
+
+<script>
+    /** * MONA MONTREUX CORE LOGIC * */
+
+    // --- References ---
+    const launcher = document.getElementById("hotel-chatbot-launcher");
+    const chatWindow = document.getElementById("hotel-chatbot");
+    const minimizeBtn = document.getElementById("minimize-btn");
+    const resetBtn = document.getElementById("reset-btn");
+    const messagesContainer = document.getElementById("hotel-chatbot-messages");
+    const inputField = document.getElementById("chat-input");
+    const sendButton = document.getElementById("send-btn");
+    const quickRepliesContainer = document.getElementById("quick-replies");
+    const nudge = document.getElementById("proactive-nudge");
+
+    // --- Configuration ---
+    const WEBHOOK_URL = "https://n8n.srv1106816.hstgr.cloud/webhook/595269c9-1640-45c9-9c2b-861a69417966"; 
+    const INITIAL_GREETING = "Bonjour! Welcome to Mona Montreux. How may I assist with your stay today?";
+    const STARTER_OPTIONS = [
+        "Show me the rooms",
+        "Dining options",
+        "Experiences",
+        "Contact reception"
+    ];
+
+    // --- Configure Marked (Markdown) - STANDARD RENDERER ---
+    // Since your backend data is now clean, we just need to ensure links open in new tabs.
+    const renderer = new marked.Renderer();
+    renderer.link = function(href, title, text) {
+        return `<a href="${href}" target="_blank" rel="noopener noreferrer" title="${title || ''}">${text}</a>`;
+    };
+    marked.setOptions({ renderer: renderer });
+
+    // --- Session Management ---
+    let sessionId = localStorage.getItem("hotel_session_id");
+    if (!sessionId) {
+        sessionId = "sess_" + Math.random().toString(36).substring(2) + Date.now().toString(36);
+        localStorage.setItem("hotel_session_id", sessionId);
+    }
+
+    // --- Proactive Nudge ---
+    setTimeout(() => {
+        if (!chatWindow.classList.contains("open")) {
+            nudge.classList.add("visible");
+        }
+    }, 5000);
+
+    function closeNudge() {
+        nudge.classList.remove("visible");
+    }
+
+    // --- State ---
+    let isTyping = false;
+    let typingElement = null;
+
+    // --- Toggle Chat ---
+    function toggleChat() {
+        closeNudge();
+        const isOpen = chatWindow.classList.contains("open");
+        if (isOpen) {
+            chatWindow.classList.remove("open");
+            launcher.classList.remove("active");
+            try { window.parent.postMessage("chat-close", "*"); } catch(e){}
+        } else {
+            chatWindow.classList.add("open");
+            launcher.classList.add("active");
+            inputField.focus();
+            try { window.parent.postMessage("chat-open", "*"); } catch(e){}
+            
+            if (messagesContainer.children.length === 0) {
+                setTimeout(() => {
+                    appendMessage(INITIAL_GREETING, "bot");
+                    showStarterOptions();
+                }, 400);
+            }
+        }
+    }
+
+    resetBtn.addEventListener("click", () => {
+        sessionId = "sess_" + Math.random().toString(36).substring(2) + Date.now().toString(36);
+        localStorage.setItem("hotel_session_id", sessionId);
+        messagesContainer.innerHTML = "";
+        appendMessage(INITIAL_GREETING, "bot");
+        showStarterOptions();
+    });
+
+    launcher.addEventListener("click", toggleChat);
+    minimizeBtn.addEventListener("click", toggleChat);
+
+    // --- UI Helpers ---
+    function createMessageElement(text, sender) {
+        const row = document.createElement("div");
+        row.className = `message-row ${sender}`;
+        const bubble = document.createElement("div");
+        bubble.className = `bubble ${sender}`;
+        
+        if (sender === "bot") {
+            try {
+                // Parse the clean markdown from n8n
+                bubble.innerHTML = marked.parse(text || "");
+            } catch(e) {
+                console.error("Markdown Error:", e);
+                bubble.textContent = text;
+            }
+        } else {
+            bubble.textContent = text;
+        }
+        
+        row.appendChild(bubble);
+        return { row, bubble };
+    }
+
+    function appendMessage(text, sender) {
+        const { row } = createMessageElement(text, sender);
+        messagesContainer.appendChild(row);
+        scrollToBottom();
+    }
+
+    function showTypingIndicator() {
+        if (isTyping) return;
+        isTyping = true;
+        const row = document.createElement("div");
+        row.className = "message-row bot";
+        row.id = "typing-row";
+        const indicator = document.createElement("div");
+        indicator.className = "typing-indicator";
+        indicator.innerHTML = `<div class="dot"></div><div class="dot"></div><div class="dot"></div>`;
+        row.appendChild(indicator);
+        messagesContainer.appendChild(row);
+        scrollToBottom();
+        typingElement = row;
+    }
+
+    function removeTypingIndicator() {
+        if (typingElement) {
+            typingElement.remove();
+            typingElement = null;
+        }
+        isTyping = false;
+    }
+
+    function scrollToBottom() {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    // --- Streaming Text Logic ---
+    function appendStreamingMessage(text) {
+        const { row, bubble } = createMessageElement("", "bot");
+        messagesContainer.appendChild(row);
+
+        // Safety: If text is huge, render instantly
+        if (text.length > 2000) {
+            bubble.innerHTML = marked.parse(text);
+            scrollToBottom();
+            return;
+        }
+
+        let rawText = "";
+        let index = 0;
+        const length = text.length;
+        const speed = length > 200 ? 3 : 10; 
+
+        function typeChar() {
+            if (index < length) {
+                rawText += text.charAt(index);
+                try {
+                    // Update markdown preview occasionally
+                    if (index % 3 === 0 || index === length - 1) {
+                         bubble.innerHTML = marked.parse(rawText);
+                    }
+                } catch (e) {}
+                index++;
+                
+                if (index % 5 === 0) scrollToBottom();
+                setTimeout(typeChar, speed);
+            } else {
+                bubble.innerHTML = marked.parse(text);
+                scrollToBottom();
+            }
+        }
+        requestAnimationFrame(typeChar);
+    }
+
+    // --- Quick Replies ---
+    function showStarterOptions() {
+        quickRepliesContainer.innerHTML = "";
+        STARTER_OPTIONS.forEach((opt, idx) => {
+            const chip = document.createElement("button");
+            chip.className = "chip";
+            chip.textContent = opt;
+            chip.style.animationDelay = `${idx * 0.1}s`;
+            chip.onclick = () => {
+                handleUserSend(opt);
+                clearQuickReplies();
+            };
+            quickRepliesContainer.appendChild(chip);
+        });
+    }
+
+    function clearQuickReplies() {
+        quickRepliesContainer.innerHTML = "";
+    }
+
+    // --- Networking ---
+    async function postToWebhook(payload) {
+        try {
+            const response = await fetch(WEBHOOK_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            return await response.json();
+        } catch (error) {
+            console.error("Webhook error:", error);
+            throw error;
+        }
+    }
+
+    // --- Main Send Logic ---
+    async function handleUserSend(text) {
+        if (!text || !text.trim()) return;
+
+        appendMessage(text, "user");
+        inputField.value = "";
+        clearQuickReplies();
+        showTypingIndicator();
+
+        try {
+            const data = await postToWebhook({ chatInput: text, sessionId });
+            removeTypingIndicator();
+
+            let botText = "I apologize, I am having trouble connecting.";
+            
+            // ROBUST DATA HANDLING
+            // Checks for 'output', 'text', 'reply', or 'result' in both Array and Object formats
+            if (Array.isArray(data) && data.length > 0) {
+                botText = data[0].output || data[0].text || data[0].reply || data[0].result || botText;
+            } else if (typeof data === 'object') {
+                botText = data.output || data.text || data.reply || data.result || botText;
+            }
+
+            appendStreamingMessage(botText);
+            
+        } catch (error) {
+            removeTypingIndicator();
+            appendMessage("Connection issue. Please try again.", "bot");
+        }
+    }
+
+    // --- Event Listeners ---
+    sendButton.addEventListener("click", () => handleUserSend(inputField.value));
+    inputField.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") handleUserSend(inputField.value);
+    });
+    inputField.addEventListener("input", () => {
+        if (inputField.value.length > 0) clearQuickReplies();
+    });
+
+</script>
+</body>
 </html>
