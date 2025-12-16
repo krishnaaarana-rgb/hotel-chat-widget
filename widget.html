@@ -21,7 +21,10 @@
             --accent-color: #000000;
             --bg-color: #ffffff;
             --secondary-bg: #F5F5F7; /* Apple Light Grey */
-            --glass-bg: rgba(255, 255, 255, 0.85);
+            
+            /* FIXED: SOLID WHITE BACKGROUND (No Transparency) */
+            --glass-bg: #ffffff; 
+            
             --glass-border: rgba(0, 0, 0, 0.08);
             --text-main: #1d1d1f;
             --text-sub: #86868b;
@@ -44,17 +47,18 @@
         /* ========================================================================
            WRAPPER
         ======================================================================== */
-       #chatbot-wrapper {
-    position: fixed; 
-    bottom: 0; 
-    right: 0;
-    z-index: 9999999;
-    display: flex; flex-direction: column; align-items: flex-end;
-    pointer-events: none;
-    
-    /* THIS PADDING PREVENTS SHADOW CUT-OFFS */
-    padding: 30px; 
-}
+        #chatbot-wrapper {
+            position: fixed; 
+            bottom: 0; 
+            right: 0;
+            z-index: 9999999;
+            display: flex; flex-direction: column; align-items: flex-end;
+            pointer-events: none;
+            
+            /* THIS PADDING PREVENTS SHADOW CUT-OFFS */
+            padding: 30px; 
+        }
+        
         #chatbot-wrapper > * {
             pointer-events: auto;
         }
@@ -167,17 +171,18 @@
         #hotel-chatbot-launcher.active #launcher-chat-icon { opacity: 0; transform: scale(0.5) rotate(90deg); }
 
         /* ========================================================================
-           MAIN CHAT CONTAINER (Frosted Glass)
+           MAIN CHAT CONTAINER (SOLID WHITE)
         ======================================================================== */
         #hotel-chatbot {
             position: absolute; bottom: 90px; right: 0;
             width: 380px; height: 720px;
             max-width: calc(100vw - 40px); max-height: calc(100vh - 120px);
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(25px) saturate(180%);
-            -webkit-backdrop-filter: blur(25px) saturate(180%);
+            
+            /* FIXED: SOLID WHITE */
+            background: #ffffff; 
+            
             border-radius: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            border: 1px solid rgba(0,0,0,0.1); /* Subtle border for crispness */
             box-shadow: var(--shadow-float);
             display: flex; flex-direction: column;
             transform-origin: bottom right;
@@ -198,7 +203,10 @@
         ======================================================================== */
         #hotel-chatbot-header {
             padding: 18px 24px;
-            background: rgba(255,255,255,0.6);
+            
+            /* FIXED: SOLID WHITE */
+            background: #ffffff;
+            
             border-bottom: 1px solid rgba(0,0,0,0.05);
             display: flex; align-items: center; justify-content: space-between;
             z-index: 10;
@@ -253,8 +261,8 @@
             overflow-y: auto;
             scroll-behavior: smooth;
             display: flex; flex-direction: column; gap: 18px;
-            /* Subtle gradient background */
-            background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.5) 100%);
+            /* FIXED: Clean white/grey gradient */
+            background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(245,245,247,1) 100%);
         }
 
         #hotel-chatbot-messages::-webkit-scrollbar { width: 4px; }
@@ -348,7 +356,7 @@
         #quick-replies::-webkit-scrollbar { display: none; }
 
         .chip {
-            background: rgba(255,255,255,0.8);
+            background: #ffffff; /* Solid white background */
             border: 1px solid rgba(0,0,0,0.08);
             padding: 8px 14px;
             border-radius: 20px;
@@ -373,7 +381,10 @@
         ======================================================================== */
         #input-area {
             padding: 16px 24px 24px 24px;
-            background: rgba(255,255,255,0.9);
+            
+            /* FIXED: SOLID WHITE */
+            background: #ffffff;
+            
             border-top: 1px solid rgba(0,0,0,0.06);
             display: flex; gap: 10px; align-items: center;
         }
