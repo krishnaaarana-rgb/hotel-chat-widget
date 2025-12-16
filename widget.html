@@ -44,13 +44,17 @@
         /* ========================================================================
            WRAPPER
         ======================================================================== */
-        #chatbot-wrapper {
-            position: fixed; bottom: 30px; right: 30px;
-            z-index: 9999999;
-            display: flex; flex-direction: column; align-items: flex-end;
-            pointer-events: none;
-        }
-        
+       #chatbot-wrapper {
+    position: fixed; 
+    bottom: 0; 
+    right: 0;
+    z-index: 9999999;
+    display: flex; flex-direction: column; align-items: flex-end;
+    pointer-events: none;
+    
+    /* THIS PADDING PREVENTS SHADOW CUT-OFFS */
+    padding: 30px; 
+}
         #chatbot-wrapper > * {
             pointer-events: auto;
         }
