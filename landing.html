@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="AI Concierge for Hotels. Increase direct bookings and answer guest questions instantly.">
+    <title>AI Concierge | Increase Direct Bookings</title>
+    <style>
+        /* --- RESET & VARIABLES --- */
+        :root {
+            /* Primary Colors - Trust & Professionalism */
+            --color-primary: #003580; /* Booking.com/Marriott style Deep Blue */
+            --color-primary-dark: #00224f;
+            
+            /* Accent Colors - Action & Warmth */
+            --color-accent: #FFB700; /* Warm Gold/Amber */
+            --color-accent-hover: #e6a500;
+            
+            /* Neutrals */
+            --color-bg: #FFFFFF;
+            --color-bg-alt: #F2F6FA; /* Very light blue-grey */
+            --color-text-main: #262626;
+            --color-text-light: #6B7280;
+            --color-white: #FFFFFF;
+            
+            /* Spacing & Layout */
+            --container-width: 1200px;
+            --spacing-xs: 0.5rem;
+            --spacing-sm: 1rem;
+            --spacing-md: 2rem;
+            --spacing-lg: 4rem;
+            --spacing-xl: 6rem;
+            
+            /* UI Elements */
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-md: 0 4px 6px rgba(0, 53, 128, 0.1);
+            --shadow-lg: 0 10px 15px rgba(0, 53, 128, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: var(--color-text-main);
+            line-height: 1.6;
+            background-color: var(--color-bg);
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        ul { list-style: none; }
+        img { max-width: 100%; height: auto; }
+
+        /* --- UTILITIES --- */
+        .container {
+            max-width: var(--container-width);
+            margin: 0 auto;
+            padding: 0 var(--spacing-md);
+        }
+        
+        .text-center { text-align: center; }
+        .text-primary { color: var(--color-primary); }
+        .bg-alt { background-color: var(--color-bg-alt); }
+        
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            font-size: 1rem;
+        }
+        
+        .btn-primary {
+            background-color: var(--color-accent);
+            color: var(--color-primary-dark);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--color-accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: var(--color-primary);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--color-text-light);
+            max-width: 700px;
+            margin: 0 auto var(--spacing-lg) auto;
+        }
+
+        /* --- NAV --- */
+        nav {
+            padding: var(--spacing-sm) 0;
+            border-bottom: 1px solid #e5e7eb;
+            background: var(--color-white);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-weight: 800;
+            font-size: 1.5rem;
+            color: var(--color-primary);
+            letter-spacing: -0.5px;
+        }
+
+        /* --- HERO SECTION --- */
+        .hero {
+            padding: var(--spacing-xl) 0;
+            background: linear-gradient(135deg, var(--color-bg-alt) 0%, #FFFFFF 100%);
+            position: relative;
+        }
+        
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+            align-items: center;
+        }
+        
+        .hero-text h1 {
+            font-size: 3rem;
+            line-height: 1.2;
+            color: var(--color-primary-dark);
+            margin-bottom: var(--spacing-md);
+            font-weight: 800;
+        }
+        
+        .hero-text p {
+            font-size: 1.25rem;
+            color: var(--color-text-light);
+            margin-bottom: var(--spacing-md);
+        }
+        
+        /* Simulated Chat Interface for Demo */
+        .chat-demo {
+            background: white;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+            border: 1px solid #e5e7eb;
+            overflow: hidden;
+            height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .chat-header {
+            background: var(--color-primary);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .chat-status {
+            width: 10px;
+            height: 10px;
+            background: #4ade80;
+            border-radius: 50%;
+        }
+        
+        .chat-body {
+            flex: 1;
+            padding: 1rem;
+            background: #f9fafb;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        
+        .message {
+            max-width: 85%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+        }
+        
+        .message.bot {
+            background: white;
+            border: 1px solid #e5e7eb;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+        
+        .message.user {
+            background: var(--color-primary);
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+        
+        .chat-input-area {
+            padding: 1rem;
+            border-top: 1px solid #e5e7eb;
+            background: white;
+        }
+        
+        .fake-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 24px;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        /* --- THE PROBLEM --- */
+        .problem {
+            padding: var(--spacing-xl) 0;
+            background: white;
+        }
+        
+        .problem-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+            align-items: center;
+        }
+        
+        .problem-visual {
+            background: #ffe4e4; /* Light red to signify problem */
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            text-align: center;
+            position: relative;
+        }
+        
+        .bounce-card {
+            background: white;
+            padding: 20px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-md);
+            max-width: 300px;
+            margin: 0 auto;
+        }
+        
+        .bounce-stat {
+            color: #ef4444;
+            font-weight: bold;
+            font-size: 1.5rem;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        /* --- HOW IT WORKS --- */
+        .how-it-works {
+            padding: var(--spacing-xl) 0;
+            background: var(--color-bg-alt);
+        }
+        
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+        }
+        
+        .step-card {
+            background: white;
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            text-align: center;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+        }
+        
+        .step-number {
+            background: var(--color-primary);
+            color: white;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--spacing-sm) auto;
+            font-weight: bold;
+        }
+        
+        .step-title {
+            font-weight: 700;
+            margin-bottom: var(--spacing-xs);
+            color: var(--color-primary-dark);
+        }
+        
+        /* Arrow between steps (desktop only) */
+        .step-card:not(:last-child)::after {
+            content: "→";
+            position: absolute;
+            right: -20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.5rem;
+            color: var(--color-text-light);
+            display: none; /* Hidden by default, shown in media query */
+        }
+
+        /* --- FEATURES --- */
+        .features {
+            padding: var(--spacing-xl) 0;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--spacing-md);
+        }
+        
+        .feature-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1.5rem;
+            border: 1px solid #e5e7eb;
+            border-radius: var(--radius-md);
+            transition: border-color 0.3s;
+        }
+        
+        .feature-item:hover {
+            border-color: var(--color-primary);
+        }
+        
+        .feature-icon {
+            font-size: 1.5rem;
+            color: var(--color-accent);
+        }
+        
+        .feature-text h3 {
+            font-size: 1.2rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-primary-dark);
+        }
+
+        /* --- BENEFITS --- */
+        .benefits {
+            padding: var(--spacing-xl) 0;
+            background: var(--color-primary-dark);
+            color: white;
+        }
+        
+        .benefits h2 { color: white; }
+        .benefits .section-subtitle { color: rgba(255,255,255,0.8); }
+        
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-lg);
+        }
+        
+        .benefit-card {
+            background: rgba(255,255,255,0.1);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-md);
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+        
+        .benefit-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+        
+        .benefit-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+            color: var(--color-accent);
+        }
+
+        /* --- RESULTS --- */
+        .results {
+            padding: var(--spacing-xl) 0;
+            background: var(--color-bg-alt);
+        }
+        
+        .results-box {
+            background: white;
+            border-radius: var(--radius-md);
+            padding: var(--spacing-lg);
+            box-shadow: var(--shadow-md);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: var(--spacing-lg);
+            text-align: center;
+        }
+        
+        .metric-big {
+            font-size: 4rem;
+            font-weight: 800;
+            color: var(--color-primary);
+            line-height: 1;
+            margin-bottom: 0.5rem;
+        }
+        
+        .metric-label {
+            font-size: 1.25rem;
+            color: var(--color-text-light);
+            font-weight: 500;
+        }
+        
+        .metric-divider {
+            display: none;
+            width: 1px;
+            background: #e5e7eb;
+        }
+
+        /* --- CTA FORM --- */
+        .cta-section {
+            padding: var(--spacing-xl) 0;
+            background: white;
+        }
+        
+        .form-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: var(--spacing-md);
+            border: 1px solid #e5e7eb;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 3px rgba(0, 53, 128, 0.1);
+        }
+        
+        .form-submit {
+            width: 100%;
+            margin-top: 1rem;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background: var(--color-text-main);
+            color: white;
+            padding: var(--spacing-md) 0;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (min-width: 1024px) {
+            .step-card:not(:last-child)::after {
+                display: block;
+            }
+            .metric-divider {
+                display: block;
+            }
+            .results-box {
+                grid-template-columns: 1fr auto 1fr; /* Space for divider */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-text h1 { font-size: 2.25rem; }
+            .hero-content { grid-template-columns: 1fr; }
+            .problem-grid { grid-template-columns: 1fr; }
+            .steps-grid { grid-template-columns: 1fr; }
+            .features-grid { grid-template-columns: 1fr; }
+            .benefits-grid { grid-template-columns: 1fr; }
+            .results-box { grid-template-columns: 1fr; gap: var(--spacing-md); }
+            
+            /* Hide the visual part of step arrows on mobile */
+            .step-card::after { display: none; }
+            
+            .chat-demo { height: 400px; margin-top: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div class="container nav-inner">
+            <div class="logo">AI Concierge</div>
+            <a href="#demo" class="btn btn-primary">Get Started</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="hero-text">
+                <h1>Guests Get Instant Answers. You Keep the Booking.</h1>
+                <p>Most guests won't email or wait. They just leave. Your AI Concierge changes that by answering questions instantly.</p>
+                <a href="#demo" class="btn btn-primary">Chat Below</a>
+                <p style="margin-top: 1rem; font-size: 0.85rem; color: var(--color-text-light);">
+                    <span style="color: #10b981;">●</span> Live & ready to test
+                </p>
+            </div>
+            
+            <div class="chat-demo" id="chat-visual">
+                <div class="chat-header">
+                    <div class="chat-status"></div>
+                    <strong>Hotel Concierge</strong>
+                </div>
+                <div class="chat-body">
+                    <div class="message bot">
+                        Welcome to The Grand Hotel! 🏨 How can I help you today?
+                    </div>
+                    <div class="message user">
+                        Do you have late check-out available?
+                    </div>
+                    <div class="message bot">
+                        Yes! We offer late check-out until 2:00 PM for $40, subject to availability. Would you like me to add this to your booking request?
+                    </div>
+                    <div class="message user">
+                        Also, is breakfast included?
+                    </div>
+                    <div class="message bot">
+                        Our "Bed & Breakfast" rate includes a full buffet. The Standard rate does not, but you can add it upon arrival for $25/person. 🥐 ☕
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <div class="fake-input">Type your question...</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: var(--spacing-lg);">
+                <h2 class="section-title">Why You're Losing Bookings</h2>
+            </div>
+            <div class="problem-grid">
+                <div class="problem-text">
+                    <p style="font-size: 1.15rem; margin-bottom: 1.5rem;">
+                        A guest lands on your website. They have a simple question about your wifi, checkout time, or nearby restaurants.
+                    </p>
+                    <p style="font-size: 1.15rem; margin-bottom: 1.5rem;">
+                        They don't want to email and wait 24 hours. They don't want to call the front desk.
+                    </p>
+                    <p style="font-size: 1.15rem; font-weight: 700; color: #ef4444;">
+                        So they leave. They book on Booking.com or Expedia instead. You lose the margin. Or they bounce entirely.
+                    </p>
+                </div>
+                <div class="problem-visual">
+                    <div class="bounce-card">
+                        <span class="bounce-stat">High Bounce Rate</span>
+                        <p>Guest visits "Contact Us" page</p>
+                        <p style="margin: 10px 0;">↓</p>
+                        <p>Sees email form</p>
+                        <p style="margin: 10px 0;">↓</p>
+                        <strong style="color: #ef4444;">Exits to OTA Site</strong>
+                    </div>
+                    <p style="margin-top: 1rem; font-size: 0.9rem; color: #7f1d1d;">Don't let this happen.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="how-it-works">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title">How Your AI Concierge Works</h2>
+                <p class="section-subtitle">Automated, instant, and accurate.</p>
+            </div>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3 class="step-title">Guest Lands</h3>
+                    <p>Visitor arrives on your website with a question.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3 class="step-title">Guest Asks</h3>
+                    <p>They ask the AI Concierge via the chat widget.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3 class="step-title">Instant Answer</h3>
+                    <p>AI responds instantly with accurate hotel data.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">4</div>
+                    <h3 class="step-title">Direct Booking</h3>
+                    <p>Guest is satisfied and books directly on your site.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title">What Makes It Different</h2>
+                <p class="section-subtitle">Built specifically for hospitality, powered by OpenAI.</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-icon">🌍</div>
+                    <div class="feature-text">
+                        <h3>Multi-Language Support</h3>
+                        <p>Automatically detects and responds in any language supported by OpenAI, welcoming international guests seamlessly.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">⚡</div>
+                    <div class="feature-text">
+                        <h3>Instant Answers</h3>
+                        <p>Pulls real-time data about your hotel, rooms, amenities, and pricing to answer questions in milliseconds.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🛡️</div>
+                    <div class="feature-text">
+                        <h3>No Hallucinations</h3>
+                        <p>Trained only on your specific hotel database. It never invents policies or amenities you don't have.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🤝</div>
+                    <div class="feature-text">
+                        <h3>Seamless Handoff</h3>
+                        <p>Filters repetitive questions. Complex issues or booking confirmations are escalated to your team instantly.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="benefits">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title">What You Get</h2>
+                <p class="section-subtitle">Real ROI for your hotel operations.</p>
+            </div>
+            
+            <div class="benefits-grid">
+                <div class="benefit-card">
+                    <span class="benefit-icon">💰</span>
+                    <h3>More Direct Bookings</h3>
+                    <p>Guests get answers instantly and book direct. You keep 100% margin instead of paying 15-20% OTA commissions.</p>
+                </div>
+                <div class="benefit-card">
+                    <span class="benefit-icon">⏳</span>
+                    <h3>Team Saves Time</h3>
+                    <p>Stop answering "do you have wifi" 50 times a day. Your front desk focuses on guests, not repetitive emails.</p>
+                </div>
+                <div class="benefit-card">
+                    <span class="benefit-icon">⭐</span>
+                    <h3>Better Guest Satisfaction</h3>
+                    <p>Instant answers in their native language mean happier guests who feel taken care of before they even arrive.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="results">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title">Results from Partner Hotels</h2>
+                <p class="section-subtitle">Real metrics from properties using our AI Concierge.</p>
+            </div>
+            
+            <div class="results-box">
+                <div>
+                    <div class="metric-big">32%</div>
+                    <div class="metric-label">Increase in Direct Bookings</div>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">Year over year growth</p>
+                </div>
+                <div class="metric-divider"></div>
+                <div>
+                    <div class="metric-big">64%</div>
+                    <div class="metric-label">Reduction in Inquiries</div>
+                    <p style="margin-top: 10px; font-size: 0.9rem; color: #666;">Fewer repetitive emails & calls</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="demo">
+        <div class="container">
+            <div class="text-center">
+                <h2 class="section-title">See Your AI Concierge in Action</h2>
+                <p class="section-subtitle">Get a custom demo for your property.</p>
+            </div>
+            
+            <div class="form-container">
+                <form id="contactForm" onsubmit="event.preventDefault(); alert('Thanks! We will contact you shortly.');">
+                    <div class="form-group">
+                        <label class="form-label">Hotel Name</label>
+                        <input type="text" class="form-input" required placeholder="e.g. Grand Plaza Hotel">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-input" required placeholder="manager@hotel.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" class="form-input" placeholder="+1 (555) 000-0000">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary form-submit">Get Started</button>
+                    
+                    <p style="margin-top: 1rem; text-align: center; font-size: 0.8rem; color: #9ca3af;">
+                        No credit card required. Free consultation.
+                    </p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 AI Concierge Solutions. All rights reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
