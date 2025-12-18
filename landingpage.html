@@ -3,280 +3,566 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Automation Experts | The AI Concierge that turns guests into revenue.">
-    <title>Automation Experts | The New Standard in Hospitality</title>
+    <meta name="description" content="Automation Experts | The AI Concierge for Modern Hospitality.">
+    <title>Automation Experts | Hospitality Intelligence</title>
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,700;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,600&display=swap" rel="stylesheet">
 
     <style>
         /* -----------------------------------------------------------------
-           1. CORE SYSTEM & PALETTE (Luxury Dark Mode)
+           1. ROOT VARIABLES & RESET (Apple Light Mode)
            ----------------------------------------------------------------- */
         :root {
             /* Backgrounds */
-            --bg-body: #050505;
-            --bg-surface: #0f0f0f;
-            --bg-surface-light: #1a1a1a;
-            --bg-glass: rgba(20, 20, 20, 0.7);
+            --bg-body: #FFFFFF;
+            --bg-alt: #F5F5F7; /* Apple Platinum */
+            --bg-glass: rgba(255, 255, 255, 0.85);
+            --bg-card: #FFFFFF;
 
             /* Text */
-            --text-primary: #F2F2F7;
-            --text-secondary: #A1A1AA;
-            --text-muted: #52525B;
+            --text-primary: #1D1D1F; /* Almost Black */
+            --text-secondary: #86868B;
+            --text-tertiary: #6E6E73;
 
-            /* The "Champagne" Accent - Luxury Vibe */
-            --accent-gold: #D4AF37;
-            --accent-gold-dim: #8a701e;
-            --accent-gradient: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 50%, #996515 100%);
+            /* Accents */
+            --accent-blue: #0071E3;
+            --accent-dark: #000000;
+            --accent-gold: #D4AF37; /* Subtle Luxury Touch */
             
-            /* Typography */
-            --font-display: 'Playfair Display', serif;
-            --font-body: 'Inter', -apple-system, sans-serif;
+            /* Shadows (Diffuse & soft) */
+            --shadow-sm: 0 2px 5px rgba(0,0,0,0.05);
+            --shadow-md: 0 8px 30px rgba(0,0,0,0.06);
+            --shadow-lg: 0 30px 60px rgba(0,0,0,0.12);
+            --shadow-float: 0 20px 80px rgba(0,0,0,0.15);
+
+            /* Layout */
+            --max-width: 1280px;
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 32px;
             
-            /* Dimensions */
-            --max-width: 1200px;
-            --radius-lg: 24px;
-            --radius-pill: 999px;
+            /* Transitions */
+            --ease-apple: cubic-bezier(0.25, 1, 0.5, 1);
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        html { scroll-behavior: smooth; }
+        html { scroll-behavior: smooth; font-size: 16px; }
 
         body {
             background-color: var(--bg-body);
             color: var(--text-primary);
-            font-family: var(--font-body);
-            line-height: 1.6;
+            font-family: 'Inter', -apple-system, sans-serif;
+            line-height: 1.5;
             overflow-x: hidden;
-            /* Subtle grain texture for premium feel */
-            background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
-            background-size: 30px 30px;
+            -webkit-font-smoothing: antialiased;
         }
-
-        a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
-        ul { list-style: none; }
 
         /* -----------------------------------------------------------------
-           2. TYPOGRAPHY
+           2. TYPOGRAPHY SYSTEM
            ----------------------------------------------------------------- */
-        h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; }
+        h1, h2, h3, h4, h5 { letter-spacing: -0.02em; color: var(--text-primary); }
         
         h1 {
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
             font-size: 4.5rem;
-            line-height: 1.1;
-            letter-spacing: -0.02em;
-            margin-bottom: 24px;
+            line-height: 1.08;
+            margin-bottom: 1.5rem;
         }
 
-        h2 { font-size: 3rem; margin-bottom: 1rem; }
-        
-        .text-gradient {
-            background: var(--accent-gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-style: italic;
+        h2 {
+            font-size: 3.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+
+        h3 {
+            font-size: 1.75rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
         }
 
         p.lead {
-            font-size: 1.25rem;
+            font-size: 1.35rem;
             color: var(--text-secondary);
-            font-weight: 300;
-            max-width: 650px;
-            margin: 0 auto 40px;
+            font-weight: 400;
+            max-width: 680px;
+            margin: 0 auto 2.5rem;
+            line-height: 1.5;
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #1D1D1F 0%, #434344 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .serif-accent {
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            color: var(--accent-gold);
+            font-weight: 500;
         }
 
         /* -----------------------------------------------------------------
-           3. UI COMPONENTS
+           3. UI COMPONENTS & UTILITIES
            ----------------------------------------------------------------- */
         .container { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
         .text-center { text-align: center; }
+        .section-padding { padding: 120px 0; }
 
+        /* Buttons */
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 16px 40px;
-            border-radius: var(--radius-pill);
-            font-size: 15px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
+            padding: 16px 36px;
+            border-radius: 980px;
+            font-size: 16px;
+            font-weight: 500;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s var(--ease-apple);
             border: none;
-            font-family: var(--font-body);
+            text-decoration: none;
         }
 
         .btn-primary {
-            background: var(--accent-gradient);
-            color: #1a1200;
-            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
+            background: var(--accent-dark);
+            color: #FFFFFF;
         }
-        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(212, 175, 55, 0.3); }
-
-        .btn-glass {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
-            color: white;
-            backdrop-filter: blur(10px);
+        .btn-primary:hover {
+            transform: scale(1.03);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
         }
-        .btn-glass:hover { background: rgba(255,255,255,0.1); border-color: var(--accent-gold); }
 
-        /* Animations */
-        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
-        .reveal.active { opacity: 1; transform: translateY(0); }
+        .btn-secondary {
+            background: var(--bg-alt);
+            color: var(--accent-blue);
+            font-weight: 600;
+        }
+        .btn-secondary:hover {
+            background: #E5E5EA;
+        }
+
+        /* Chips */
+        .badge-chip {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: #F5F5F7;
+            color: var(--text-secondary);
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-bottom: 24px;
+            border: 1px solid #E5E5E5;
+        }
 
         /* -----------------------------------------------------------------
-           4. NAVIGATION
+           4. NAVIGATION (Frosted Glass)
            ----------------------------------------------------------------- */
         nav {
             position: fixed; top: 0; width: 100%; z-index: 1000;
-            background: var(--bg-glass);
-            backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255,255,255,0.05);
-            padding: 20px 0;
-            transition: padding 0.3s;
+            background: rgba(255, 255, 255, 0.75);
+            backdrop-filter: saturate(180%) blur(20px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            transition: all 0.3s ease;
         }
-        nav.scrolled { padding: 15px 0; background: rgba(5,5,5,0.9); }
         
-        .nav-inner { display: flex; justify-content: space-between; align-items: center; }
-        .logo { 
-            font-family: var(--font-display); 
-            font-size: 1.5rem; 
-            font-weight: 700; 
+        .nav-inner { height: 70px; display: flex; justify-content: space-between; align-items: center; }
+        
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            font-size: 1.4rem;
             color: var(--text-primary);
             letter-spacing: -0.5px;
         }
 
+        .nav-menu { display: flex; gap: 40px; }
+        .nav-link { font-size: 14px; color: var(--text-secondary); font-weight: 500; transition: color 0.2s; }
+        .nav-link:hover { color: var(--text-primary); }
+
         /* -----------------------------------------------------------------
-           5. HERO & MACBOOK MOCKUP
+           5. HERO SECTION (Dual Layout)
            ----------------------------------------------------------------- */
-        .hero { padding: 180px 0 100px; position: relative; }
-        
-        /* Gold Glow behind hero */
-        .hero::before {
-            content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
-            width: 600px; height: 600px;
-            background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
-            filter: blur(60px); z-index: -1; pointer-events: none;
-        }
-
-        .laptop-wrapper {
-            margin-top: 60px;
-            position: relative;
-            perspective: 2000px;
-            display: flex;
-            justify-content: center;
-        }
-        
-        .macbook {
-            width: 900px;
-            transform-style: preserve-3d;
-            transform: rotateX(15deg);
-            transition: transform 0.6s ease;
-        }
-        .macbook:hover { transform: rotateX(0deg); }
-
-        .screen {
-            background: #000;
-            border-radius: 20px 20px 0 0;
-            border: 1px solid #333;
-            height: 550px;
+        .hero {
+            padding-top: 180px;
+            padding-bottom: 100px;
             position: relative;
             overflow: hidden;
-            /* Premium Glossy Reflection */
-            box-shadow: 0 0 0 2px #111 inset, 0 0 80px rgba(212, 175, 55, 0.1);
-        }
-        
-        .camera-dot {
-            position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
-            width: 6px; height: 6px; background: #222; border-radius: 50%; z-index: 10;
+            background: radial-gradient(circle at 50% 0%, #FFFFFF 0%, #F2F2F7 100%);
         }
 
-        .base {
-            background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
-            height: 25px; width: 102%; margin-left: -1%;
-            border-radius: 0 0 20px 20px;
+        .hero-layout {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            align-items: center;
+            gap: 60px;
+        }
+
+        .hero-text { text-align: left; z-index: 2; }
+        
+        .hero-visual {
             position: relative;
-            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.8);
+            height: 800px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* The iPhone Container (Perfect Aspect Ratio) */
+        .iphone-wrapper {
+            width: 380px;
+            height: 780px;
+            background: #000;
+            border-radius: 55px;
+            padding: 14px;
+            position: relative;
+            box-shadow: var(--shadow-float);
+            border: 6px solid #333; /* Dark frame */
+            z-index: 10;
+            transform: rotate(-5deg);
+            transition: transform 0.8s var(--ease-apple);
         }
         
-        /* The playful "Try Me" pointer */
-        .demo-pointer {
-            position: absolute; top: 40%; right: -140px;
-            color: var(--accent-gold); font-family: 'Playfair Display', serif; font-style: italic;
-            font-size: 1.2rem; transform: rotate(10deg);
-            display: flex; align-items: center; gap: 10px;
-            animation: float 3s ease-in-out infinite;
+        .iphone-wrapper:hover {
+            transform: rotate(0deg) scale(1.02);
         }
-        .demo-pointer::before { content: '←'; font-size: 2rem; font-family: sans-serif; font-style: normal; }
 
-        @keyframes float { 0%, 100% { transform: translateY(0) rotate(10deg); } 50% { transform: translateY(-10px) rotate(10deg); } }
+        .notch {
+            position: absolute; top: 18px; left: 50%; transform: translateX(-50%);
+            width: 120px; height: 35px; background: #000; border-radius: 20px; z-index: 20;
+        }
+
+        .screen-content {
+            width: 100%; height: 100%;
+            background: #fff;
+            border-radius: 42px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        iframe { width: 100%; height: 100%; border: none; }
+
+        /* Decorative blobs behind phone */
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            z-index: 1;
+            opacity: 0.6;
+        }
+        .blob-1 { width: 400px; height: 400px; background: #D4AF37; top: 10%; right: -20%; opacity: 0.2; }
+        .blob-2 { width: 300px; height: 300px; background: #0071E3; bottom: 10%; left: 0%; opacity: 0.1; }
 
         /* -----------------------------------------------------------------
-           6. THE ROI TRINITY (Benefits)
+           6. METRICS STRIP (The ROI)
            ----------------------------------------------------------------- */
-        .roi-section { padding: 120px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
-        .roi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 60px; }
-        
-        .roi-card {
-            background: var(--bg-surface-light);
-            padding: 40px 30px; border-radius: var(--radius-lg);
-            border: 1px solid rgba(255,255,255,0.05);
-            text-align: left; transition: all 0.3s;
+        .metrics-section {
+            background: #fff;
+            border-bottom: 1px solid #E5E5E5;
         }
-        .roi-card:hover { border-color: var(--accent-gold); transform: translateY(-5px); }
         
-        .roi-number {
-            font-family: var(--font-display); font-size: 4rem;
-            background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-            margin-bottom: 10px; display: block; line-height: 1;
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            divide-x: 1px solid #E5E5E5;
+        }
+
+        .metric-item {
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .metric-val {
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            letter-spacing: -2px;
+            line-height: 1;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .metric-lbl {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .metric-desc {
+            font-size: 0.95rem;
+            color: var(--text-tertiary);
+            max-width: 250px;
+            margin: 0 auto;
         }
 
         /* -----------------------------------------------------------------
-           7. COMPARISON & PRICING
+           7. FEATURES BENTO (Apple Style)
            ----------------------------------------------------------------- */
-        .comparison-table { width: 100%; border-collapse: collapse; margin-top: 50px; color: var(--text-secondary); }
-        .comparison-table th { color: white; text-align: left; padding: 20px; border-bottom: 1px solid #333; font-weight: 500; font-family: var(--font-display); font-size: 1.2rem; }
-        .comparison-table td { padding: 20px; border-bottom: 1px solid #222; }
-        .us-col { color: var(--accent-gold); font-weight: 600; }
+        .bento-section {
+            background: var(--bg-alt);
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 450px);
+            gap: 24px;
+            margin-top: 60px;
+        }
+
+        .card {
+            background: #FFFFFF;
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.4s ease;
+        }
+
+        .card:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-5px);
+        }
+
+        .card.span-2 { grid-column: span 2; }
+        .card.row-2 { grid-row: span 2; }
         
-        .pricing-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; max-width: 900px; margin: 60px auto 0; }
+        /* Dark Card Style */
+        .card.dark {
+            background: #1D1D1F;
+            color: #FFFFFF;
+        }
+        .card.dark h3, .card.dark p { color: #FFF; }
+        .card.dark p { opacity: 0.7; }
+
+        .card-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 12px;
+            letter-spacing: -0.01em;
+        }
+        
+        .card p {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* -----------------------------------------------------------------
+           8. COMPARISON TABLE (Clean)
+           ----------------------------------------------------------------- */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 60px;
+            background: white;
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .comparison-table th {
+            text-align: left;
+            padding: 30px;
+            background: #FAFAFA;
+            border-bottom: 1px solid #E5E5E5;
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .comparison-table td {
+            padding: 25px 30px;
+            border-bottom: 1px solid #F0F0F0;
+            font-size: 1.05rem;
+            color: var(--text-primary);
+        }
+
+        .comparison-table tr:last-child td { border-bottom: none; }
+        
+        .col-highlight {
+            background: #F5F9FF;
+            color: var(--accent-blue) !important;
+            font-weight: 600;
+        }
+        
+        .check-icon { color: #34C759; margin-right: 8px; font-weight: bold; }
+        .cross-icon { color: #FF3B30; margin-right: 8px; font-weight: bold; }
+
+        /* -----------------------------------------------------------------
+           9. TECH SECTION (Minimalist)
+           ----------------------------------------------------------------- */
+        .tech-section {
+            background: #000;
+            color: white;
+            padding: 140px 0;
+            text-align: center;
+        }
+
+        .tech-tags {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        .tag {
+            padding: 10px 24px;
+            border: 1px solid #333;
+            border-radius: 100px;
+            font-size: 0.9rem;
+            color: #888;
+            font-family: monospace;
+        }
+
+        /* -----------------------------------------------------------------
+           10. PRICING (Glass & Gold)
+           ----------------------------------------------------------------- */
+        .pricing-section { background: var(--bg-alt); }
+
+        .pricing-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            max-width: 960px;
+            margin: 60px auto 0;
+        }
+
         .price-card {
-            background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 30px; padding: 50px; position: relative; overflow: hidden;
-            display: flex; flex-direction: column;
+            background: #FFF;
+            padding: 50px;
+            border-radius: 30px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(0,0,0,0.03);
+            display: flex;
+            flex-direction: column;
+            position: relative;
         }
-        .price-card.pro {
-            background: linear-gradient(180deg, rgba(212, 175, 55, 0.05) 0%, rgba(0,0,0,0) 100%);
-            border-color: var(--accent-gold);
+
+        .price-card.featured {
+            box-shadow: 0 0 0 2px var(--accent-gold), var(--shadow-lg);
         }
-        .price-tag { font-size: 3.5rem; font-family: var(--font-display); color: white; }
-        .feature-list li { margin-bottom: 15px; display: flex; gap: 10px; color: #ccc; font-size: 0.95rem; }
-        .check-gold { color: var(--accent-gold); }
+        
+        .badge-popular {
+            position: absolute;
+            top: 20px; right: 20px;
+            background: var(--accent-gold);
+            color: #FFF;
+            font-size: 11px;
+            font-weight: 700;
+            padding: 6px 12px;
+            border-radius: 20px;
+            letter-spacing: 1px;
+        }
+
+        .price-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 10px; }
+        .price-amt { font-size: 3.5rem; font-weight: 700; letter-spacing: -1px; }
+        .price-sub { color: var(--text-secondary); font-size: 1rem; margin-bottom: 30px; }
+        
+        .price-features li {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+        .price-features li strong { color: var(--text-primary); }
+        .icon-check { margin-right: 12px; color: var(--accent-blue); }
 
         /* -----------------------------------------------------------------
-           8. FOOTER (Expanded)
+           11. FAQ ACCORDION
            ----------------------------------------------------------------- */
-        footer { background: #080808; padding: 100px 0 40px; border-top: 1px solid #222; margin-top: 100px; }
-        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 60px; margin-bottom: 60px; }
-        .footer-links h4 { color: white; margin-bottom: 25px; font-size: 1.1rem; }
-        .footer-links ul li { margin-bottom: 15px; color: var(--text-secondary); font-size: 0.95rem; }
-        .footer-links ul li a:hover { color: var(--accent-gold); }
+        .faq-item {
+            border-bottom: 1px solid #E5E5E5;
+            padding: 24px 0;
+        }
         
-        .legal-text { font-size: 0.85rem; color: #444; line-height: 1.8; margin-top: 20px; }
+        .faq-question {
+            font-size: 1.2rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .faq-answer {
+            margin-top: 15px;
+            color: var(--text-secondary);
+            display: none; /* JS would toggle this */
+            line-height: 1.6;
+        }
 
-        /* Responsive */
-        @media (max-width: 900px) {
-            h1 { font-size: 3rem; }
-            .macbook { width: 100%; transform: none; }
-            .screen { height: 400px; }
-            .demo-pointer { display: none; }
-            .roi-grid, .pricing-grid, .footer-grid { grid-template-columns: 1fr; }
-            .comparison-wrapper { overflow-x: auto; }
-            .comparison-table { min-width: 700px; }
+        /* -----------------------------------------------------------------
+           12. CTA & FOOTER
+           ----------------------------------------------------------------- */
+        .footer {
+            background: #FBFBFD;
+            padding: 100px 0 40px;
+            border-top: 1px solid #E5E5E5;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 80px;
+            margin-bottom: 80px;
+        }
+
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            display: block;
+        }
+
+        .footer-links h5 { margin-bottom: 20px; font-size: 0.9rem; text-transform: uppercase; color: var(--text-tertiary); letter-spacing: 1px; }
+        .footer-links li { margin-bottom: 12px; }
+        .footer-links a { font-size: 0.95rem; color: var(--text-secondary); }
+        .footer-links a:hover { color: var(--accent-blue); }
+
+        .legal-block {
+            border-top: 1px solid #E5E5E5;
+            padding-top: 40px;
+            font-size: 0.8rem;
+            color: var(--text-tertiary);
+            line-height: 1.6;
+        }
+
+        /* -----------------------------------------------------------------
+           13. RESPONSIVE
+           ----------------------------------------------------------------- */
+        @media (max-width: 1024px) {
+            h1 { font-size: 3.5rem; }
+            .hero-layout { grid-template-columns: 1fr; text-align: center; }
+            .hero-text { order: 1; margin-bottom: 40px; }
+            .hero-visual { order: 2; height: auto; }
+            .iphone-wrapper { margin: 0 auto; transform: rotate(0deg); }
+            p.lead { margin: 0 auto 30px; }
+            .metrics-grid { grid-template-columns: 1fr; divide-x: none; divide-y: 1px solid #E5E5E5; }
+            .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+            .pricing-container { grid-template-columns: 1fr; }
+            .footer-grid { grid-template-columns: 1fr; gap: 40px; }
         }
     </style>
 </head>
@@ -285,82 +571,144 @@
     <nav id="navbar">
         <div class="container nav-inner">
             <div class="logo">Automation Experts</div>
-            <a href="#demo" class="btn btn-primary" style="padding: 10px 25px; font-size: 12px;">Get Audit</a>
+            
+            <div class="nav-menu" style="display: flex; align-items: center;">
+                <div style="display: flex; gap: 30px; margin-right: 30px;">
+                    <a href="#features" class="nav-link">Capabilities</a>
+                    <a href="#pricing" class="nav-link">Pricing</a>
+                    <a href="#faq" class="nav-link">FAQ</a>
+                </div>
+                <a href="#demo" class="btn btn-primary" style="padding: 10px 24px; font-size: 14px;">Get Audit</a>
+            </div>
         </div>
     </nav>
 
     <section class="hero">
-        <div class="container text-center">
-            <h1 class="reveal active">
-                Hospitality. <span class="text-gradient">Elevated.</span>
-            </h1>
-            <p class="lead reveal active" style="transition-delay: 0.1s;">
-                The AI Concierge that answers instantly, secures bookings, and elevates guest satisfaction.
-                <span style="display: block; margin-top: 15px; color: white; font-weight: 500;">
-                    Setup is free. You only pay for results.
-                </span>
-            </p>
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
 
-            <div class="laptop-wrapper reveal active" style="transition-delay: 0.2s;">
-                <div class="macbook">
-                    <div class="screen">
-                        <div class="camera-dot"></div>
-                        <iframe src="https://krishnaaarana-rgb.github.io/hotel-chat-widget/widget.html" style="width:100%; height:100%; border:none;" title="AI Demo"></iframe>
-                        
-                        <div class="demo-pointer">
-                            Try the demo!<br>Ask about "Late check-out"
+        <div class="container">
+            <div class="hero-layout">
+                
+                <div class="hero-text reveal active">
+                    <span class="badge-chip">The New Standard</span>
+                    <h1>
+                        Hospitality.<br>
+                        <span class="text-gradient">Automated.</span>
+                    </h1>
+                    <p class="lead">
+                        The AI Concierge that answers guests instantly, captures leads, and escalates bookings to your team. 
+                        <span style="color: var(--text-primary); font-weight: 500;">Setup is free. You only pay for results.</span>
+                    </p>
+                    
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                        <a href="#demo" class="btn btn-primary">Start Transformation</a>
+                        <a href="#features" class="btn btn-secondary">See How It Works</a>
+                    </div>
+                    
+                    <div style="margin-top: 40px; display: flex; align-items: center; gap: 15px;">
+                        <div style="display: flex;">
+                            <div style="width: 35px; height: 35px; background: #ddd; border-radius: 50%; border: 2px solid white;"></div>
+                            <div style="width: 35px; height: 35px; background: #ccc; border-radius: 50%; border: 2px solid white; margin-left: -10px;"></div>
+                            <div style="width: 35px; height: 35px; background: #bbb; border-radius: 50%; border: 2px solid white; margin-left: -10px;"></div>
+                        </div>
+                        <span style="font-size: 0.9rem; color: var(--text-secondary);">Trusted by 50+ properties</span>
+                    </div>
+                </div>
+
+                <div class="hero-visual reveal active" style="transition-delay: 0.2s;">
+                    <div class="iphone-wrapper">
+                        <div class="notch"></div>
+                        <div class="screen-content">
+                            <iframe src="https://krishnaaarana-rgb.github.io/hotel-chat-widget/widget.html" title="AI Chat Demo"></iframe>
                         </div>
                     </div>
-                    <div class="base"></div>
                 </div>
+
             </div>
         </div>
     </section>
 
-    <section class="roi-section" id="benefits">
+    <section class="metrics-section">
         <div class="container">
-            <div class="text-center reveal">
-                <h2 style="font-size: 2.5rem;">Why Top Hotels Choose Us</h2>
-            </div>
-            
-            <div class="roi-grid">
-                <div class="roi-card reveal">
-                    <span class="roi-number">30%</span>
-                    <h3>More Direct Bookings</h3>
-                    <p style="margin-top: 15px; color: var(--text-secondary);">
-                        Guests book direct. You keep 100% margin instead of paying 15% commission to OTAs. Stop losing revenue to your competitors.
-                    </p>
+            <div class="metrics-grid">
+                <div class="metric-item reveal">
+                    <span class="metric-val">30%</span>
+                    <span class="metric-lbl">More Direct Bookings</span>
+                    <p class="metric-desc">Guests book direct. You keep 100% margin instead of paying 15% to OTAs.</p>
                 </div>
-
-                <div class="roi-card reveal" style="transition-delay: 0.1s;">
-                    <span class="roi-number">50hrs</span>
-                    <h3>Team Saves Time</h3>
-                    <p style="margin-top: 15px; color: var(--text-secondary);">
-                        No more answering "do you have wifi" or "what languages do you speak" 100 times a day. Let your front desk focus on the guests in the lobby.
-                    </p>
+                <div class="metric-item reveal" style="transition-delay: 0.1s;">
+                    <span class="metric-val">50hrs</span>
+                    <span class="metric-lbl">Time Saved Monthly</span>
+                    <p class="metric-desc">Stop answering "do you have wifi" 100 times a day. Automate the mundane.</p>
                 </div>
-
-                <div class="roi-card reveal" style="transition-delay: 0.2s;">
-                    <span class="roi-number">5★</span>
-                    <h3>Better Guest Satisfaction</h3>
-                    <p style="margin-top: 15px; color: var(--text-secondary);">
-                        Instant answers in their native language mean happier guests who actually complete the booking instead of bouncing to Expedia.
-                    </p>
+                <div class="metric-item reveal" style="transition-delay: 0.2s;">
+                    <span class="metric-val">1.5s</span>
+                    <span class="metric-lbl">Avg Response Time</span>
+                    <p class="metric-desc">Instant answers in their native language mean happier guests who actually book.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="container" style="padding: 100px 24px;">
-        <h2 class="text-center reveal">Evolution vs. Tradition</h2>
-        <div class="comparison-wrapper reveal">
-            <table class="comparison-table">
+    <section class="section-padding bento-section" id="features">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 60px;">
+                <h2>Intelligence at Scale</h2>
+                <p class="lead">A suite of capabilities designed to replace friction with flow.</p>
+            </div>
+
+            <div class="bento-grid">
+                <div class="card span-2 row-2 reveal">
+                    <div>
+                        <span class="card-icon">🧠</span>
+                        <h3>Contextual Awareness</h3>
+                        <p>Unlike basic chatbots, Automation Experts understands nuance. It knows the difference between "Can I bring my dog?" and "Do you have hot dogs?". It sells your amenities, not just lists them.</p>
+                    </div>
+                    <img src="https://placehold.co/600x300/F5F5F7/cccccc?text=Contextual+AI+UI" alt="AI Visualization" style="margin-top: 30px; border-radius: 12px; opacity: 0.8;">
+                </div>
+
+                <div class="card dark reveal">
+                    <span class="card-icon">⚡</span>
+                    <h3>Sub-100ms</h3>
+                    <p>Latency so low, it feels like magic. Powered by edge computing.</p>
+                </div>
+
+                <div class="card reveal">
+                    <span class="card-icon">🌍</span>
+                    <h3>95+ Languages</h3>
+                    <p>Speak to guests in their native tongue automatically.</p>
+                </div>
+
+                <div class="card span-2 reveal">
+                    <span class="card-icon">🛡️</span>
+                    <h3>Custom Database Hosted</h3>
+                    <p>We host a secure, isolated database of your hotel's specific facts. The AI references this exclusively, ensuring zero hallucinations.</p>
+                </div>
+
+                <div class="card span-2 reveal">
+                    <span class="card-icon">📊</span>
+                    <h3>Insight Engine</h3>
+                    <p>See exactly what guests are asking. Discover trends like "Vegan options" or "Late check-out" and adjust your operations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding">
+        <div class="container">
+            <div class="text-center">
+                <h2>Evolution vs. Tradition</h2>
+                <p class="lead">Why the old way is costing you money.</p>
+            </div>
+
+            <table class="comparison-table reveal">
                 <thead>
                     <tr>
-                        <th>Feature</th>
-                        <th>Standard Chatbot</th>
-                        <th>Human Staff</th>
-                        <th class="us-col">Automation Experts</th>
+                        <th style="width: 30%;">Feature</th>
+                        <th style="width: 25%;">Standard Chatbot</th>
+                        <th style="width: 25%;">Human Staff</th>
+                        <th class="col-highlight">Automation Experts</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -368,148 +716,198 @@
                         <td>Response Time</td>
                         <td>Instant (Generic)</td>
                         <td>Minutes/Hours</td>
-                        <td class="us-col">~1.5 Seconds (Accurate)</td>
+                        <td class="col-highlight"><span class="check-icon">✓</span> 1.5 Seconds (Accurate)</td>
                     </tr>
                     <tr>
                         <td>Tone & Voice</td>
                         <td>Robotic</td>
                         <td>Inconsistent</td>
-                        <td class="us-col">Customized Luxury</td>
+                        <td class="col-highlight"><span class="check-icon">✓</span> Customized Luxury</td>
                     </tr>
                     <tr>
                         <td>Availability</td>
                         <td>24/7</td>
                         <td>8 Hours/Shift</td>
-                        <td class="us-col">24/7/365</td>
+                        <td class="col-highlight"><span class="check-icon">✓</span> 24/7/365</td>
+                    </tr>
+                    <tr>
+                        <td>Setup Effort</td>
+                        <td>High (DIY)</td>
+                        <td>Training Required</td>
+                        <td class="col-highlight"><span class="check-icon">✓</span> Zero (We do it)</td>
                     </tr>
                     <tr>
                         <td>Booking Action</td>
                         <td>Link Only</td>
                         <td>Manual Entry</td>
-                        <td class="us-col">Lead Capture & Escalation</td>
-                    </tr>
-                    <tr>
-                        <td>Setup Cost</td>
-                        <td>High (DIY)</td>
-                        <td>Training $$$</td>
-                        <td class="us-col">Free (Done For You)</td>
+                        <td class="col-highlight"><span class="check-icon">✓</span> Lead Capture & Escalation</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </section>
 
-    <section style="background: #0a0a0a; padding: 100px 0; border-top: 1px solid #1a1a1a;">
-        <div class="container text-center reveal">
-            <h2 class="text-gradient">Developers Love Us. Managers Trust Us.</h2>
-            <p class="lead">
-                Security is not an afterthought. It is our foundation.
-            </p>
-            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; margin-top: 40px; color: var(--text-muted); font-weight: 600;">
-                <span>🔒 AES-256 Encryption</span>
-                <span>🇪🇺 GDPR Compliant</span>
-                <span>⚡ Zero-Latency Edge Network</span>
-                <span>📃 Custom PDF Training</span>
-            </div>
-        </div>
-    </section>
-
-    <section id="pricing" class="container" style="padding: 100px 24px;">
-        <div class="text-center reveal">
-            <h2>Transparent Investment</h2>
-            <p class="lead">No hidden fees. Free setup. Cancel anytime.</p>
-        </div>
-
-        <div class="pricing-grid">
-            <div class="price-card reveal">
-                <h3>Essential</h3>
-                <div class="price-tag">$149<span style="font-size: 1rem; color: #666;">/mo</span></div>
-                <p style="color: var(--accent-gold); margin: 10px 0 30px;">Perfect for Boutique Hotels</p>
-                <ul class="feature-list">
-                    <li><span class="check-gold">✓</span> Up to 1,000 conversations</li>
-                    <li><span class="check-gold">✓</span> Handles FAQ & Pricing</li>
-                    <li><span class="check-gold">✓</span> Captures Leads (Name/Email)</li>
-                    <li><span class="check-gold">✓</span> Instant Email Escalation</li>
-                    <li><span class="check-gold">✓</span> <strong>Free Custom Setup</strong></li>
-                </ul>
-                <a href="mailto:krishnarana@automationexperts.tech" class="btn btn-glass" style="margin-top: auto; text-align: center;">Start Essential</a>
-            </div>
-
-            <div class="price-card pro reveal" style="transition-delay: 0.1s;">
-                <div style="position: absolute; top: 20px; right: 20px; background: var(--accent-gold); color: black; padding: 5px 15px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;">MOST POPULAR</div>
-                <h3 style="color: var(--accent-gold);">Pro</h3>
-                <div class="price-tag">$199<span style="font-size: 1rem; color: #666;">/mo</span></div>
-                <p style="color: white; margin: 10px 0 30px;">For Resorts & High Volume</p>
-                <ul class="feature-list">
-                    <li><span class="check-gold">✓</span> <strong>Unlimited Conversations</strong></li>
-                    <li><span class="check-gold">✓</span> Priority Support (Same-day)</li>
-                    <li><span class="check-gold">✓</span> Slack Alerts Integration</li>
-                    <li><span class="check-gold">✓</span> Multi-channel Support</li>
-                    <li><span class="check-gold">✓</span> <strong>Free Custom Setup</strong></li>
-                </ul>
-                <a href="mailto:krishnarana@automationexperts.tech" class="btn btn-primary" style="margin-top: auto; text-align: center;">Go Pro</a>
-            </div>
-        </div>
-    </section>
-
-    <section class="container reveal" id="demo" style="max-width: 600px; padding: 100px 24px;">
-        <div style="background: var(--bg-surface); padding: 50px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1);">
-            <h2 class="text-center" style="font-size: 2rem;">Secure Your Spot</h2>
-            <p class="text-center" style="color: #888; margin-bottom: 30px;">We are currently onboarding partners. Get your free audit.</p>
+    <section class="tech-section">
+        <div class="container">
+            <h2 style="color: white;">Developers Love Us.<br>Managers Trust Us.</h2>
+            <p class="lead" style="color: #888;">Built on a modern stack ensuring security and scalability.</p>
             
-            <form onsubmit="event.preventDefault(); alert('We will contact you within 2 hours.');">
-                <input type="text" placeholder="Hotel Name" style="width: 100%; padding: 15px; margin-bottom: 15px; background: #000; border: 1px solid #333; color: white; border-radius: 10px;">
-                <input type="email" placeholder="Manager Email" style="width: 100%; padding: 15px; margin-bottom: 15px; background: #000; border: 1px solid #333; color: white; border-radius: 10px;">
-                <input type="url" placeholder="Website URL" style="width: 100%; padding: 15px; margin-bottom: 25px; background: #000; border: 1px solid #333; color: white; border-radius: 10px;">
-                <button type="submit" class="btn btn-primary" style="width: 100%;">Get Custom Demo</button>
-            </form>
+            <div class="tech-tags">
+                <span class="tag">AES-256 Encryption</span>
+                <span class="tag">GDPR Compliant</span>
+                <span class="tag">Single Line JS Install</span>
+                <span class="tag">Works on WordPress</span>
+                <span class="tag">Works on Wix</span>
+                <span class="tag">Works on Webflow</span>
+            </div>
+
+            <div style="margin-top: 50px; background: #111; padding: 20px; display: inline-block; border-radius: 12px; font-family: monospace; color: #34C759; border: 1px solid #333;">
+                &lt;iframe src="your-hotel-chat.html"&gt;&lt;/iframe&gt;
+            </div>
+            <p style="margin-top: 15px; color: #555; font-size: 0.9rem;">That's literally all you need.</p>
         </div>
     </section>
 
-    <footer>
+    <section class="section-padding pricing-section" id="pricing">
+        <div class="container">
+            <div class="text-center">
+                <h2>Transparent Investment</h2>
+                <p class="lead">No hidden fees. Cancel anytime.</p>
+            </div>
+
+            <div class="pricing-container">
+                <div class="price-card reveal">
+                    <h3 class="price-title">Essential</h3>
+                    <div class="price-amt">$149</div>
+                    <div class="price-sub">per month</div>
+                    <span style="color: var(--accent-blue); font-weight: 600; margin-bottom: 20px; font-size: 0.9rem;">PERFECT FOR SMALL HOTELS</span>
+                    
+                    <ul class="price-features">
+                        <li><span class="icon-check">✓</span> <strong>Up to 1,000</strong> conversations</li>
+                        <li><span class="icon-check">✓</span> Handles FAQ & Pricing</li>
+                        <li><span class="icon-check">✓</span> Captures Leads (Name, Phone)</li>
+                        <li><span class="icon-check">✓</span> Sends leads to email</li>
+                        <li><span class="icon-check">✓</span> <strong>Free Custom Setup</strong></li>
+                    </ul>
+                    <a href="mailto:krishnarana@automationexperts.tech" class="btn btn-secondary" style="margin-top: auto; width: 100%;">Start Essential</a>
+                </div>
+
+                <div class="price-card featured reveal" style="transition-delay: 0.1s;">
+                    <div class="badge-popular">MOST POPULAR</div>
+                    <h3 class="price-title">Pro</h3>
+                    <div class="price-amt">$199</div>
+                    <div class="price-sub">per month</div>
+                    <span style="color: var(--accent-gold); font-weight: 600; margin-bottom: 20px; font-size: 0.9rem;">FOR RESORTS & HIGH VOLUME</span>
+                    
+                    <ul class="price-features">
+                        <li><span class="icon-check" style="color: var(--accent-gold);">✓</span> <strong>Unlimited</strong> conversations</li>
+                        <li><span class="icon-check">✓</span> Everything in Essential</li>
+                        <li><span class="icon-check">✓</span> Priority Support (Same-day)</li>
+                        <li><span class="icon-check">✓</span> Slack Alerts Integration</li>
+                        <li><span class="icon-check">✓</span> Enhanced Customization</li>
+                        <li><span class="icon-check">✓</span> <strong>Free Custom Setup</strong></li>
+                    </ul>
+                    <a href="mailto:krishnarana@automationexperts.tech" class="btn btn-primary" style="margin-top: auto; width: 100%; background: var(--text-primary);">Go Pro</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding" id="faq">
+        <div class="container" style="max-width: 800px;">
+            <div class="text-center" style="margin-bottom: 50px;">
+                <h2>Frequently Asked Questions</h2>
+            </div>
+            
+            <div class="faq-list">
+                <details class="faq-item">
+                    <summary class="faq-question">Do I need technical skills to install this?</summary>
+                    <p class="faq-answer" style="display: block; margin-top: 10px;">No. We handle the setup for you. We provide a single line of code that you copy and paste into your website builder. If you don't know how, we will do it for you for free.</p>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-question">Does it support my language?</summary>
+                    <p class="faq-answer" style="display: block; margin-top: 10px;">Yes. The AI automatically detects the language of the guest and responds in that language, whether it's Spanish, French, German, Chinese, or 90+ others.</p>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-question">What happens if the AI doesn't know the answer?</summary>
+                    <p class="faq-answer" style="display: block; margin-top: 10px;">It is trained to never "guess." If it doesn't know the answer based on your database, it will politely ask the guest for their email so a human manager can follow up.</p>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-question">Can I cancel anytime?</summary>
+                    <p class="faq-answer" style="display: block; margin-top: 10px;">Yes. Our plans are month-to-month. There are no long-term binding contracts.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding" style="background: #FAFAFA; border-top: 1px solid #EEE;" id="demo">
+        <div class="container">
+            <div style="background: white; padding: 60px; border-radius: 30px; box-shadow: var(--shadow-md); max-width: 700px; margin: 0 auto; border: 1px solid #EEE;">
+                <div class="text-center">
+                    <h2>Secure Your Spot</h2>
+                    <p class="lead" style="margin-bottom: 30px; font-size: 1.1rem;">We are currently onboarding partners. Get your free audit.</p>
+                </div>
+
+                <form onsubmit="event.preventDefault(); alert('We will contact you within 2 hours.');">
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;">Hotel Name</label>
+                        <input type="text" placeholder="e.g. The Grand Budapest" style="width: 100%; padding: 16px; border: 1px solid #DDD; border-radius: 12px; font-size: 1rem; background: #F9F9F9;">
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;">Email Address</label>
+                        <input type="email" placeholder="manager@hotel.com" style="width: 100%; padding: 16px; border: 1px solid #DDD; border-radius: 12px; font-size: 1rem; background: #F9F9F9;">
+                    </div>
+                    <div style="margin-bottom: 30px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;">Website URL</label>
+                        <input type="url" placeholder="https://" style="width: 100%; padding: 16px; border: 1px solid #DDD; border-radius: 12px; font-size: 1rem; background: #F9F9F9;">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%;">Get Custom Demo</button>
+                    <p style="text-align: center; margin-top: 15px; font-size: 0.85rem; color: #888;">No credit card required. Free consultation.</p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
         <div class="container">
             <div class="footer-grid">
                 <div>
-                    <h3 class="logo" style="margin-bottom: 20px;">Automation Experts</h3>
-                    <p style="color: var(--text-secondary); max-width: 300px;">
-                        Pioneering the intersection of Artificial Intelligence and Luxury Hospitality. 
+                    <span class="footer-logo">Automation Experts</span>
+                    <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 0.95rem; line-height: 1.6;">
+                        Pioneering the intersection of Artificial Intelligence and Hospitality. 
                         We build tools that make technology invisible and service unforgettable.
                     </p>
-                    <div style="margin-top: 30px;">
-                        <a href="https://www.linkedin.com/in/krishnaaarana/" style="margin-right: 20px; color: white; opacity: 0.7;">LinkedIn</a>
-                        <a href="mailto:krishnarana@automationexperts.tech" style="color: white; opacity: 0.7;">Email Us</a>
+                    <div style="display: flex; gap: 20px;">
+                        <a href="https://www.linkedin.com/in/krishnaaarana/" target="_blank" style="color: var(--text-primary); font-weight: 600;">LinkedIn</a>
+                        <a href="mailto:krishnarana@automationexperts.tech" style="color: var(--text-primary); font-weight: 600;">Email</a>
                     </div>
                 </div>
-                
+
                 <div class="footer-links">
-                    <h4>Company</h4>
+                    <h5>Company</h5>
                     <ul>
-                        <li><a href="#benefits">About Us</a></li>
+                        <li><a href="#features">Capabilities</a></li>
                         <li><a href="#pricing">Pricing</a></li>
-                        <li><a href="#">Careers</a></li>
-                        <li><a href="mailto:krishnarana@automationexperts.tech">Contact</a></li>
+                        <li><a href="#demo">Get a Demo</a></li>
+                        <li><a href="#">About Us</a></li>
                     </ul>
                 </div>
-                
+
                 <div class="footer-links">
-                    <h4>Legal</h4>
+                    <h5>Legal</h5>
                     <ul>
                         <li><a href="#">Privacy Policy</a></li>
                         <li><a href="#">Terms of Service</a></li>
-                        <li><a href="#">Data Processing</a></li>
                         <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">Data Processing</a></li>
                     </ul>
                 </div>
             </div>
 
-            <div style="border-top: 1px solid #222; padding-top: 40px;">
-                <div class="legal-text">
-                    <p><strong>Privacy Policy Summary:</strong> Automation Experts respects your privacy. We process personal data (Name, Email, Hotel Data) solely for the purpose of providing our Concierge services. We do not sell data to third parties. Data is encrypted via AES-256 standards.</p>
-                    <p style="margin-top: 10px;"><strong>Terms of Service:</strong> By using our services, you agree that Automation Experts acts as a data processor. We are not responsible for bookings not completed due to third-party payment gateway failures. Use of our "Pro" plan constitutes a month-to-month agreement.</p>
-                </div>
-                <p style="text-align: center; color: #555; margin-top: 40px; font-size: 0.9rem;">
-                    &copy; 2025 Automation Experts. Delhi, India. All rights reserved.
-                </p>
+            <div class="legal-block">
+                <p><strong>Privacy Policy Summary:</strong> Automation Experts respects your privacy. We process personal data (Name, Email, Hotel Data) solely for the purpose of providing our Concierge services. We do not sell data to third parties. Data is encrypted via AES-256 standards.</p>
+                <p style="margin-top: 10px;"><strong>Terms of Service:</strong> By using our services, you agree that Automation Experts acts as a data processor. We are not responsible for bookings not completed due to third-party payment gateway failures. Use of our "Pro" plan constitutes a month-to-month agreement.</p>
+                <p style="margin-top: 30px; text-align: center;">&copy; 2025 Automation Experts. Delhi, India. All rights reserved.</p>
             </div>
         </div>
     </footer>
@@ -529,8 +927,13 @@
         // Navbar Scroll Effect
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
-            if (window.scrollY > 50) nav.classList.add('scrolled');
-            else nav.classList.remove('scrolled');
+            if (window.scrollY > 50) {
+                nav.style.padding = "10px 0";
+                nav.style.background = "rgba(255,255,255,0.9)";
+            } else {
+                nav.style.padding = "20px 0";
+                nav.style.background = "rgba(255,255,255,0.75)";
+            }
         });
     </script>
 </body>
