@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Automation Experts | The AI Concierge for Modern Hospitality.">
+    <title>Automation Experts | The Future of Hospitality</title>
+    <style>
+        /* -----------------------------------------------------------------
+           1. CORE SYSTEM & RESET
+           ----------------------------------------------------------------- */
+        :root {
+            /* Palette - "Midnight & Starlight" */
+            --bg-body: #000000;
+            --bg-surface: #121212;
+            --bg-surface-elevated: #1c1c1e;
+            --bg-surface-glass: rgba(28, 28, 30, 0.6);
+            
+            --text-primary: #f5f5f7;
+            --text-secondary: #86868b;
+            --text-tertiary: #6e6e73;
+            
+            --accent-blue: #2997ff;
+            --accent-gold: #FFD60A;
+            --accent-success: #30d158;
+            --accent-gradient: linear-gradient(135deg, #FFB700 0%, #FF8A00 100%);
+            
+            /* Typography - San Francisco Style Stack */
+            --font-main: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            
+            /* Layout & Spacing */
+            --max-width: 1200px;
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 32px;
+            --radius-xl: 48px;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        html { scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            font-family: var(--font-main);
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+            line-height: 1.5;
+        }
+
+        a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
+        ul { list-style: none; }
+        img { max-width: 100%; display: block; }
+
+        /* -----------------------------------------------------------------
+           2. TYPOGRAPHY UTILITIES
+           ----------------------------------------------------------------- */
+        .text-gradient {
+            background: linear-gradient(180deg, #FFFFFF 20%, #86868b 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .text-gradient-gold {
+            background: var(--accent-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        h1 {
+            font-size: 5rem;
+            letter-spacing: -0.03em;
+            line-height: 1.05;
+            font-weight: 700;
+        }
+
+        h2 {
+            font-size: 3.5rem;
+            letter-spacing: -0.02em;
+            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        h3 {
+            font-size: 2rem;
+            letter-spacing: -0.01em;
+            font-weight: 600;
+        }
+
+        p.lead {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.4;
+        }
+
+        /* -----------------------------------------------------------------
+           3. UI COMPONENTS
+           ----------------------------------------------------------------- */
+        .container {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 36px;
+            border-radius: 980px;
+            font-size: 17px;
+            font-weight: 500;
+            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background: #fff;
+            color: #000;
+        }
+        
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+        }
+
+        .btn-glass {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .btn-glass:hover { background: rgba(255,255,255,0.2); }
+
+        .badge {
+            display: inline-block;
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid var(--accent-gold);
+            color: var(--accent-gold);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        /* Scroll Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* -----------------------------------------------------------------
+           4. NAVIGATION (Glass Sticky)
+           ----------------------------------------------------------------- */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 0;
+            transition: all 0.3s;
+        }
+        
+        nav.scrolled {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 0;
+        }
+
+        .nav-inner { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 700; font-size: 1.25rem; letter-spacing: -0.02em; }
+        .nav-links { display: flex; gap: 30px; align-items: center; }
+        .nav-item { font-size: 14px; color: var(--text-secondary); }
+        .nav-item:hover { color: var(--text-primary); }
+
+        /* -----------------------------------------------------------------
+           5. HERO SECTION
+           ----------------------------------------------------------------- */
+        .hero {
+            position: relative;
+            min-height: 100vh;
+            padding-top: 140px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            overflow: hidden;
+        }
+
+        /* Ambient background glow */
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -20%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(0, 53, 128, 0.15) 0%, rgba(0,0,0,0) 70%);
+            z-index: -1;
+            pointer-events: none;
+        }
+
+        .hero-content {
+            z-index: 2;
+            position: relative;
+            margin-bottom: 60px;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+        }
+
+        /* The iPhone 3D Mockup */
+        .phone-container {
+            width: 380px;
+            height: 750px;
+            background: #000;
+            border-radius: 50px;
+            padding: 12px;
+            position: relative;
+            margin: 0 auto;
+            border: 4px solid #2a2a2a;
+            box-shadow: 
+                0 0 0 2px #000,
+                0 0 0 3px #333,
+                0 50px 100px -20px rgba(0,0,0,0.8),
+                0 0 80px rgba(41, 151, 255, 0.1);
+            transform: perspective(1000px) rotateX(10deg) rotateY(0deg) scale(0.9);
+            transition: transform 0.5s ease;
+        }
+        
+        .phone-container:hover {
+            transform: perspective(1000px) rotateX(0deg) scale(1);
+        }
+
+        .notch {
+            position: absolute;
+            top: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 30px;
+            background: #000;
+            border-bottom-left-radius: 16px;
+            border-bottom-right-radius: 16px;
+            z-index: 10;
+        }
+
+        .iframe-wrapper {
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            border-radius: 38px;
+            overflow: hidden;
+        }
+
+        iframe { width: 100%; height: 100%; border: none; }
+
+        /* -----------------------------------------------------------------
+           6. THE PROBLEM (High Contrast)
+           ----------------------------------------------------------------- */
+        .problem-section {
+            padding: 150px 0;
+            background: #000;
+        }
+
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 40px;
+            margin-top: 80px;
+            text-align: center;
+        }
+
+        .stat-item h3 { font-size: 4rem; color: #ff3b30; margin-bottom: 10px; }
+        .stat-item p { color: var(--text-secondary); font-size: 1.1rem; }
+
+        /* -----------------------------------------------------------------
+           7. BENTO GRID FEATURES
+           ----------------------------------------------------------------- */
+        .features-section {
+            padding: 100px 0;
+            background: var(--bg-surface);
+        }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-template-rows: repeat(2, 400px);
+            gap: 24px;
+            margin-top: 60px;
+        }
+
+        .bento-card {
+            background: var(--bg-surface-elevated);
+            border-radius: var(--radius-lg);
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .bento-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        .span-2 { grid-column: span 2; }
+        .span-4 { grid-column: span 4; }
+        .row-2 { grid-row: span 2; }
+
+        .bento-icon { font-size: 3rem; margin-bottom: 20px; display: block; }
+        
+        .bento-content h4 {
+            font-size: 1.75rem;
+            margin-bottom: 12px;
+            color: var(--text-primary);
+        }
+        .bento-content p {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* -----------------------------------------------------------------
+           8. COMPARISON TABLE (Us vs. Them)
+           ----------------------------------------------------------------- */
+        .comparison-section {
+            padding: 150px 0;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 60px;
+            color: var(--text-secondary);
+        }
+
+        .comparison-table th, .comparison-table td {
+            padding: 24px;
+            text-align: left;
+            border-bottom: 1px solid #333;
+        }
+
+        .comparison-table th { font-size: 1.2rem; font-weight: 600; color: var(--text-primary); }
+        .comparison-table td:first-child { color: var(--text-primary); font-size: 1.2rem; width: 40%; }
+        
+        .us-col { color: var(--accent-gold) !important; font-weight: 600; }
+        .check { color: var(--accent-success); font-size: 1.2rem; }
+        .cross { color: #ff3b30; font-size: 1.2rem; }
+
+        /* -----------------------------------------------------------------
+           9. TECHNICAL SPECS ("Under the Hood")
+           ----------------------------------------------------------------- */
+        .tech-section {
+            padding: 100px 0;
+            background: #0a0a0a;
+            border-top: 1px solid #222;
+            border-bottom: 1px solid #222;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+        }
+
+        .code-block {
+            background: #1e1e1e;
+            padding: 30px;
+            border-radius: 12px;
+            font-family: 'Courier New', Courier, monospace;
+            color: #d4d4d4;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        }
+        
+        .token-keyword { color: #569cd6; }
+        .token-string { color: #ce9178; }
+        .token-func { color: #dcdcaa; }
+
+        /* -----------------------------------------------------------------
+           10. CONTACT / CTA
+           ----------------------------------------------------------------- */
+        .cta-section {
+            padding: 150px 0;
+            text-align: center;
+        }
+
+        .form-container {
+            max-width: 500px;
+            margin: 60px auto 0;
+            text-align: left;
+            background: var(--bg-surface-elevated);
+            padding: 40px;
+            border-radius: var(--radius-lg);
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .form-group { margin-bottom: 24px; }
+        .form-label { display: block; margin-bottom: 8px; color: var(--text-secondary); font-size: 0.9rem; }
+        .form-input {
+            width: 100%;
+            padding: 16px;
+            background: #000;
+            border: 1px solid #333;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+        .form-input:focus { border-color: var(--accent-blue); }
+
+        /* -----------------------------------------------------------------
+           11. FOOTER
+           ----------------------------------------------------------------- */
+        footer {
+            padding: 80px 0 40px;
+            background: #050505;
+            color: var(--text-tertiary);
+            font-size: 0.9rem;
+            border-top: 1px solid #111;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .footer-brand h4 { color: white; font-size: 1.2rem; margin-bottom: 16px; }
+        .footer-links h5 { color: white; margin-bottom: 20px; }
+        .footer-links li { margin-bottom: 12px; }
+        .footer-links a:hover { color: var(--accent-gold); }
+
+        .social-row { margin-top: 20px; display: flex; gap: 15px; }
+
+        /* -----------------------------------------------------------------
+           12. RESPONSIVE
+           ----------------------------------------------------------------- */
+        @media (max-width: 1024px) {
+            h1 { font-size: 3.5rem; }
+            .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+            .span-2, .span-4, .row-2 { grid-column: span 1; grid-row: span 1; }
+            .tech-grid { grid-template-columns: 1fr; }
+            .stat-grid { grid-template-columns: 1fr; }
+            .comparison-section { overflow-x: scroll; }
+            .comparison-table { min-width: 600px; }
+            .footer-content { grid-template-columns: 1fr; }
+            .phone-container { width: 90%; height: 600px; transform: none; }
+            .phone-container:hover { transform: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <div class="container nav-inner">
+            <div class="logo">Automation Experts</div>
+            <div class="nav-links">
+                <a href="#problem" class="nav-item">Why Now</a>
+                <a href="#features" class="nav-item">Capabilities</a>
+                <a href="#specs" class="nav-item">Specs</a>
+                <a href="#demo" class="btn btn-primary" style="padding: 10px 24px; font-size: 14px;">Get Demo</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container hero-content">
+            <div class="badge reveal active">The New Standard</div>
+            <h1 class="text-gradient reveal active" style="transition-delay: 0.1s;">
+                Concierge. <br>
+                <span class="text-gradient-gold">Reimagined.</span>
+            </h1>
+            <p class="lead reveal active" style="transition-delay: 0.2s; margin-top: 24px;">
+                Increase direct bookings by 30% with an AI that answers instantly, 
+                negotiates upgrades, and never sleeps.
+            </p>
+            
+            <div class="hero-buttons reveal active" style="transition-delay: 0.3s;">
+                <a href="#demo" class="btn btn-primary">Start Transformation</a>
+                <a href="#features" class="btn btn-glass">Learn More</a>
+            </div>
+        </div>
+
+        <div class="phone-container reveal active" style="transition-delay: 0.4s;">
+            <div class="notch"></div>
+            <div class="iframe-wrapper">
+                <iframe src="https://krishnaaarana-rgb.github.io/hotel-chat-widget/widget.html" title="Live AI Demo" loading="lazy"></iframe>
+            </div>
+        </div>
+    </section>
+
+    <section class="problem-section" id="problem">
+        <div class="container">
+            <h2 class="text-gradient reveal">The Silent Revenue Killer.</h2>
+            <p class="lead reveal">
+                Your guests live in an instant world. When they visit your site and have to email you 
+                for a simple answer, they don't wait. They leave.
+            </p>
+
+            <div class="stat-grid">
+                <div class="stat-item reveal">
+                    <h3>53%</h3>
+                    <p>of mobile visitors leave if a page takes >3s to answer them.</p>
+                </div>
+                <div class="stat-item reveal" style="transition-delay: 0.1s;">
+                    <h3>20%</h3>
+                    <p>Commission lost to OTAs because they offer faster booking flows.</p>
+                </div>
+                <div class="stat-item reveal" style="transition-delay: 0.2s;">
+                    <h3>ZERO</h3>
+                    <p>Bookings made by your front desk while they are asleep.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="features-section" id="features">
+        <div class="container">
+            <div style="text-align: center; margin-bottom: 60px;">
+                <h2 class="text-gradient reveal">Intelligence at Scale.</h2>
+                <p class="lead reveal">A suite of capabilities designed to replace friction with flow.</p>
+            </div>
+
+            <div class="bento-grid">
+                <div class="bento-card span-2 row-2 reveal">
+                    <div style="z-index: 2;">
+                        <span class="bento-icon">🧠</span>
+                        <div class="bento-content">
+                            <h4>Contextual Awareness</h4>
+                            <p>Unlike basic chatbots, Automation Experts understands nuance. It knows the difference between "Can I bring my dog?" and "Do you have hot dogs?". It sells your amenities, not just lists them.</p>
+                        </div>
+                    </div>
+                    <div style="position: absolute; right: -50px; bottom: -50px; width: 200px; height: 200px; background: var(--accent-blue); filter: blur(80px); opacity: 0.2;"></div>
+                </div>
+
+                <div class="bento-card reveal" style="background: linear-gradient(135deg, #1c1c1e 0%, #000 100%);">
+                    <span class="bento-icon">⚡</span>
+                    <div class="bento-content">
+                        <h4>Sub-100ms</h4>
+                        <p>Latency so low, it feels like magic.</p>
+                    </div>
+                </div>
+
+                <div class="bento-card reveal">
+                    <span class="bento-icon">🌍</span>
+                    <div class="bento-content">
+                        <h4>95+ Languages</h4>
+                        <p>Speak to guests in their native tongue.</p>
+                    </div>
+                </div>
+
+                <div class="bento-card span-2 reveal">
+                    <span class="bento-icon">🛡️</span>
+                    <div class="bento-content">
+                        <h4>The "No Hallucination" Promise</h4>
+                        <p>We use RAG (Retrieval-Augmented Generation) locked to your specific hotel PDF/Doc. It cannot invent policies.</p>
+                    </div>
+                </div>
+
+                <div class="bento-card span-2 reveal">
+                    <span class="bento-icon">📊</span>
+                    <div class="bento-content">
+                        <h4>Insight Engine</h4>
+                        <p>See exactly what guests are asking. Discover that 40% of people ask about "Vegan options" and adjust your menu accordingly.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="comparison-section">
+        <div class="container">
+            <h2 class="text-gradient reveal" style="text-align: center;">Evolution vs. Tradition.</h2>
+            
+            <table class="comparison-table reveal">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Standard Chatbot</th>
+                        <th>Human Staff</th>
+                        <th class="us-col">Automation Experts</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Response Time</td>
+                        <td>Instant (Generic)</td>
+                        <td>Minutes/Hours</td>
+                        <td class="us-col">Instant (Accurate)</td>
+                    </tr>
+                    <tr>
+                        <td>Cost Per Interaction</td>
+                        <td>Low</td>
+                        <td>High ($$$)</td>
+                        <td class="us-col">Negligible</td>
+                    </tr>
+                    <tr>
+                        <td>Availability</td>
+                        <td>24/7</td>
+                        <td>8 Hours/Shift</td>
+                        <td class="us-col">24/7/365</td>
+                    </tr>
+                    <tr>
+                        <td>Tone & Brand Voice</td>
+                        <td>Robotic</td>
+                        <td>Inconsistent</td>
+                        <td class="us-col">Perfectly Trained</td>
+                    </tr>
+                    <tr>
+                        <td>Direct Booking Integration</td>
+                        <td><span class="cross">×</span> Link Only</td>
+                        <td><span class="cross">×</span> Manual</td>
+                        <td class="us-col"><span class="check">✓</span> Guided Funnel</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    <section class="tech-section" id="specs">
+        <div class="container">
+            <div class="tech-grid">
+                <div class="reveal">
+                    <h2 class="text-gradient">Developers love us.<br>Managers trust us.</h2>
+                    <p class="lead" style="margin: 0; text-align: left;">
+                        Built on a modern stack ensuring security and scalability.
+                    </p>
+                    <ul style="margin-top: 30px; color: var(--text-secondary);">
+                        <li style="margin-bottom: 15px;">✓ AES-256 Encryption for guest data</li>
+                        <li style="margin-bottom: 15px;">✓ GDPR & CCPA Compliant</li>
+                        <li style="margin-bottom: 15px;">✓ One-line JavaScript installation</li>
+                        <li style="margin-bottom: 15px;">✓ Works with WordPress, Wix, Squarespace, Webflow</li>
+                    </ul>
+                </div>
+                
+                <div class="code-block reveal">
+                    <span class="token-keyword">const</span> hotelConfig = {<br>
+                    &nbsp;&nbsp;id: <span class="token-string">"grand_plaza_01"</span>,<br>
+                    &nbsp;&nbsp;mode: <span class="token-string">"concierge_pro"</span>,<br>
+                    &nbsp;&nbsp;knowledgeBase: <span class="token-func">loadSecureDocs</span>(),<br>
+                    &nbsp;&nbsp;tone: <span class="token-string">"luxury_warmth"</span><br>
+                    };<br><br>
+                    <span class="token-keyword">await</span> AutomationExperts.<span class="token-func">deploy</span>(hotelConfig);<br>
+                    <span class="token-comment">// System Live in 400ms...</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="demo">
+        <div class="container">
+            <h2 class="text-gradient reveal">Ready to upgrade your hotel?</h2>
+            <p class="lead reveal">We are currently onboarding select partners. Secure your spot.</p>
+
+            <div class="form-container reveal">
+                <form onsubmit="event.preventDefault(); alert('Thank you! Our team will contact you within 2 hours to setup your custom demo.');">
+                    <div class="form-group">
+                        <label class="form-label">Property Name</label>
+                        <input type="text" class="form-input" required placeholder="e.g. The Grand Budapest">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Manager Email</label>
+                        <input type="email" class="form-input" required placeholder="name@hotel.com">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Website URL</label>
+                        <input type="url" class="form-input" placeholder="https://">
+                    </div>
+                    <div class="form-group" style="margin-top: 30px;">
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">
+                            Get Custom Audit & Demo
+                        </button>
+                    </div>
+                    <p style="font-size: 0.8rem; color: #555; text-align: center; margin-top: 15px;">
+                        No credit card required. Free implementation consultation.
+                    </p>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h4>Automation Experts</h4>
+                    <p style="max-width: 300px; line-height: 1.6;">
+                        Pioneering the intersection of Artificial Intelligence and Hospitality. 
+                        We build tools that make technology invisible and service unforgettable.
+                    </p>
+                    <div class="social-row">
+                        <a href="https://www.linkedin.com/in/krishnaaarana/" target="_blank" style="color: white; opacity: 0.7;">LinkedIn</a>
+                        <a href="mailto:krishnarana@automationexperts.tech" style="color: white; opacity: 0.7;">Email</a>
+                    </div>
+                </div>
+                
+                <div class="footer-links">
+                    <h5>Platform</h5>
+                    <ul>
+                        <li><a href="#">Concierge AI</a></li>
+                        <li><a href="#">Booking Engine</a></li>
+                        <li><a href="#">Analytics</a></li>
+                        <li><a href="#">Integrations</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-links">
+                    <h5>Company</h5>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div style="text-align: center; border-top: 1px solid #1a1a1a; padding-top: 30px;">
+                <p>&copy; 2025 Automation Experts. Delhi, India. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // 1. Scroll Reveal Animation
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); 
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.reveal').forEach(el => {
+            observer.observe(el);
+        });
+
+        // 2. Navbar Glass Effect on Scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+</html>
