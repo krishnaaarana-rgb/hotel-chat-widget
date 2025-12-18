@@ -2,506 +2,830 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8" />
-    <title>Mona Montreux | Concierge OS</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Mona Montreux | Concierge</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.6/purify.min.js"></script>
 
     <style>
         /* ========================================================================
-           DESIGN TOKEN SYSTEM: "RIMOWA" AESTHETIC
-           Matte blacks, aluminum whites, expensive blur.
+           DESIGN SYSTEM: LUXURY / APPLE AESTHETIC
         ======================================================================== */
         :root {
-            --font-main: 'Plus Jakarta Sans', -apple-system, sans-serif;
+            /* Premium Monochrome Palette */
+            --primary-color: #111111; /* Onyx Black */
+            --accent-color: #000000;
+            --bg-color: #ffffff;
+            --secondary-bg: #F5F5F7; /* Apple Light Grey */
             
-            /* Dynamic Palette */
-            --bg-glass: rgba(255, 255, 255, 0.85);
-            --bg-surface: #ffffff;
-            --bg-subtle: #F4F4F5;
-            --primary: #0F172A; /* Slate 900 */
-            --primary-gradient: linear-gradient(135deg, #0F172A 0%, #334155 100%);
-            --accent: #2563EB;
-            --text-heading: #0F172A;
-            --text-body: #334155;
-            --text-muted: #94A3B8;
+            /* FIXED: SOLID WHITE BACKGROUND (No Transparency) */
+            --glass-bg: #ffffff; 
             
-            /* Dimensions */
-            --chat-w: 420px; /* Wider for carousels */
-            --chat-h: 750px;
+            --glass-border: rgba(0, 0, 0, 0.08);
+            --text-main: #1d1d1f;
+            --text-sub: #86868b;
             
-            /* Physics */
-            --spring-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
-            --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-            
-            /* Elevation */
-            --shadow-subtle: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-deep: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            /* Animations */
+            --bezier-apple: cubic-bezier(0.25, 1, 0.5, 1);
+            --shadow-soft: 0 12px 40px rgba(0,0,0,0.12);
+            --shadow-float: 0 20px 50px rgba(0,0,0,0.15);
         }
 
-        /* RESET */
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; outline: none; }
-        body { margin: 0; font-family: var(--font-main); background: transparent; overflow: hidden; }
+        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: transparent;
+            overflow: hidden;
+        }
 
         /* ========================================================================
            WRAPPER
         ======================================================================== */
-        #concierge-wrapper {
-            position: fixed; bottom: 24px; right: 24px;
-            z-index: 999999; display: flex; flex-direction: column; align-items: flex-end;
+        #chatbot-wrapper {
+            position: fixed; 
+            bottom: 0; 
+            right: 0;
+            z-index: 9999999;
+            display: flex; flex-direction: column; align-items: flex-end;
             pointer-events: none;
+            
+            /* THIS PADDING PREVENTS SHADOW CUT-OFFS */
+            padding: 30px; 
         }
-        #concierge-wrapper > * { pointer-events: auto; }
+        
+        #chatbot-wrapper > * {
+            pointer-events: auto;
+        }
 
         /* ========================================================================
-           MAIN APP CONTAINER
+           PROACTIVE NUDGE (Refined)
         ======================================================================== */
-        #concierge-app {
-            width: var(--chat-w); height: var(--chat-h);
-            max-width: calc(100vw - 48px); max-height: calc(100dvh - 120px);
-            background: var(--bg-glass);
-            backdrop-filter: blur(24px) saturate(180%);
-            -webkit-backdrop-filter: blur(24px) saturate(180%);
-            border-radius: 32px;
-            box-shadow: var(--shadow-deep);
-            border: 1px solid rgba(255,255,255,0.8);
-            display: flex; flex-direction: column;
+        #proactive-nudge {
+            background: white;
+            padding: 14px 20px;
+            border-radius: 18px;
+            box-shadow: var(--shadow-soft);
+            margin-bottom: 15px;
+            margin-right: 5px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-main);
+            opacity: 0;
+            transform: translateY(10px) scale(0.95);
+            transition: all 0.5s var(--bezier-apple);
+            position: relative;
+            cursor: pointer;
+            border: 1px solid rgba(0,0,0,0.04);
+            display: flex; align-items: center; gap: 10px;
+            white-space: nowrap;
+        }
+
+        #proactive-nudge.visible {
+            opacity: 1; transform: translateY(0) scale(1);
+        }
+
+        /* Tooltip Arrow */
+        #proactive-nudge::after {
+            content: ''; position: absolute; bottom: -6px; right: 28px;
+            width: 12px; height: 12px; background: white;
+            transform: rotate(45deg);
+            box-shadow: 2px 2px 2px rgba(0,0,0,0.03);
+        }
+
+        #proactive-nudge .close-nudge {
+            margin-left: 8px; color: #C7C7CC; cursor: pointer;
+            font-size: 18px; line-height: 1; transition: color 0.2s;
+        }
+        #proactive-nudge .close-nudge:hover { color: var(--text-main); }
+
+        /* ========================================================================
+           LAUNCHER BUTTON (Sleek Pill)
+        ======================================================================== */
+        #hotel-chatbot-launcher {
+            height: 64px;
+            width: auto;
+            min-width: 64px;
+            padding: 0 28px;
+            border-radius: 40px; /* More rounded */
+            border: none;
+            background: var(--primary-color);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            gap: 12px;
+            transition: all 0.4s var(--bezier-apple);
+            position: relative;
             overflow: hidden;
+            transform-origin: center right;
+        }
+
+        .launcher-label {
+            color: white;
+            font-weight: 500;
+            font-size: 15px;
+            letter-spacing: -0.01em;
+            white-space: nowrap;
+            opacity: 1;
+            transform: translateX(0);
+            transition: all 0.3s ease;
+        }
+
+        .icon-container {
+            position: relative;
+            width: 24px; height: 24px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        #hotel-chatbot-launcher svg {
+            width: 24px; height: 24px; stroke: white; fill: none; stroke-width: 2;
+            transition: transform 0.4s var(--bezier-apple), opacity 0.3s ease;
+            position: absolute;
+        }
+        
+        #launcher-close-icon { opacity: 0; transform: scale(0.5) rotate(-90deg); }
+        #launcher-chat-icon { opacity: 1; transform: scale(1) rotate(0deg); }
+
+        #hotel-chatbot-launcher:hover { 
+            transform: translateY(-2px); 
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3); 
+        }
+
+        #hotel-chatbot-launcher.active {
+            width: 64px; 
+            padding: 0; 
+            border-radius: 50%;
+            background: #333; /* Slightly lighter black for close state */
+        }
+
+        #hotel-chatbot-launcher.active .launcher-label {
+            opacity: 0; width: 0; margin: 0; transform: translateX(20px);
+        }
+
+        #hotel-chatbot-launcher.active #launcher-close-icon { opacity: 1; transform: scale(1) rotate(0deg); }
+        #hotel-chatbot-launcher.active #launcher-chat-icon { opacity: 0; transform: scale(0.5) rotate(90deg); }
+
+        /* ========================================================================
+           MAIN CHAT CONTAINER (SOLID WHITE)
+        ======================================================================== */
+        #hotel-chatbot {
+            position: absolute; bottom: 90px; right: 0;
+            width: 380px; height: 720px;
+            max-width: calc(100vw - 40px); max-height: calc(100vh - 120px);
             
-            /* Animation States */
-            opacity: 0; transform: translateY(40px) scale(0.95); pointer-events: none;
-            transition: opacity 0.4s ease, transform 0.5s var(--ease-out);
+            /* FIXED: SOLID WHITE */
+            background: #ffffff; 
+            
+            border-radius: 28px;
+            border: 1px solid rgba(0,0,0,0.1); /* Subtle border for crispness */
+            box-shadow: var(--shadow-float);
+            display: flex; flex-direction: column;
+            transform-origin: bottom right;
+            transform: scale(0.95) translateY(20px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s var(--bezier-apple);
+            overflow: hidden;
         }
 
-        #concierge-app.active { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
-
-        /* HEADER: TIME AWARE */
-        .app-header {
-            padding: 24px 28px;
-            background: rgba(255,255,255,0.9);
-            border-bottom: 1px solid rgba(0,0,0,0.04);
-            display: flex; justify-content: space-between; align-items: flex-start;
+        #hotel-chatbot.open {
+            opacity: 1; visibility: visible;
+            transform: scale(1) translateY(0);
         }
 
-        .header-content h1 { margin: 0; font-size: 20px; font-weight: 700; color: var(--text-heading); letter-spacing: -0.5px; }
-        .header-content p { margin: 4px 0 0; font-size: 13px; color: var(--text-muted); font-weight: 500; display: flex; align-items: center; gap: 6px; }
-        .live-indicator { width: 8px; height: 8px; background: #10B981; border-radius: 50%; box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2); }
-
-        .header-controls button {
-            background: var(--bg-subtle); border: none; width: 32px; height: 32px;
-            border-radius: 10px; color: var(--text-body); cursor: pointer;
-            transition: all 0.2s; display: flex; align-items: center; justify-content: center;
+        /* ========================================================================
+           HEADER (Minimalist)
+        ======================================================================== */
+        #hotel-chatbot-header {
+            padding: 18px 24px;
+            
+            /* FIXED: SOLID WHITE */
+            background: #ffffff;
+            
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            display: flex; align-items: center; justify-content: space-between;
+            z-index: 10;
         }
-        .header-controls button:hover { background: #E4E4E7; color: var(--primary); }
 
-        /* BODY: THE STREAM */
-        .app-body {
-            flex: 1; padding: 24px; overflow-y: auto; overflow-x: hidden;
-            display: flex; flex-direction: column; gap: 24px;
+        .brand { display: flex; align-items: center; gap: 12px; }
+        
+        .avatar-container {
+            position: relative;
+            width: 44px; height: 44px;
+        }
+
+        .avatar-img {
+            width: 100%; height: 100%;
+            border-radius: 50%; /* Circle avatar is more "Apple" */
+            object-fit: cover;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .status-dot {
+            position: absolute; bottom: 0; right: 0;
+            width: 12px; height: 12px;
+            background: #34C759; /* Apple Green */
+            border: 2px solid white;
+            border-radius: 50%;
+        }
+
+        .header-info h3 { 
+            margin: 0; font-size: 16px; font-weight: 600; 
+            color: var(--text-main); letter-spacing: -0.01em; 
+        }
+        .header-info p { 
+            margin: 2px 0 0; font-size: 12px; 
+            color: var(--text-sub); font-weight: 400; 
+        }
+
+        .header-actions { display: flex; gap: 4px; }
+
+        .action-btn {
+            background: transparent; border: none; cursor: pointer;
+            padding: 8px; border-radius: 50%; color: var(--text-sub);
+            transition: all 0.2s;
+        }
+        .action-btn:hover { background: rgba(0,0,0,0.05); color: var(--text-main); }
+
+        /* ========================================================================
+           MESSAGES AREA
+        ======================================================================== */
+        #hotel-chatbot-messages {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
             scroll-behavior: smooth;
+            display: flex; flex-direction: column; gap: 18px;
+            /* FIXED: Clean white/grey gradient */
+            background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(245,245,247,1) 100%);
         }
-        .app-body::-webkit-scrollbar { width: 0px; } /* Clean scroll */
 
-        /* BUBBLES */
-        .msg-row { display: flex; flex-direction: column; gap: 4px; opacity: 0; animation: fadeSlideUp 0.5s var(--ease-out) forwards; }
-        @keyframes fadeSlideUp { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        #hotel-chatbot-messages::-webkit-scrollbar { width: 4px; }
+        #hotel-chatbot-messages::-webkit-scrollbar-thumb {
+            background: rgba(0,0,0,0.1); border-radius: 10px;
+        }
 
-        .msg-row.bot { align-items: flex-start; }
-        .msg-row.user { align-items: flex-end; }
+        .message-row {
+            display: flex; width: 100%;
+            animation: messageEnter 0.4s var(--bezier-apple) forwards;
+            opacity: 0; transform: translateY(10px);
+        }
+        
+        @keyframes messageEnter { to { opacity: 1; transform: translateY(0); } }
 
+        .message-row.user { justify-content: flex-end; }
+        .message-row.bot { justify-content: flex-start; }
+
+        /* Chat Bubbles */
         .bubble {
-            max-width: 85%; padding: 16px 20px; font-size: 15px; line-height: 1.6;
-            position: relative; border-radius: 20px;
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.5;
+            position: relative;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
         }
-
+        
+        /* BOT BUBBLE: Clean Light Grey */
         .bubble.bot {
-            background: var(--bg-surface); color: var(--text-body);
+            background: #F2F4F7;
+            color: var(--text-main);
             border-bottom-left-radius: 4px;
-            box-shadow: var(--shadow-subtle);
         }
 
+        /* USER BUBBLE: Luxury Black */
         .bubble.user {
-            background: var(--primary-gradient); color: white;
+            background: var(--primary-color);
+            color: white;
             border-bottom-right-radius: 4px;
-            box-shadow: var(--shadow-subtle);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
-
-        /* FEATURE: CAROUSEL / CARDS (The $10k Feature) */
-        .carousel-container {
-            display: flex; gap: 12px; overflow-x: auto; padding: 4px 24px 16px 4px;
-            width: calc(100% + 48px); margin-left: -4px;
-            scroll-snap-type: x mandatory;
-        }
-        .carousel-container::-webkit-scrollbar { display: none; }
         
-        .card-item {
-            min-width: 220px; width: 220px;
-            background: white; border-radius: 16px; overflow: hidden;
-            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
-            scroll-snap-align: center; border: 1px solid rgba(0,0,0,0.05);
-            transition: transform 0.3s;
-        }
-        .card-item:hover { transform: translateY(-4px); }
+        /* MARKDOWN STYLES */
+        .bubble p { margin: 0 0 8px 0; }
+        .bubble p:last-child { margin: 0; }
+        .bubble ul, .bubble ol { margin: 8px 0; padding-left: 20px; }
+        .bubble li { margin-bottom: 4px; }
+        .bubble strong { font-weight: 600; color: inherit; } 
         
-        .card-img { width: 100%; height: 120px; object-fit: cover; background: #E2E8F0; }
-        .card-content { padding: 12px; }
-        .card-title { font-weight: 600; font-size: 14px; margin-bottom: 4px; color: var(--text-heading); }
-        .card-desc { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
-        .card-btn {
-            width: 100%; padding: 8px; border-radius: 8px; border: none;
-            background: var(--bg-subtle); color: var(--text-heading);
-            font-size: 12px; font-weight: 600; cursor: pointer;
-            transition: background 0.2s;
+        /* Links inside bubbles */
+        .bubble a { 
+            color: #007AFF; /* Apple Blue */
+            text-decoration: none; 
+            font-weight: 500; 
         }
-        .card-btn:hover { background: var(--primary); color: white; }
+        .bubble a:hover { text-decoration: underline; }
+        
+        .bubble.user a { color: white; text-decoration: underline; }
 
-        /* FEATURE: SKELETON LOADING (Premium Feel) */
-        .skeleton-loader { width: 100%; max-width: 200px; }
-        .sk-line { height: 10px; background: #E2E8F0; border-radius: 4px; margin-bottom: 8px; overflow: hidden; position: relative; }
-        .sk-line:last-child { width: 60%; }
-        .sk-line::after {
-            content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
-            animation: shimmer 1.5s infinite;
-        }
-        @keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-
-        /* FEEDBACK ACTIONS */
-        .feedback-row { display: flex; gap: 8px; margin-top: 4px; opacity: 0; transition: opacity 0.3s; }
-        .msg-row:hover .feedback-row { opacity: 1; }
-        .fb-btn { background: none; border: none; color: #CBD5E1; cursor: pointer; padding: 2px; }
-        .fb-btn:hover { color: var(--text-muted); }
-
-        /* FOOTER */
-        .app-footer {
-            padding: 20px 24px; background: white;
-            border-top: 1px solid rgba(0,0,0,0.05);
+        /* ========================================================================
+           TYPING INDICATOR
+        ======================================================================== */
+        .typing-indicator {
+            padding: 10px 14px; background: #F2F4F7;
+            border-radius: 18px; border-bottom-left-radius: 4px;
+            display: inline-flex; gap: 4px; align-items: center;
+            width: fit-content;
         }
 
-        .input-bar {
-            display: flex; align-items: center; gap: 12px;
-            background: var(--bg-subtle); border-radius: 18px;
-            padding: 8px 8px 8px 20px; transition: all 0.3s;
+        .dot {
+            width: 6px; height: 6px; background: #8E8E93; border-radius: 50%;
+            animation: bounce 1.4s infinite ease-in-out both;
         }
-        .input-bar:focus-within { background: white; box-shadow: 0 0 0 2px var(--primary); }
+        .dot:nth-child(1) { animation-delay: -0.32s; }
+        .dot:nth-child(2) { animation-delay: -0.16s; }
+        
+        @keyframes bounce { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.6; } 40% { transform: scale(1); opacity: 1; } }
 
-        #user-input {
-            flex: 1; background: transparent; border: none; font-size: 15px; color: var(--text-heading);
-            font-family: inherit; resize: none; max-height: 100px;
+        /* ========================================================================
+           QUICK REPLIES
+        ======================================================================== */
+        #quick-replies {
+            display: flex; gap: 8px; padding: 0 24px 16px 24px;
+            overflow-x: auto; flex-wrap: wrap;
+            scrollbar-width: none;
+        }
+        #quick-replies::-webkit-scrollbar { display: none; }
+
+        .chip {
+            background: #ffffff; /* Solid white background */
+            border: 1px solid rgba(0,0,0,0.08);
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 13px; font-weight: 500;
+            color: var(--text-main);
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        }
+        
+        .chip:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        /* ========================================================================
+           INPUT AREA
+        ======================================================================== */
+        #input-area {
+            padding: 16px 24px 24px 24px;
+            
+            /* FIXED: SOLID WHITE */
+            background: #ffffff;
+            
+            border-top: 1px solid rgba(0,0,0,0.06);
+            display: flex; gap: 10px; align-items: center;
+        }
+
+        .input-wrapper {
+            flex: 1; position: relative;
+            background: #F2F4F7;
+            border-radius: 24px;
+            transition: all 0.3s ease;
+            border: 1px solid transparent;
+        }
+        
+        .input-wrapper:focus-within {
+            background: white;
+            border-color: rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        #chat-input {
+            width: 100%; padding: 12px 18px;
+            border: none; background: transparent;
+            font-family: inherit; font-size: 15px; color: var(--text-main);
+            outline: none;
         }
         
         #send-btn {
-            width: 40px; height: 40px; border-radius: 14px; border: none;
-            background: var(--primary); color: white;
+            width: 42px; height: 42px;
+            border-radius: 50%; border: none;
+            background: var(--primary-color);
+            color: white; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transform: scale(0.9); opacity: 0.5; pointer-events: none;
-            transition: all 0.3s var(--spring-bounce);
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
-        #send-btn.ready { transform: scale(1); opacity: 1; pointer-events: auto; }
-
-        /* LAUNCHER (Exploding FAB) */
-        #app-launcher {
-            width: 64px; height: 64px; border-radius: 24px;
-            background: var(--primary); box-shadow: var(--shadow-deep);
-            border: none; cursor: pointer; color: white;
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.4s var(--spring-bounce);
-        }
-        #app-launcher:hover { transform: scale(1.05) translateY(-4px); }
-        .launcher-icon { width: 28px; height: 28px; position: absolute; transition: 0.3s; }
-        .icon-x { opacity: 0; transform: rotate(-45deg); }
         
-        /* STATE: OPEN */
-        body.app-open #app-launcher { transform: rotate(90deg) scale(0.8); background: #333; }
-        body.app-open .icon-chat { opacity: 0; transform: rotate(45deg); }
-        body.app-open .icon-x { opacity: 1; transform: rotate(0); }
+        #send-btn:hover { transform: scale(1.05); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
+        #send-btn:active { transform: scale(0.95); }
+        #send-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; margin-left: -2px; }
 
     </style>
 </head>
 <body>
 
-<div id="concierge-wrapper">
+<div id="chatbot-wrapper">
     
-    <div id="concierge-app">
-        <div class="app-header">
-            <div class="header-content">
-                <h1 id="dynamic-greeting">Good Afternoon</h1>
-                <p><span class="live-indicator"></span> Mona Concierge AI</p>
-            </div>
-            <div class="header-controls">
-                <button onclick="MonaOS.toggleSound()" title="Toggle Sound">
-                    <svg id="sound-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 5L6 9H2v6h4l5 4V5z"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
-                </button>
-                <button onclick="MonaOS.reset()" title="Reset">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"></path><path d="M21 3v5h-5"></path></svg>
-                </button>
-            </div>
-        </div>
-
-        <div id="msg-stream" class="app-body">
-            </div>
-
-        <div class="app-footer">
-            <div class="input-bar">
-                <textarea id="user-input" rows="1" placeholder="Type a message..." oninput="MonaOS.handleInput(this)"></textarea>
-                <button id="send-btn" onclick="MonaOS.send()">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-                </button>
-            </div>
-        </div>
+    <div id="proactive-nudge" onclick="toggleChat()">
+        <span>👋 Imagine this for your Hotel!</span>
+        <span class="close-nudge" onclick="event.stopPropagation(); closeNudge()">×</span>
     </div>
 
-    <button id="app-launcher" onclick="MonaOS.toggle()">
-        <svg class="launcher-icon icon-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
-        <svg class="launcher-icon icon-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+    <div id="hotel-chatbot">
+        
+        <div id="hotel-chatbot-header">
+            <div class="brand">
+                <div class="avatar-container">
+                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAe1BMVEUAAAD////8/PwICAgEBARCQkJISEjKysrHx8deXl7AwMA+Pj75+fn29vYLCwsUFBQxMTHv7++Pj4/Q0NDn5+cYGBg5OTkiIiKkpKTg4OC6urpMTEx1dXUnJycsLCwRERGvr6+EhITZ2dlvb2+enp5iYmJXV1eJiYmxsbHNzZA3AAAFHklEQVR4nO2c6XqiMBhGCQGXmoBsAnWr2jq9/yucJAQEDcLTmWB/vOepWOEryckKFnAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC/Ha9Z6GVng3rzOlu8TmD3bx42T4ZH2zkQH4Nwv14f9vmxmxuqF169mh5zEXaQca2i6P42ITJRqt+90N8Vi5RHUSRe6bzY+ZnOeqUb6D8K1tf4vZRhjPOofIuvh7o4aLPXyakTDa8fKXcJIeolF4Sw9GMZ1uWtXB0vWJ/mnOgY8VJvLDmt6+p6TdOqk17Hpco7Z1pFCxFSxmtZ0CJQxh6X70zkm1RoX/HuEv72lYl9UTqUpCVUuusirbPfrhD9iRUbHUov50bDJTcJ/VtyCfVeX9LbneyUVhlz3VYGNVz+RHEmA7cLrltUFXXTZdUrms/CF3mIJLfJrfQfVFSuCSPnq5PFvLOtCXXbdRnncreTti9PpXc8RWQM/DNxH6rLADv7lQn1pqsYkVD2IdJ2h/Mno2TNDCGCoi9aGUxTLVSls5+rXjDGgxg6UE/oqRrlpkGN9vm8GpbGNBkRM1whqs8z/qce1e2jiixfqKTdcQU9qu6q9sd2TWlZRxx0hAtX18VwUTM97A7D5FDs1v1kCmihC3FcJxlXc0xbR1vHmcRFjI0Xpia22/w2pDEqjuhjnHPu2G5atOrp63Hzx48pAvt9RO3/nYyaPn4Kd6+e3TFY7/tr5KTwc5JwghnRC8/uqJn653Cys9y01FR4UYnZrZNygioJEsvtSmG7SgTXsYdYP0c03SQczsm/Qb9dYnfQqg5WZrZF8qfVoafJgfmvFWEIrEaST5sS8nzna8RM/nxE04doSoEbhKs1Z9tt6+NJFln1DY/0MOWwCatPg0n/waRLVnY9gvJpjchv59zBOuEuidKIaymDhFTd2ZOQA+LhSRfh/Hu7D/fbgg8NB+fdJgs3u8Tcl9RK9m13/L0+yWC6DdS3BtRPntUJc4tQHUvRLJYnhcYYcZgS1IVnhV2/RzRrvvE8lM+m/oJS/T0M/dMrS9LcoojnxP0ZbCZj8XZl/R56PJKV54ULQ4A+0dlbFHGcwpSuWpTBzcMJTBnUobv6q21ZL9f+gvFtOSiMo68ap4pO4cXGTizhh/aJbJ72eRC7c/ubyUNNCZdO3LJXpAz0f7HU0kse4yYRMbdpybITNzPHieafHJ1W06eL3qZlV2Tekz92J+Kb275YuQjUv1b0CEdNVfyqGlEF7bZEPCnSE0gW1SmTPnHyfpeIzOLXkIiuonnQ+icbfZmIsbPLmZh1mhZdGQ/PlUhdF1Xg76oR2U3u+0gf86AdBxGIQAQiEIEIRCACEYhABCIQgQhEIAIRiEAEIhCBCEQgAhGIQAQiEIEIRCACEYhABCIQgQhEIAIRiEDk/yLvZn8z3m4nL2FetuOMIlwFd0WOBhFWXRK9ldut3Qjzbrp4Xz6rgTeXlKsrxjfmaiPNtfGOfgrGu9pkumzbt3dLu9jz7tGDqftgorwTmZcGE/m3PK6zV72fjBUiQsv8Pvn/CHWCT8P9e9x102UnzHG2BhN5e8Z31i2b4yc3VAcj5dWehmozwWF1h7/a+Kus05rlDW3Hx7iV7+87PUR+OK43d4GzzWa2yaw+9sG8a8OjZeRdhj2xt/W9j6iY4OFnnhOYVso2d/tMm8V94N1Kaswr7SpYuxPR/ExCerfGlAHTEwB7s/l8KwAAAAAAAAAAAAAAAAAAAAAAAAAAAACA1/EXj9dRzT+CgSsAAAAASUVORK5CYII=" alt="Mona" class="avatar-img">
+                    <div class="status-dot"></div>
+                </div>
+                <div class="header-info">
+                    <h3>Mona Montreux</h3>
+                    <p>Concierge</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="action-btn" id="reset-btn" title="Start New Chat">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+                </button>
+                <button class="action-btn" id="minimize-btn" title="Minimize">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                </button>
+            </div>
+        </div>
+
+        <div id="hotel-chatbot-messages"></div>
+        <div id="quick-replies"></div>
+
+        <div id="input-area">
+            <div class="input-wrapper">
+                <input type="text" id="chat-input" placeholder="Type a message..." autocomplete="off">
+            </div>
+            <button id="send-btn">
+                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" /></svg>
+            </button>
+        </div>
+
+    </div>
+
+    <button id="hotel-chatbot-launcher">
+        <div class="icon-container">
+            <svg id="launcher-chat-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
+            </svg>
+            <svg id="launcher-close-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+        </div>
+        <span class="launcher-label">Try Our Demo</span>
     </button>
 
 </div>
 
 <script>
-    /**
-     * MONA OS (Premium Architecture)
-     * Includes: Audio Engine, Carousel Renderer, Time Awareness, Skeleton States
-     */
-    const MonaOS = (() => {
-        // --- 1. CONFIG & AUDIO ---
-        const CONFIG = {
-            webhook: "https://n8n.srv1106816.hstgr.cloud/webhook/595269c9-1640-45c9-9c2b-861a69417966",
-        };
+    /** * MONA MONTREUX CORE LOGIC * */
 
-        // Subtle "Pop" sound (Base64) to avoid external requests
-        const AUDIO_POP = new Audio("data:audio/wav;base64,UklGRi4AAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQAAAAA="); // Placeholder for brevity, real sound would be longer
-        // Note: For actual $10k feel, we'd put a real short base64 string here.
+    // --- References ---
+    const launcher = document.getElementById("hotel-chatbot-launcher");
+    const chatWindow = document.getElementById("hotel-chatbot");
+    const minimizeBtn = document.getElementById("minimize-btn");
+    const resetBtn = document.getElementById("reset-btn");
+    const messagesContainer = document.getElementById("hotel-chatbot-messages");
+    const inputField = document.getElementById("chat-input");
+    const sendButton = document.getElementById("send-btn");
+    const quickRepliesContainer = document.getElementById("quick-replies");
+    const nudge = document.getElementById("proactive-nudge");
+
+    // --- Configuration ---
+    const WEBHOOK_URL = "https://n8n.srv1106816.hstgr.cloud/webhook/595269c9-1640-45c9-9c2b-861a69417966"; 
+    const INITIAL_GREETING = "Bonjour! Welcome to Mona Montreux. How may I assist with your stay today? You're welcome to communicate in any language you prefer.";
+    const STARTER_OPTIONS = [
+        "Show me the rooms",
+        "Check-in / Check-out",
+        "Parking",
+        "Contact reception"
+    ];
+
+    // --- Configure Marked (Markdown) - FIXED RENDERER ---
+    const renderer = new marked.Renderer();
+    renderer.link = function(href, title, text) {
+        // CRITICAL FIX: Convert href to string if it's an object
+        let cleanHref = '#';
         
-        let state = {
-            soundOn: true,
-            isOpen: false,
-            history: [],
-            session: 'sess_' + Date.now()
-        };
-
-        const DOM = {
-            app: document.getElementById('concierge-app'),
-            stream: document.getElementById('msg-stream'),
-            input: document.getElementById('user-input'),
-            sendBtn: document.getElementById('send-btn'),
-            greeting: document.getElementById('dynamic-greeting')
-        };
-
-        // --- 2. INIT & TIME AWARENESS ---
-        const init = () => {
-            updateGreeting();
-            // Check local storage for history
-            const saved = localStorage.getItem('mona_os_v1');
-            if(saved) {
-                const p = JSON.parse(saved);
-                state.history = p.history;
-                state.session = p.session;
-                renderHistory();
+        if (href) {
+            // If href is an object, try to extract URL properties
+            if (typeof href === 'object') {
+                cleanHref = href.url || href.href || href.link || '#';
+                console.warn("Link href is an object:", href);
             } else {
-                // Initial Bot Message
-                addMessage({ type: 'text', content: "Welcome to Montreux. I am at your service. How can I help you today?", sender: 'bot' });
+                cleanHref = String(href);
             }
+        }
+        
+        // Ensure it's a valid URL
+        if (cleanHref !== '#' && !cleanHref.match(/^https?:\/\//i)) {
+            console.warn("Relative URL detected:", cleanHref);
+        }
+        
+        const cleanTitle = title ? String(title) : '';
+        const cleanText = text ? String(text) : cleanHref;
+        
+        return `<a href="${cleanHref}" target="_blank" rel="noopener noreferrer" title="${cleanTitle}">${cleanText}</a>`;
+    };
+
+    marked.setOptions({ 
+        renderer: renderer,
+        breaks: true,
+        gfm: true
+    });
+
+    // --- Session Management ---
+    let sessionId = localStorage.getItem("hotel_session_id");
+    if (!sessionId) {
+        sessionId = "sess_" + Math.random().toString(36).substring(2) + Date.now().toString(36);
+        localStorage.setItem("hotel_session_id", sessionId);
+    }
+
+    // --- Proactive Nudge (Logic Update: 1000ms delay) ---
+    setTimeout(() => {
+        if (!chatWindow.classList.contains("open")) {
+            nudge.classList.add("visible");
+        }
+    }, 1000); 
+
+    function closeNudge() {
+        nudge.classList.remove("visible");
+    }
+
+    // --- State ---
+    let isTyping = false;
+    let typingElement = null;
+
+    // --- Toggle Chat ---
+    function toggleChat() {
+        closeNudge();
+        const isOpen = chatWindow.classList.contains("open");
+        if (isOpen) {
+            chatWindow.classList.remove("open");
+            launcher.classList.remove("active");
+            try { window.parent.postMessage("chat-close", "*"); } catch(e){}
+        } else {
+            chatWindow.classList.add("open");
+            launcher.classList.add("active");
+            inputField.focus();
+            try { window.parent.postMessage("chat-open", "*"); } catch(e){}
             
-            // Listen for enter key
-            DOM.input.addEventListener('keydown', e => {
-                if(e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
-            });
-        };
-
-        const updateGreeting = () => {
-            const hr = new Date().getHours();
-            let greet = "Good Morning";
-            if(hr >= 12) greet = "Good Afternoon";
-            if(hr >= 18) greet = "Good Evening";
-            DOM.greeting.innerText = greet;
-        };
-
-        // --- 3. RENDER ENGINE (The $10k Logic) ---
-        const renderMessage = (msg, animate = false) => {
-            const row = document.createElement('div');
-            row.className = `msg-row ${msg.sender}`;
-            
-            // Logic: Is this a Carousel? Image? Text?
-            let contentHtml = '';
-
-            if (msg.type === 'carousel') {
-                // RENDER CAROUSEL
-                contentHtml = `<div class="carousel-container">
-                    ${msg.items.map(item => `
-                        <div class="card-item">
-                            <img src="${item.img}" class="card-img" alt="${item.title}">
-                            <div class="card-content">
-                                <div class="card-title">${item.title}</div>
-                                <div class="card-desc">${item.desc}</div>
-                                <button class="card-btn" onclick="MonaOS.handleCardClick('${item.title}')">Select</button>
-                            </div>
-                        </div>
-                    `).join('')}
-                </div>`;
-            } else {
-                // RENDER TEXT (Markdown + Sanitized)
-                const safeHtml = DOMPurify.sanitize(marked.parse(msg.content));
-                contentHtml = `<div class="bubble ${msg.sender}">${safeHtml}</div>`;
+            if (messagesContainer.children.length === 0) {
+                setTimeout(() => {
+                    appendMessage(INITIAL_GREETING, "bot");
+                    showStarterOptions();
+                }, 400);
             }
+        }
+    }
 
-            // Add Feedback Buttons for Bot
-            if (msg.sender === 'bot' && msg.type !== 'carousel') {
-                contentHtml += `<div class="feedback-row">
-                    <button class="fb-btn" title="Helpful"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path></svg></button>
-                    <button class="fb-btn" title="Not Helpful"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 15v4a3 3 0 0 0 3 3l4-9V2H5.72a2 2 0 0 0-2 1.7l-1.38 9a2 2 0 0 0 2 2.3zm7-13h2.67A2.31 2.31 0 0 1 22 4v7a2.31 2.31 0 0 1-2.33 2H17"></path></svg></button>
-                </div>`;
-            }
+    resetBtn.addEventListener("click", () => {
+        sessionId = "sess_" + Math.random().toString(36).substring(2) + Date.now().toString(36);
+        localStorage.setItem("hotel_session_id", sessionId);
+        messagesContainer.innerHTML = "";
+        appendMessage(INITIAL_GREETING, "bot");
+        showStarterOptions();
+    });
 
-            row.innerHTML = contentHtml;
-            DOM.stream.appendChild(row);
-            
-            // Sound Effect
-            if(animate && state.soundOn && msg.sender === 'bot') {
-                // Play sound logic here (disabled for now as base64 is empty)
-            }
-            
-            scrollToBottom();
-        };
+    launcher.addEventListener("click", toggleChat);
+    minimizeBtn.addEventListener("click", toggleChat);
 
-        const addMessage = (msg) => {
-            state.history.push(msg);
-            localStorage.setItem('mona_os_v1', JSON.stringify({ history: state.history, session: state.session }));
-            renderMessage(msg, true);
-        };
-
-        // --- 4. NETWORK & SENDING ---
-        const send = async () => {
-            const txt = DOM.input.value.trim();
-            if(!txt) return;
-
-            // UI Cleanup
-            DOM.input.value = '';
-            DOM.input.style.height = 'auto';
-            DOM.sendBtn.classList.remove('ready');
-            
-            // 1. User Bubble
-            addMessage({ type: 'text', content: txt, sender: 'user' });
-
-            // 2. Show Skeleton Loader
-            const loaderId = showSkeleton();
-
+    // --- UI Helpers ---
+    function createMessageElement(text, sender) {
+        const row = document.createElement("div");
+        row.className = `message-row ${sender}`;
+        const bubble = document.createElement("div");
+        bubble.className = `bubble ${sender}`;
+        
+        if (sender === "bot") {
             try {
-                // 3. Webhook Call
-                const response = await fetch(CONFIG.webhook, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ chatInput: txt, sessionId: state.session })
-                });
-                const data = await response.json();
+                // Parse markdown and set innerHTML
+                const parsed = marked.parse(text || "");
+                console.log("=== MARKDOWN DEBUG ===");
+                console.log("Original text:", text);
+                console.log("Parsed HTML:", parsed);
+                bubble.innerHTML = parsed;
                 
-                removeSkeleton(loaderId);
-
-                // 4. INTELLIGENT PARSING (The Magic)
-                // If the bot sends multiple lines with image URLs, turn it into a carousel
-                const botText = extractText(data);
+                // CRITICAL FIX: Ensure all links have proper event handling
+                setTimeout(() => {
+                    const links = bubble.querySelectorAll('a');
+                    console.log("Found links:", links.length);
+                    links.forEach((link, idx) => {
+                        console.log(`Link ${idx}:`, {
+                            href: link.href,
+                            text: link.textContent,
+                            target: link.target
+                        });
+                        // Ensure click events work properly
+                        link.addEventListener('click', function(e) {
+                            console.log("Link clicked!", link.href);
+                            e.stopPropagation();
+                            // Let the browser handle the link naturally
+                        });
+                    });
+                    console.log("===================");
+                }, 0);
                 
-                if (detectCarousel(botText)) {
-                    // Convert text to Carousel Data
-                    const items = parseCarousel(botText);
-                    addMessage({ type: 'carousel', items: items, sender: 'bot' });
-                } else {
-                    addMessage({ type: 'text', content: botText, sender: 'bot' });
-                }
-
-            } catch (e) {
-                removeSkeleton(loaderId);
-                addMessage({ type: 'text', content: "Connection interrupted. Please check your signal.", sender: 'bot' });
+            } catch(e) {
+                console.error("Markdown Error:", e);
+                bubble.textContent = text;
             }
-        };
-
-        // --- 5. HELPERS ---
-        const extractText = (data) => {
-            if (Array.isArray(data) && data[0]) return data[0].output || data[0].text || "";
-            if (data.output || data.text) return data.output || data.text;
-            return "";
-        };
-
-        // Mock Logic to simulate "smart" carousel detection from text
-        const detectCarousel = (text) => {
-            // If text contains multiple markdown images or lists with 'price', assume carousel
-            return text.includes('[Carousel]') || (text.match(/!\[.*?\]\(.*?\)/g) || []).length > 1;
-        };
-
-        const parseCarousel = (text) => {
-            // This is a mock parser. In production, n8n should send JSON.
-            // Here we just grab images and make dummy cards for the "Visual Effect"
-            const matches = text.match(/!\[(.*?)\]\((.*?)\)/g);
-            if(!matches) return [];
-            
-            return matches.map(m => {
-                const parts = /!\[(.*?)\]\((.*?)\)/.exec(m);
-                return {
-                    title: parts[1] || "Accommodation",
-                    desc: "Luxury Suite with view • 45m²",
-                    img: parts[2]
-                };
-            });
-        };
-
-        const showSkeleton = () => {
-            const id = 'sk-' + Date.now();
-            const div = document.createElement('div');
-            div.className = 'msg-row bot';
-            div.id = id;
-            div.innerHTML = `<div class="bubble bot skeleton-loader">
-                <div class="sk-line"></div><div class="sk-line"></div>
-            </div>`;
-            DOM.stream.appendChild(div);
-            scrollToBottom();
-            return id;
-        };
-
-        const removeSkeleton = (id) => {
-            const el = document.getElementById(id);
-            if(el) el.remove();
-        };
-
-        const scrollToBottom = () => {
-            setTimeout(() => DOM.stream.scrollTop = DOM.stream.scrollHeight, 50);
-        };
-
-        const handleInput = (el) => {
-            el.style.height = 'auto';
-            el.style.height = el.scrollHeight + 'px';
-            if(el.value.length > 0) DOM.sendBtn.classList.add('ready');
-            else DOM.sendBtn.classList.remove('ready');
-        };
-
-        const handleCardClick = (title) => {
-            DOM.input.value = "I am interested in " + title;
-            send();
-        };
-
-        const toggle = () => {
-            state.isOpen = !state.isOpen;
-            document.body.classList.toggle('app-open', state.isOpen);
-            DOM.app.classList.toggle('active', state.isOpen);
-            if(state.isOpen) setTimeout(() => DOM.input.focus(), 200);
-        };
-
-        const reset = () => {
-            state.history = [];
-            state.session = 'sess_' + Date.now();
-            localStorage.removeItem('mona_os_v1');
-            DOM.stream.innerHTML = '';
-            init();
-        };
+        } else {
+            bubble.textContent = text;
+        }
         
-        const renderHistory = () => {
-            state.history.forEach(msg => renderMessage(msg));
-        };
+        row.appendChild(bubble);
+        return { row, bubble };
+    }
 
-        return { init, toggle, send, handleInput, reset, handleCardClick, toggleSound: () => state.soundOn = !state.soundOn };
-    })();
+    function appendMessage(text, sender) {
+        const { row } = createMessageElement(text, sender);
+        messagesContainer.appendChild(row);
+        scrollToBottom();
+    }
 
-    MonaOS.init();
+    function showTypingIndicator() {
+        if (isTyping) return;
+        isTyping = true;
+        const row = document.createElement("div");
+        row.className = "message-row bot";
+        row.id = "typing-row";
+        const indicator = document.createElement("div");
+        indicator.className = "typing-indicator";
+        indicator.innerHTML = `<div class="dot"></div><div class="dot"></div><div class="dot"></div>`;
+        row.appendChild(indicator);
+        messagesContainer.appendChild(row);
+        scrollToBottom();
+        typingElement = row;
+    }
+
+    function removeTypingIndicator() {
+        if (typingElement) {
+            typingElement.remove();
+            typingElement = null;
+        }
+        isTyping = false;
+    }
+
+    function scrollToBottom() {
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    }
+
+    // --- Streaming Text Logic ---
+    function appendStreamingMessage(text) {
+        const { row, bubble } = createMessageElement("", "bot");
+        messagesContainer.appendChild(row);
+
+        // Safety: If text is huge, render instantly
+        if (text.length > 2000) {
+            bubble.innerHTML = marked.parse(text);
+            
+            // Fix links after rendering
+            const links = bubble.querySelectorAll('a');
+            links.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                });
+            });
+            
+            scrollToBottom();
+            return;
+        }
+
+        let rawText = "";
+        let index = 0;
+        const length = text.length;
+        const speed = length > 200 ? 3 : 10; 
+
+        function typeChar() {
+            if (index < length) {
+                rawText += text.charAt(index);
+                try {
+                    // Update markdown preview occasionally
+                    if (index % 3 === 0 || index === length - 1) {
+                         bubble.innerHTML = marked.parse(rawText);
+                    }
+                } catch (e) {}
+                index++;
+                
+                if (index % 5 === 0) scrollToBottom();
+                setTimeout(typeChar, speed);
+            } else {
+                bubble.innerHTML = marked.parse(text);
+                
+                // CRITICAL: Fix links after streaming completes
+                const links = bubble.querySelectorAll('a');
+                links.forEach(link => {
+                    link.addEventListener('click', function(e) {
+                        e.stopPropagation();
+                    });
+                });
+                
+                scrollToBottom();
+            }
+        }
+        requestAnimationFrame(typeChar);
+    }
+
+    // --- Quick Replies ---
+    function showStarterOptions() {
+        quickRepliesContainer.innerHTML = "";
+        STARTER_OPTIONS.forEach((opt, idx) => {
+            const chip = document.createElement("button");
+            chip.className = "chip";
+            chip.textContent = opt;
+            chip.style.animationDelay = `${idx * 0.1}s`;
+            chip.onclick = () => {
+                handleUserSend(opt);
+                clearQuickReplies();
+            };
+            quickRepliesContainer.appendChild(chip);
+        });
+    }
+
+    function clearQuickReplies() {
+        quickRepliesContainer.innerHTML = "";
+    }
+
+    // --- Networking ---
+    async function postToWebhook(payload) {
+        try {
+            const response = await fetch(WEBHOOK_URL, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(payload)
+            });
+            return await response.json();
+        } catch (error) {
+            console.error("Webhook error:", error);
+            throw error;
+        }
+    }
+
+    // --- Main Send Logic ---
+    async function handleUserSend(text) {
+        if (!text || !text.trim()) return;
+
+        appendMessage(text, "user");
+        inputField.value = "";
+        clearQuickReplies();
+        showTypingIndicator();
+
+        try {
+            const data = await postToWebhook({ chatInput: text, sessionId });
+            removeTypingIndicator();
+
+            let botText = "I apologize, I am having trouble connecting.";
+            
+            // ROBUST DATA HANDLING - check all possible response formats
+            if (Array.isArray(data) && data.length > 0) {
+                botText = data[0].result || data[0].output || data[0].text || data[0].reply || botText;
+            } else if (typeof data === 'object') {
+                botText = data.result || data.output || data.text || data.reply || botText;
+            }
+            
+            // Safety: Ensure it's a string
+            if (typeof botText !== 'string') {
+                botText = String(botText);
+            }
+
+            appendStreamingMessage(botText);
+            
+        } catch (error) {
+            removeTypingIndicator();
+            appendMessage("Connection issue. Please try again.", "bot");
+        }
+    }
+
+    // --- Event Listeners ---
+    sendButton.addEventListener("click", () => handleUserSend(inputField.value));
+    inputField.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") handleUserSend(inputField.value);
+    });
+    inputField.addEventListener("input", () => {
+        if (inputField.value.length > 0) clearQuickReplies();
+    });
+
+    // ==========================================
+    // AUTO-OPEN LOGIC (Desktop Only)
+    // ==========================================
+    setTimeout(() => {
+        // Only open if on Desktop (>480px) and not already open
+        if (window.innerWidth > 480 && !chatWindow.classList.contains("open")) {
+            toggleChat();
+        }
+    }, 3000); // 3-second delay so it's polite
+
 </script>
 </body>
 </html>
