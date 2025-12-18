@@ -159,15 +159,66 @@
         .card.dark h3, .card.dark p { color: #FFF; }
         .card-icon { font-size: 3rem; margin-bottom: 20px; display: block; }
 
-        /* Testimonials */
-        .testimonials { padding: 100px 0; background: #fff; }
-        .test-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; margin-top: 50px; }
-        .test-card { background: #F9F9F9; padding: 40px; border-radius: 20px; border: 1px solid #eee; }
-        .test-text { font-size: 1.1rem; color: #333; font-style: italic; margin-bottom: 20px; line-height: 1.6; }
-        .test-author { display: flex; align-items: center; gap: 15px; }
-        .test-avatar { width: 50px; height: 50px; background: #ddd; border-radius: 50%; }
-        .test-info h5 { font-size: 1rem; margin-bottom: 2px; }
-        .test-info span { font-size: 0.85rem; color: #888; }
+        /* -----------------------------------------------------------------
+           NEW: SCROLLING TESTIMONIALS (Horizontal Snap)
+           ----------------------------------------------------------------- */
+        .testimonials { padding: 120px 0; background: #fff; overflow: hidden; }
+        
+        .test-scroll-container {
+            display: flex;
+            gap: 32px;
+            overflow-x: auto;
+            padding: 40px 24px 60px; /* Space for shadow */
+            scroll-snap-type: x mandatory;
+            margin: 0 -24px; /* Pull to edges on mobile */
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Hide scrollbar Firefox */
+        }
+        .test-scroll-container::-webkit-scrollbar { display: none; }
+
+        .test-card {
+            min-width: 400px;
+            background: #F9F9F9;
+            padding: 40px;
+            border-radius: 24px;
+            border: 1px solid #EEE;
+            scroll-snap-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.3s ease;
+        }
+
+        .test-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+            border-color: #E0E0E0;
+            background: #FFF;
+        }
+
+        .test-text {
+            font-size: 1.15rem;
+            color: #333;
+            font-weight: 400;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .test-author { display: flex; align-items: center; gap: 16px; }
+        
+        .test-avatar { 
+            width: 56px; 
+            height: 56px; 
+            border-radius: 50%; 
+            object-fit: cover; 
+            background: #E5E5E5; 
+            border: 2px solid white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .test-info h5 { font-size: 1rem; font-weight: 700; margin-bottom: 2px; color: var(--text-primary); }
+        .test-info span { font-size: 0.85rem; color: var(--text-secondary); display: block; }
 
         /* Pricing & FAQ styles maintained... */
         .comparison-table { width: 100%; border-collapse: collapse; margin-top: 60px; background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-md); }
@@ -201,11 +252,13 @@
             .metrics-grid { grid-template-columns: 1fr; divide-x: none; divide-y: 1px solid #E5E5E5; }
             .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
             .pricing-container { grid-template-columns: 1fr; }
-            .test-grid { grid-template-columns: 1fr; }
+            
+            /* Scroll adjustments for mobile */
+            .test-scroll-container { padding-left: 24px; padding-right: 24px; gap: 16px; }
+            .test-card { min-width: 300px; padding: 30px; }
+            
             .logo-grid { flex-direction: column; gap: 30px; }
             .footer-grid { grid-template-columns: 1fr; gap: 40px; }
-            
-            /* Mobile Nav Adjustment */
             .nav-menu a:not(.btn) { display: none; } 
         }
     </style>
@@ -347,27 +400,63 @@
 
     <section class="testimonials">
         <div class="container">
-            <div class="text-center">
+            <div class="text-center" style="margin-bottom: 50px;">
                 <h2>Trusted by Forward Thinkers</h2>
+                <p class="lead" style="max-width: 500px; margin: 0 auto;">See what business owners are saying about our impact.</p>
             </div>
-            <div class="test-grid">
+            
+            <div class="test-scroll-container">
                 <div class="test-card reveal">
-                    <p class="test-text">"We were skeptical about AI, but the setup was effortless. Within a week, the bot was handling 80% of our FAQ queries. Front desk stress is gone."</p>
+                    <p class="test-text">"Krishna’s deep research and constant testing lead to better outcomes, delivering a chatbot experience and client service that feels genuinely human."</p>
                     <div class="test-author">
-                        <div class="test-avatar" style="background-color: #333;"></div>
+                        <img src="https://lh3.googleusercontent.com/d/1jcswGP7q1NZ2CJa3ubrrSy-S-4wL7dI0" alt="Amisha" class="test-avatar">
                         <div class="test-info">
-                            <h5>James M.</h5>
-                            <span>General Manager, Boutique Hotel</span>
+                            <h5>Amisha</h5>
+                            <span>Owner, Ahmedabad</span>
                         </div>
                     </div>
                 </div>
+
                 <div class="test-card reveal">
-                    <p class="test-text">"The lead capture feature is a game changer. We used to lose people who visited the site at night. Now we wake up to an inbox full of potential bookings."</p>
+                    <p class="test-text">"We use their AI assistant at our clinic, and it has made our daily work so much easier. Fast answers, fewer calls, and a smoother experience for everyone."</p>
                     <div class="test-author">
-                        <div class="test-avatar" style="background-color: #D4AF37;"></div>
+                        <img src="https://lh3.googleusercontent.com/d/1h00yT9GsyZlXo7SP3uiTYGFfb94yzA1m" alt="Aniket" class="test-avatar">
                         <div class="test-info">
-                            <h5>Sarah L.</h5>
-                            <span>Director of Sales, Coastal Resort</span>
+                            <h5>Aniket</h5>
+                            <span>Owner, IRI Dream Care</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="test-card reveal">
+                    <p class="test-text">"Before Automation Experts, we were drowning in operational chaos—juggling guest requests across different channels. Now, the system centralized everything. It’s the upgrade we didn't know we needed."</p>
+                    <div class="test-author">
+                        <img src="https://lh3.googleusercontent.com/d/1CN1ABCC6VRJEaCbr2JXAPJz0EYnmrWOJ" alt="Gagan" class="test-avatar">
+                        <div class="test-info">
+                            <h5>Gagan</h5>
+                            <span>Director, Ample Publications</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="test-card reveal">
+                    <p class="test-text">"Krishna’s AI agents helped us build the seamless system we always wanted. Everything feels smoother, and the output is great."</p>
+                    <div class="test-author">
+                        <img src="https://lh3.googleusercontent.com/d/1DeOubSXhRZUGGcrCzzkdpyngEgp2G3k3" alt="Andrew" class="test-avatar">
+                        <div class="test-info">
+                            <h5>Andrew</h5>
+                            <span>CEO, AdCrunch</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="test-card reveal">
+                    <p class="test-text">"We’re a data-driven company, and Krishna has transformed our raw sheets into clear, meaningful information and graphs that help us make informed decisions."</p>
+                    <div class="test-author">
+                        <img src="https://lh3.googleusercontent.com/d/1E2-DIQDrsrlT1M8Y0UECsUhWXXQQvEc2" alt="Tracy" class="test-avatar">
+                        <div class="test-info">
+                            <h5>Tracy</h5>
+                            <span>CTO, Michael Curtis Media</span>
                         </div>
                     </div>
                 </div>
@@ -491,6 +580,7 @@
                     
                     <input type="hidden" name="_subject" value="New Hotel Audit Request!">
                     <input type="hidden" name="_captcha" value="false">
+
                     <div style="margin-bottom: 20px;">
                         <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;">Hotel Name</label>
                         <input type="text" name="Hotel Name" required placeholder="e.g. The Grand Budapest" style="width: 100%; padding: 16px; border: 1px solid #DDD; border-radius: 12px; font-size: 1rem; background: #F9F9F9;">
