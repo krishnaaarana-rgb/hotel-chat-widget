@@ -821,11 +821,11 @@
     // AUTO-OPEN LOGIC (Desktop Only)
     // ==========================================
     setTimeout(() => {
-        // Only open if on Desktop (>480px) and not already open
-        if (window.innerWidth > 480 && !chatWindow.classList.contains("open")) {
+        // Use screen.width to detect desktop even inside an iframe
+        if (window.screen.width > 480 && !chatWindow.classList.contains("open")) {
             toggleChat();
         }
-    }, 2000); // 3-second delay so it's polite
+    }, 2000);
 
 </script>
 </body>
