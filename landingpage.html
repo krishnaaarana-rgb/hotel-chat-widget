@@ -3,479 +3,280 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Automation Experts | The AI Concierge for Modern Hospitality.">
-    <title>Automation Experts | The Future of Hospitality</title>
+    <meta name="description" content="Automation Experts | The AI Concierge that turns guests into revenue.">
+    <title>Automation Experts | The New Standard in Hospitality</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,700;1,600&display=swap" rel="stylesheet">
+
     <style>
         /* -----------------------------------------------------------------
-           1. CORE SYSTEM & RESET
+           1. CORE SYSTEM & PALETTE (Luxury Dark Mode)
            ----------------------------------------------------------------- */
         :root {
-            /* Palette - "Midnight & Starlight" */
-            --bg-body: #000000;
-            --bg-surface: #121212;
-            --bg-surface-elevated: #1c1c1e;
-            --bg-surface-glass: rgba(28, 28, 30, 0.6);
+            /* Backgrounds */
+            --bg-body: #050505;
+            --bg-surface: #0f0f0f;
+            --bg-surface-light: #1a1a1a;
+            --bg-glass: rgba(20, 20, 20, 0.7);
+
+            /* Text */
+            --text-primary: #F2F2F7;
+            --text-secondary: #A1A1AA;
+            --text-muted: #52525B;
+
+            /* The "Champagne" Accent - Luxury Vibe */
+            --accent-gold: #D4AF37;
+            --accent-gold-dim: #8a701e;
+            --accent-gradient: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 50%, #996515 100%);
             
-            --text-primary: #f5f5f7;
-            --text-secondary: #86868b;
-            --text-tertiary: #6e6e73;
+            /* Typography */
+            --font-display: 'Playfair Display', serif;
+            --font-body: 'Inter', -apple-system, sans-serif;
             
-            --accent-blue: #2997ff;
-            --accent-gold: #FFD60A;
-            --accent-success: #30d158;
-            --accent-gradient: linear-gradient(135deg, #FFB700 0%, #FF8A00 100%);
-            
-            /* Typography - San Francisco Style Stack */
-            --font-main: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            
-            /* Layout & Spacing */
+            /* Dimensions */
             --max-width: 1200px;
-            --radius-sm: 12px;
-            --radius-md: 20px;
-            --radius-lg: 32px;
-            --radius-xl: 48px;
+            --radius-lg: 24px;
+            --radius-pill: 999px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
         html { scroll-behavior: smooth; }
 
         body {
             background-color: var(--bg-body);
             color: var(--text-primary);
-            font-family: var(--font-main);
-            -webkit-font-smoothing: antialiased;
+            font-family: var(--font-body);
+            line-height: 1.6;
             overflow-x: hidden;
-            line-height: 1.5;
+            /* Subtle grain texture for premium feel */
+            background-image: radial-gradient(rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
         }
 
         a { text-decoration: none; color: inherit; transition: all 0.3s ease; }
         ul { list-style: none; }
-        img { max-width: 100%; display: block; }
 
         /* -----------------------------------------------------------------
-           2. TYPOGRAPHY UTILITIES
+           2. TYPOGRAPHY
            ----------------------------------------------------------------- */
-        .text-gradient {
-            background: linear-gradient(180deg, #FFFFFF 20%, #86868b 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
+        h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 500; }
         
-        .text-gradient-gold {
+        h1 {
+            font-size: 4.5rem;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            margin-bottom: 24px;
+        }
+
+        h2 { font-size: 3rem; margin-bottom: 1rem; }
+        
+        .text-gradient {
             background: var(--accent-gradient);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-        }
-
-        h1 {
-            font-size: 5rem;
-            letter-spacing: -0.03em;
-            line-height: 1.05;
-            font-weight: 700;
-        }
-
-        h2 {
-            font-size: 3.5rem;
-            letter-spacing: -0.02em;
-            font-weight: 600;
-            margin-bottom: 2rem;
-        }
-
-        h3 {
-            font-size: 2rem;
-            letter-spacing: -0.01em;
-            font-weight: 600;
+            font-style: italic;
         }
 
         p.lead {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             color: var(--text-secondary);
-            font-weight: 400;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-            line-height: 1.4;
+            font-weight: 300;
+            max-width: 650px;
+            margin: 0 auto 40px;
         }
 
         /* -----------------------------------------------------------------
            3. UI COMPONENTS
            ----------------------------------------------------------------- */
-        .container {
-            max-width: var(--max-width);
-            margin: 0 auto;
-            padding: 0 24px;
-        }
+        .container { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+        .text-center { text-align: center; }
 
         .btn {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            padding: 16px 36px;
-            border-radius: 980px;
-            font-size: 17px;
-            font-weight: 500;
-            transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+            padding: 16px 40px;
+            border-radius: var(--radius-pill);
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
             cursor: pointer;
+            transition: all 0.3s ease;
             border: none;
+            font-family: var(--font-body);
         }
 
         .btn-primary {
-            background: #fff;
-            color: #000;
+            background: var(--accent-gradient);
+            color: #1a1200;
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.2);
         }
-        
-        .btn-primary:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
-        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 15px 40px rgba(212, 175, 55, 0.3); }
 
         .btn-glass {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
+            background: rgba(255,255,255,0.05);
             border: 1px solid rgba(255,255,255,0.1);
+            color: white;
+            backdrop-filter: blur(10px);
         }
-        .btn-glass:hover { background: rgba(255,255,255,0.2); }
+        .btn-glass:hover { background: rgba(255,255,255,0.1); border-color: var(--accent-gold); }
 
-        .badge {
-            display: inline-block;
-            padding: 6px 16px;
-            border-radius: 20px;
-            border: 1px solid var(--accent-gold);
-            color: var(--accent-gold);
-            font-size: 12px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 20px;
-        }
-
-        /* Scroll Animations */
-        .reveal {
-            opacity: 0;
-            transform: translateY(40px);
-            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        /* Animations */
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        .reveal.active { opacity: 1; transform: translateY(0); }
 
         /* -----------------------------------------------------------------
-           4. NAVIGATION (Glass Sticky)
+           4. NAVIGATION
            ----------------------------------------------------------------- */
         nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            padding: 15px 0;
-            transition: all 0.3s;
-        }
-        
-        nav.scrolled {
-            background: rgba(0, 0, 0, 0.7);
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: var(--bg-glass);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            padding: 20px 0;
+            transition: padding 0.3s;
         }
-
+        nav.scrolled { padding: 15px 0; background: rgba(5,5,5,0.9); }
+        
         .nav-inner { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-weight: 700; font-size: 1.25rem; letter-spacing: -0.02em; }
-        .nav-links { display: flex; gap: 30px; align-items: center; }
-        .nav-item { font-size: 14px; color: var(--text-secondary); }
-        .nav-item:hover { color: var(--text-primary); }
-
-        /* -----------------------------------------------------------------
-           5. HERO SECTION
-           ----------------------------------------------------------------- */
-        .hero {
-            position: relative;
-            min-height: 100vh;
-            padding-top: 140px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            overflow: hidden;
-        }
-
-        /* Ambient background glow */
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -20%;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 800px;
-            height: 800px;
-            background: radial-gradient(circle, rgba(0, 53, 128, 0.15) 0%, rgba(0,0,0,0) 70%);
-            z-index: -1;
-            pointer-events: none;
-        }
-
-        .hero-content {
-            z-index: 2;
-            position: relative;
-            margin-bottom: 60px;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
-            margin-top: 40px;
-        }
-
-        /* The iPhone 3D Mockup */
-        .phone-container {
-            width: 380px;
-            height: 750px;
-            background: #000;
-            border-radius: 50px;
-            padding: 12px;
-            position: relative;
-            margin: 0 auto;
-            border: 4px solid #2a2a2a;
-            box-shadow: 
-                0 0 0 2px #000,
-                0 0 0 3px #333,
-                0 50px 100px -20px rgba(0,0,0,0.8),
-                0 0 80px rgba(41, 151, 255, 0.1);
-            transform: perspective(1000px) rotateX(10deg) rotateY(0deg) scale(0.9);
-            transition: transform 0.5s ease;
-        }
-        
-        .phone-container:hover {
-            transform: perspective(1000px) rotateX(0deg) scale(1);
-        }
-
-        .notch {
-            position: absolute;
-            top: 12px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 30px;
-            background: #000;
-            border-bottom-left-radius: 16px;
-            border-bottom-right-radius: 16px;
-            z-index: 10;
-        }
-
-        .iframe-wrapper {
-            width: 100%;
-            height: 100%;
-            background: #fff;
-            border-radius: 38px;
-            overflow: hidden;
-        }
-
-        iframe { width: 100%; height: 100%; border: none; }
-
-        /* -----------------------------------------------------------------
-           6. THE PROBLEM (High Contrast)
-           ----------------------------------------------------------------- */
-        .problem-section {
-            padding: 150px 0;
-            background: #000;
-        }
-
-        .stat-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
-            margin-top: 80px;
-            text-align: center;
-        }
-
-        .stat-item h3 { font-size: 4rem; color: #ff3b30; margin-bottom: 10px; }
-        .stat-item p { color: var(--text-secondary); font-size: 1.1rem; }
-
-        /* -----------------------------------------------------------------
-           7. BENTO GRID FEATURES
-           ----------------------------------------------------------------- */
-        .features-section {
-            padding: 100px 0;
-            background: var(--bg-surface);
-        }
-
-        .bento-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            grid-template-rows: repeat(2, 400px);
-            gap: 24px;
-            margin-top: 60px;
-        }
-
-        .bento-card {
-            background: var(--bg-surface-elevated);
-            border-radius: var(--radius-lg);
-            padding: 40px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .bento-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-            border-color: rgba(255,255,255,0.1);
-        }
-
-        .span-2 { grid-column: span 2; }
-        .span-4 { grid-column: span 4; }
-        .row-2 { grid-row: span 2; }
-
-        .bento-icon { font-size: 3rem; margin-bottom: 20px; display: block; }
-        
-        .bento-content h4 {
-            font-size: 1.75rem;
-            margin-bottom: 12px;
+        .logo { 
+            font-family: var(--font-display); 
+            font-size: 1.5rem; 
+            font-weight: 700; 
             color: var(--text-primary);
-        }
-        .bento-content p {
-            color: var(--text-secondary);
-            font-size: 1.1rem;
+            letter-spacing: -0.5px;
         }
 
         /* -----------------------------------------------------------------
-           8. COMPARISON TABLE (Us vs. Them)
+           5. HERO & MACBOOK MOCKUP
            ----------------------------------------------------------------- */
-        .comparison-section {
-            padding: 150px 0;
+        .hero { padding: 180px 0 100px; position: relative; }
+        
+        /* Gold Glow behind hero */
+        .hero::before {
+            content: ''; position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+            width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(212, 175, 55, 0.15) 0%, transparent 70%);
+            filter: blur(60px); z-index: -1; pointer-events: none;
         }
 
-        .comparison-table {
-            width: 100%;
-            border-collapse: collapse;
+        .laptop-wrapper {
             margin-top: 60px;
-            color: var(--text-secondary);
-        }
-
-        .comparison-table th, .comparison-table td {
-            padding: 24px;
-            text-align: left;
-            border-bottom: 1px solid #333;
-        }
-
-        .comparison-table th { font-size: 1.2rem; font-weight: 600; color: var(--text-primary); }
-        .comparison-table td:first-child { color: var(--text-primary); font-size: 1.2rem; width: 40%; }
-        
-        .us-col { color: var(--accent-gold) !important; font-weight: 600; }
-        .check { color: var(--accent-success); font-size: 1.2rem; }
-        .cross { color: #ff3b30; font-size: 1.2rem; }
-
-        /* -----------------------------------------------------------------
-           9. TECHNICAL SPECS ("Under the Hood")
-           ----------------------------------------------------------------- */
-        .tech-section {
-            padding: 100px 0;
-            background: #0a0a0a;
-            border-top: 1px solid #222;
-            border-bottom: 1px solid #222;
-        }
-
-        .tech-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 60px;
-            align-items: center;
-        }
-
-        .code-block {
-            background: #1e1e1e;
-            padding: 30px;
-            border-radius: 12px;
-            font-family: 'Courier New', Courier, monospace;
-            color: #d4d4d4;
-            font-size: 0.9rem;
-            line-height: 1.6;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+            position: relative;
+            perspective: 2000px;
+            display: flex;
+            justify-content: center;
         }
         
-        .token-keyword { color: #569cd6; }
-        .token-string { color: #ce9178; }
-        .token-func { color: #dcdcaa; }
-
-        /* -----------------------------------------------------------------
-           10. CONTACT / CTA
-           ----------------------------------------------------------------- */
-        .cta-section {
-            padding: 150px 0;
-            text-align: center;
+        .macbook {
+            width: 900px;
+            transform-style: preserve-3d;
+            transform: rotateX(15deg);
+            transition: transform 0.6s ease;
         }
+        .macbook:hover { transform: rotateX(0deg); }
 
-        .form-container {
-            max-width: 500px;
-            margin: 60px auto 0;
-            text-align: left;
-            background: var(--bg-surface-elevated);
-            padding: 40px;
-            border-radius: var(--radius-lg);
-            border: 1px solid rgba(255,255,255,0.05);
-        }
-
-        .form-group { margin-bottom: 24px; }
-        .form-label { display: block; margin-bottom: 8px; color: var(--text-secondary); font-size: 0.9rem; }
-        .form-input {
-            width: 100%;
-            padding: 16px;
+        .screen {
             background: #000;
+            border-radius: 20px 20px 0 0;
             border: 1px solid #333;
-            border-radius: 12px;
-            color: white;
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.3s;
+            height: 550px;
+            position: relative;
+            overflow: hidden;
+            /* Premium Glossy Reflection */
+            box-shadow: 0 0 0 2px #111 inset, 0 0 80px rgba(212, 175, 55, 0.1);
         }
-        .form-input:focus { border-color: var(--accent-blue); }
+        
+        .camera-dot {
+            position: absolute; top: 12px; left: 50%; transform: translateX(-50%);
+            width: 6px; height: 6px; background: #222; border-radius: 50%; z-index: 10;
+        }
+
+        .base {
+            background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
+            height: 25px; width: 102%; margin-left: -1%;
+            border-radius: 0 0 20px 20px;
+            position: relative;
+            box-shadow: 0 50px 100px -20px rgba(0,0,0,0.8);
+        }
+        
+        /* The playful "Try Me" pointer */
+        .demo-pointer {
+            position: absolute; top: 40%; right: -140px;
+            color: var(--accent-gold); font-family: 'Playfair Display', serif; font-style: italic;
+            font-size: 1.2rem; transform: rotate(10deg);
+            display: flex; align-items: center; gap: 10px;
+            animation: float 3s ease-in-out infinite;
+        }
+        .demo-pointer::before { content: '←'; font-size: 2rem; font-family: sans-serif; font-style: normal; }
+
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(10deg); } 50% { transform: translateY(-10px) rotate(10deg); } }
 
         /* -----------------------------------------------------------------
-           11. FOOTER
+           6. THE ROI TRINITY (Benefits)
            ----------------------------------------------------------------- */
-        footer {
-            padding: 80px 0 40px;
-            background: #050505;
-            color: var(--text-tertiary);
-            font-size: 0.9rem;
-            border-top: 1px solid #111;
+        .roi-section { padding: 120px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .roi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 60px; }
+        
+        .roi-card {
+            background: var(--bg-surface-light);
+            padding: 40px 30px; border-radius: var(--radius-lg);
+            border: 1px solid rgba(255,255,255,0.05);
+            text-align: left; transition: all 0.3s;
         }
-
-        .footer-content {
-            display: grid;
-            grid-template-columns: 2fr 1fr 1fr;
-            gap: 40px;
-            margin-bottom: 60px;
+        .roi-card:hover { border-color: var(--accent-gold); transform: translateY(-5px); }
+        
+        .roi-number {
+            font-family: var(--font-display); font-size: 4rem;
+            background: var(--accent-gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            margin-bottom: 10px; display: block; line-height: 1;
         }
-
-        .footer-brand h4 { color: white; font-size: 1.2rem; margin-bottom: 16px; }
-        .footer-links h5 { color: white; margin-bottom: 20px; }
-        .footer-links li { margin-bottom: 12px; }
-        .footer-links a:hover { color: var(--accent-gold); }
-
-        .social-row { margin-top: 20px; display: flex; gap: 15px; }
 
         /* -----------------------------------------------------------------
-           12. RESPONSIVE
+           7. COMPARISON & PRICING
            ----------------------------------------------------------------- */
-        @media (max-width: 1024px) {
-            h1 { font-size: 3.5rem; }
-            .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
-            .span-2, .span-4, .row-2 { grid-column: span 1; grid-row: span 1; }
-            .tech-grid { grid-template-columns: 1fr; }
-            .stat-grid { grid-template-columns: 1fr; }
-            .comparison-section { overflow-x: scroll; }
-            .comparison-table { min-width: 600px; }
-            .footer-content { grid-template-columns: 1fr; }
-            .phone-container { width: 90%; height: 600px; transform: none; }
-            .phone-container:hover { transform: none; }
+        .comparison-table { width: 100%; border-collapse: collapse; margin-top: 50px; color: var(--text-secondary); }
+        .comparison-table th { color: white; text-align: left; padding: 20px; border-bottom: 1px solid #333; font-weight: 500; font-family: var(--font-display); font-size: 1.2rem; }
+        .comparison-table td { padding: 20px; border-bottom: 1px solid #222; }
+        .us-col { color: var(--accent-gold); font-weight: 600; }
+        
+        .pricing-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; max-width: 900px; margin: 60px auto 0; }
+        .price-card {
+            background: var(--bg-surface); border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 30px; padding: 50px; position: relative; overflow: hidden;
+            display: flex; flex-direction: column;
+        }
+        .price-card.pro {
+            background: linear-gradient(180deg, rgba(212, 175, 55, 0.05) 0%, rgba(0,0,0,0) 100%);
+            border-color: var(--accent-gold);
+        }
+        .price-tag { font-size: 3.5rem; font-family: var(--font-display); color: white; }
+        .feature-list li { margin-bottom: 15px; display: flex; gap: 10px; color: #ccc; font-size: 0.95rem; }
+        .check-gold { color: var(--accent-gold); }
+
+        /* -----------------------------------------------------------------
+           8. FOOTER (Expanded)
+           ----------------------------------------------------------------- */
+        footer { background: #080808; padding: 100px 0 40px; border-top: 1px solid #222; margin-top: 100px; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 60px; margin-bottom: 60px; }
+        .footer-links h4 { color: white; margin-bottom: 25px; font-size: 1.1rem; }
+        .footer-links ul li { margin-bottom: 15px; color: var(--text-secondary); font-size: 0.95rem; }
+        .footer-links ul li a:hover { color: var(--accent-gold); }
+        
+        .legal-text { font-size: 0.85rem; color: #444; line-height: 1.8; margin-top: 20px; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            h1 { font-size: 3rem; }
+            .macbook { width: 100%; transform: none; }
+            .screen { height: 400px; }
+            .demo-pointer { display: none; }
+            .roi-grid, .pricing-grid, .footer-grid { grid-template-columns: 1fr; }
+            .comparison-wrapper { overflow-x: auto; }
+            .comparison-table { min-width: 700px; }
         }
     </style>
 </head>
@@ -484,125 +285,76 @@
     <nav id="navbar">
         <div class="container nav-inner">
             <div class="logo">Automation Experts</div>
-            <div class="nav-links">
-                <a href="#problem" class="nav-item">Why Now</a>
-                <a href="#features" class="nav-item">Capabilities</a>
-                <a href="#specs" class="nav-item">Specs</a>
-                <a href="#demo" class="btn btn-primary" style="padding: 10px 24px; font-size: 14px;">Get Demo</a>
-            </div>
+            <a href="#demo" class="btn btn-primary" style="padding: 10px 25px; font-size: 12px;">Get Audit</a>
         </div>
     </nav>
 
     <section class="hero">
-        <div class="container hero-content">
-            <div class="badge reveal active">The New Standard</div>
-            <h1 class="text-gradient reveal active" style="transition-delay: 0.1s;">
-                Concierge. <br>
-                <span class="text-gradient-gold">Reimagined.</span>
+        <div class="container text-center">
+            <h1 class="reveal active">
+                Hospitality. <span class="text-gradient">Elevated.</span>
             </h1>
-            <p class="lead reveal active" style="transition-delay: 0.2s; margin-top: 24px;">
-                Increase direct bookings by 30% with an AI that answers instantly, 
-                negotiates upgrades, and never sleeps.
-            </p>
-            
-            <div class="hero-buttons reveal active" style="transition-delay: 0.3s;">
-                <a href="#demo" class="btn btn-primary">Start Transformation</a>
-                <a href="#features" class="btn btn-glass">Learn More</a>
-            </div>
-        </div>
-
-        <div class="phone-container reveal active" style="transition-delay: 0.4s;">
-            <div class="notch"></div>
-            <div class="iframe-wrapper">
-                <iframe src="https://krishnaaarana-rgb.github.io/hotel-chat-widget/widget.html" title="Live AI Demo" loading="lazy"></iframe>
-            </div>
-        </div>
-    </section>
-
-    <section class="problem-section" id="problem">
-        <div class="container">
-            <h2 class="text-gradient reveal">The Silent Revenue Killer.</h2>
-            <p class="lead reveal">
-                Your guests live in an instant world. When they visit your site and have to email you 
-                for a simple answer, they don't wait. They leave.
+            <p class="lead reveal active" style="transition-delay: 0.1s;">
+                The AI Concierge that answers instantly, secures bookings, and elevates guest satisfaction.
+                <span style="display: block; margin-top: 15px; color: white; font-weight: 500;">
+                    Setup is free. You only pay for results.
+                </span>
             </p>
 
-            <div class="stat-grid">
-                <div class="stat-item reveal">
-                    <h3>53%</h3>
-                    <p>of mobile visitors leave if a page takes >3s to answer them.</p>
-                </div>
-                <div class="stat-item reveal" style="transition-delay: 0.1s;">
-                    <h3>20%</h3>
-                    <p>Commission lost to OTAs because they offer faster booking flows.</p>
-                </div>
-                <div class="stat-item reveal" style="transition-delay: 0.2s;">
-                    <h3>ZERO</h3>
-                    <p>Bookings made by your front desk while they are asleep.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="features-section" id="features">
-        <div class="container">
-            <div style="text-align: center; margin-bottom: 60px;">
-                <h2 class="text-gradient reveal">Intelligence at Scale.</h2>
-                <p class="lead reveal">A suite of capabilities designed to replace friction with flow.</p>
-            </div>
-
-            <div class="bento-grid">
-                <div class="bento-card span-2 row-2 reveal">
-                    <div style="z-index: 2;">
-                        <span class="bento-icon">🧠</span>
-                        <div class="bento-content">
-                            <h4>Contextual Awareness</h4>
-                            <p>Unlike basic chatbots, Automation Experts understands nuance. It knows the difference between "Can I bring my dog?" and "Do you have hot dogs?". It sells your amenities, not just lists them.</p>
+            <div class="laptop-wrapper reveal active" style="transition-delay: 0.2s;">
+                <div class="macbook">
+                    <div class="screen">
+                        <div class="camera-dot"></div>
+                        <iframe src="https://krishnaaarana-rgb.github.io/hotel-chat-widget/widget.html" style="width:100%; height:100%; border:none;" title="AI Demo"></iframe>
+                        
+                        <div class="demo-pointer">
+                            Try the demo!<br>Ask about "Late check-out"
                         </div>
                     </div>
-                    <div style="position: absolute; right: -50px; bottom: -50px; width: 200px; height: 200px; background: var(--accent-blue); filter: blur(80px); opacity: 0.2;"></div>
-                </div>
-
-                <div class="bento-card reveal" style="background: linear-gradient(135deg, #1c1c1e 0%, #000 100%);">
-                    <span class="bento-icon">⚡</span>
-                    <div class="bento-content">
-                        <h4>Sub-100ms</h4>
-                        <p>Latency so low, it feels like magic.</p>
-                    </div>
-                </div>
-
-                <div class="bento-card reveal">
-                    <span class="bento-icon">🌍</span>
-                    <div class="bento-content">
-                        <h4>95+ Languages</h4>
-                        <p>Speak to guests in their native tongue.</p>
-                    </div>
-                </div>
-
-                <div class="bento-card span-2 reveal">
-                    <span class="bento-icon">🛡️</span>
-                    <div class="bento-content">
-                        <h4>The "No Hallucination" Promise</h4>
-                        <p>We use RAG (Retrieval-Augmented Generation) locked to your specific hotel PDF/Doc. It cannot invent policies.</p>
-                    </div>
-                </div>
-
-                <div class="bento-card span-2 reveal">
-                    <span class="bento-icon">📊</span>
-                    <div class="bento-content">
-                        <h4>Insight Engine</h4>
-                        <p>See exactly what guests are asking. Discover that 40% of people ask about "Vegan options" and adjust your menu accordingly.</p>
-                    </div>
+                    <div class="base"></div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="comparison-section">
+    <section class="roi-section" id="benefits">
         <div class="container">
-            <h2 class="text-gradient reveal" style="text-align: center;">Evolution vs. Tradition.</h2>
+            <div class="text-center reveal">
+                <h2 style="font-size: 2.5rem;">Why Top Hotels Choose Us</h2>
+            </div>
             
-            <table class="comparison-table reveal">
+            <div class="roi-grid">
+                <div class="roi-card reveal">
+                    <span class="roi-number">30%</span>
+                    <h3>More Direct Bookings</h3>
+                    <p style="margin-top: 15px; color: var(--text-secondary);">
+                        Guests book direct. You keep 100% margin instead of paying 15% commission to OTAs. Stop losing revenue to your competitors.
+                    </p>
+                </div>
+
+                <div class="roi-card reveal" style="transition-delay: 0.1s;">
+                    <span class="roi-number">50hrs</span>
+                    <h3>Team Saves Time</h3>
+                    <p style="margin-top: 15px; color: var(--text-secondary);">
+                        No more answering "do you have wifi" or "what languages do you speak" 100 times a day. Let your front desk focus on the guests in the lobby.
+                    </p>
+                </div>
+
+                <div class="roi-card reveal" style="transition-delay: 0.2s;">
+                    <span class="roi-number">5★</span>
+                    <h3>Better Guest Satisfaction</h3>
+                    <p style="margin-top: 15px; color: var(--text-secondary);">
+                        Instant answers in their native language mean happier guests who actually complete the booking instead of bouncing to Expedia.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="container" style="padding: 100px 24px;">
+        <h2 class="text-center reveal">Evolution vs. Tradition</h2>
+        <div class="comparison-wrapper reveal">
+            <table class="comparison-table">
                 <thead>
                     <tr>
                         <th>Feature</th>
@@ -616,13 +368,13 @@
                         <td>Response Time</td>
                         <td>Instant (Generic)</td>
                         <td>Minutes/Hours</td>
-                        <td class="us-col">Instant (Accurate)</td>
+                        <td class="us-col">~1.5 Seconds (Accurate)</td>
                     </tr>
                     <tr>
-                        <td>Cost Per Interaction</td>
-                        <td>Low</td>
-                        <td>High ($$$)</td>
-                        <td class="us-col">Negligible</td>
+                        <td>Tone & Voice</td>
+                        <td>Robotic</td>
+                        <td>Inconsistent</td>
+                        <td class="us-col">Customized Luxury</td>
                     </tr>
                     <tr>
                         <td>Availability</td>
@@ -631,154 +383,154 @@
                         <td class="us-col">24/7/365</td>
                     </tr>
                     <tr>
-                        <td>Tone & Brand Voice</td>
-                        <td>Robotic</td>
-                        <td>Inconsistent</td>
-                        <td class="us-col">Perfectly Trained</td>
+                        <td>Booking Action</td>
+                        <td>Link Only</td>
+                        <td>Manual Entry</td>
+                        <td class="us-col">Lead Capture & Escalation</td>
                     </tr>
                     <tr>
-                        <td>Direct Booking Integration</td>
-                        <td><span class="cross">×</span> Link Only</td>
-                        <td><span class="cross">×</span> Manual</td>
-                        <td class="us-col"><span class="check">✓</span> Guided Funnel</td>
+                        <td>Setup Cost</td>
+                        <td>High (DIY)</td>
+                        <td>Training $$$</td>
+                        <td class="us-col">Free (Done For You)</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </section>
 
-    <section class="tech-section" id="specs">
-        <div class="container">
-            <div class="tech-grid">
-                <div class="reveal">
-                    <h2 class="text-gradient">Developers love us.<br>Managers trust us.</h2>
-                    <p class="lead" style="margin: 0; text-align: left;">
-                        Built on a modern stack ensuring security and scalability.
-                    </p>
-                    <ul style="margin-top: 30px; color: var(--text-secondary);">
-                        <li style="margin-bottom: 15px;">✓ AES-256 Encryption for guest data</li>
-                        <li style="margin-bottom: 15px;">✓ GDPR & CCPA Compliant</li>
-                        <li style="margin-bottom: 15px;">✓ One-line JavaScript installation</li>
-                        <li style="margin-bottom: 15px;">✓ Works with WordPress, Wix, Squarespace, Webflow</li>
-                    </ul>
-                </div>
-                
-                <div class="code-block reveal">
-                    <span class="token-keyword">const</span> hotelConfig = {<br>
-                    &nbsp;&nbsp;id: <span class="token-string">"grand_plaza_01"</span>,<br>
-                    &nbsp;&nbsp;mode: <span class="token-string">"concierge_pro"</span>,<br>
-                    &nbsp;&nbsp;knowledgeBase: <span class="token-func">loadSecureDocs</span>(),<br>
-                    &nbsp;&nbsp;tone: <span class="token-string">"luxury_warmth"</span><br>
-                    };<br><br>
-                    <span class="token-keyword">await</span> AutomationExperts.<span class="token-func">deploy</span>(hotelConfig);<br>
-                    <span class="token-comment">// System Live in 400ms...</span>
-                </div>
+    <section style="background: #0a0a0a; padding: 100px 0; border-top: 1px solid #1a1a1a;">
+        <div class="container text-center reveal">
+            <h2 class="text-gradient">Developers Love Us. Managers Trust Us.</h2>
+            <p class="lead">
+                Security is not an afterthought. It is our foundation.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 40px; margin-top: 40px; color: var(--text-muted); font-weight: 600;">
+                <span>🔒 AES-256 Encryption</span>
+                <span>🇪🇺 GDPR Compliant</span>
+                <span>⚡ Zero-Latency Edge Network</span>
+                <span>📃 Custom PDF Training</span>
             </div>
         </div>
     </section>
 
-    <section class="cta-section" id="demo">
-        <div class="container">
-            <h2 class="text-gradient reveal">Ready to upgrade your hotel?</h2>
-            <p class="lead reveal">We are currently onboarding select partners. Secure your spot.</p>
+    <section id="pricing" class="container" style="padding: 100px 24px;">
+        <div class="text-center reveal">
+            <h2>Transparent Investment</h2>
+            <p class="lead">No hidden fees. Free setup. Cancel anytime.</p>
+        </div>
 
-            <div class="form-container reveal">
-                <form onsubmit="event.preventDefault(); alert('Thank you! Our team will contact you within 2 hours to setup your custom demo.');">
-                    <div class="form-group">
-                        <label class="form-label">Property Name</label>
-                        <input type="text" class="form-input" required placeholder="e.g. The Grand Budapest">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Manager Email</label>
-                        <input type="email" class="form-input" required placeholder="name@hotel.com">
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">Website URL</label>
-                        <input type="url" class="form-input" placeholder="https://">
-                    </div>
-                    <div class="form-group" style="margin-top: 30px;">
-                        <button type="submit" class="btn btn-primary" style="width: 100%;">
-                            Get Custom Audit & Demo
-                        </button>
-                    </div>
-                    <p style="font-size: 0.8rem; color: #555; text-align: center; margin-top: 15px;">
-                        No credit card required. Free implementation consultation.
-                    </p>
-                </form>
+        <div class="pricing-grid">
+            <div class="price-card reveal">
+                <h3>Essential</h3>
+                <div class="price-tag">$149<span style="font-size: 1rem; color: #666;">/mo</span></div>
+                <p style="color: var(--accent-gold); margin: 10px 0 30px;">Perfect for Boutique Hotels</p>
+                <ul class="feature-list">
+                    <li><span class="check-gold">✓</span> Up to 1,000 conversations</li>
+                    <li><span class="check-gold">✓</span> Handles FAQ & Pricing</li>
+                    <li><span class="check-gold">✓</span> Captures Leads (Name/Email)</li>
+                    <li><span class="check-gold">✓</span> Instant Email Escalation</li>
+                    <li><span class="check-gold">✓</span> <strong>Free Custom Setup</strong></li>
+                </ul>
+                <a href="mailto:krishnarana@automationexperts.tech" class="btn btn-glass" style="margin-top: auto; text-align: center;">Start Essential</a>
             </div>
+
+            <div class="price-card pro reveal" style="transition-delay: 0.1s;">
+                <div style="position: absolute; top: 20px; right: 20px; background: var(--accent-gold); color: black; padding: 5px 15px; border-radius: 20px; font-size: 0.75rem; font-weight: 700;">MOST POPULAR</div>
+                <h3 style="color: var(--accent-gold);">Pro</h3>
+                <div class="price-tag">$199<span style="font-size: 1rem; color: #666;">/mo</span></div>
+                <p style="color: white; margin: 10px 0 30px;">For Resorts & High Volume</p>
+                <ul class="feature-list">
+                    <li><span class="check-gold">✓</span> <strong>Unlimited Conversations</strong></li>
+                    <li><span class="check-gold">✓</span> Priority Support (Same-day)</li>
+                    <li><span class="check-gold">✓</span> Slack Alerts Integration</li>
+                    <li><span class="check-gold">✓</span> Multi-channel Support</li>
+                    <li><span class="check-gold">✓</span> <strong>Free Custom Setup</strong></li>
+                </ul>
+                <a href="mailto:krishnarana@automationexperts.tech" class="btn btn-primary" style="margin-top: auto; text-align: center;">Go Pro</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="container reveal" id="demo" style="max-width: 600px; padding: 100px 24px;">
+        <div style="background: var(--bg-surface); padding: 50px; border-radius: 30px; border: 1px solid rgba(255,255,255,0.1);">
+            <h2 class="text-center" style="font-size: 2rem;">Secure Your Spot</h2>
+            <p class="text-center" style="color: #888; margin-bottom: 30px;">We are currently onboarding partners. Get your free audit.</p>
+            
+            <form onsubmit="event.preventDefault(); alert('We will contact you within 2 hours.');">
+                <input type="text" placeholder="Hotel Name" style="width: 100%; padding: 15px; margin-bottom: 15px; background: #000; border: 1px solid #333; color: white; border-radius: 10px;">
+                <input type="email" placeholder="Manager Email" style="width: 100%; padding: 15px; margin-bottom: 15px; background: #000; border: 1px solid #333; color: white; border-radius: 10px;">
+                <input type="url" placeholder="Website URL" style="width: 100%; padding: 15px; margin-bottom: 25px; background: #000; border: 1px solid #333; color: white; border-radius: 10px;">
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Get Custom Demo</button>
+            </form>
         </div>
     </section>
 
     <footer>
         <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <h4>Automation Experts</h4>
-                    <p style="max-width: 300px; line-height: 1.6;">
-                        Pioneering the intersection of Artificial Intelligence and Hospitality. 
+            <div class="footer-grid">
+                <div>
+                    <h3 class="logo" style="margin-bottom: 20px;">Automation Experts</h3>
+                    <p style="color: var(--text-secondary); max-width: 300px;">
+                        Pioneering the intersection of Artificial Intelligence and Luxury Hospitality. 
                         We build tools that make technology invisible and service unforgettable.
                     </p>
-                    <div class="social-row">
-                        <a href="https://www.linkedin.com/in/krishnaaarana/" target="_blank" style="color: white; opacity: 0.7;">LinkedIn</a>
-                        <a href="mailto:krishnarana@automationexperts.tech" style="color: white; opacity: 0.7;">Email</a>
+                    <div style="margin-top: 30px;">
+                        <a href="https://www.linkedin.com/in/krishnaaarana/" style="margin-right: 20px; color: white; opacity: 0.7;">LinkedIn</a>
+                        <a href="mailto:krishnarana@automationexperts.tech" style="color: white; opacity: 0.7;">Email Us</a>
                     </div>
                 </div>
                 
                 <div class="footer-links">
-                    <h5>Platform</h5>
+                    <h4>Company</h4>
                     <ul>
-                        <li><a href="#">Concierge AI</a></li>
-                        <li><a href="#">Booking Engine</a></li>
-                        <li><a href="#">Analytics</a></li>
-                        <li><a href="#">Integrations</a></li>
+                        <li><a href="#benefits">About Us</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="mailto:krishnarana@automationexperts.tech">Contact</a></li>
                     </ul>
                 </div>
                 
                 <div class="footer-links">
-                    <h5>Company</h5>
+                    <h4>Legal</h4>
                     <ul>
-                        <li><a href="#">About Us</a></li>
-                        <li><a href="#">Careers</a></li>
                         <li><a href="#">Privacy Policy</a></li>
                         <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Data Processing</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
                     </ul>
                 </div>
             </div>
-            
-            <div style="text-align: center; border-top: 1px solid #1a1a1a; padding-top: 30px;">
-                <p>&copy; 2025 Automation Experts. Delhi, India. All rights reserved.</p>
+
+            <div style="border-top: 1px solid #222; padding-top: 40px;">
+                <div class="legal-text">
+                    <p><strong>Privacy Policy Summary:</strong> Automation Experts respects your privacy. We process personal data (Name, Email, Hotel Data) solely for the purpose of providing our Concierge services. We do not sell data to third parties. Data is encrypted via AES-256 standards.</p>
+                    <p style="margin-top: 10px;"><strong>Terms of Service:</strong> By using our services, you agree that Automation Experts acts as a data processor. We are not responsible for bookings not completed due to third-party payment gateway failures. Use of our "Pro" plan constitutes a month-to-month agreement.</p>
+                </div>
+                <p style="text-align: center; color: #555; margin-top: 40px; font-size: 0.9rem;">
+                    &copy; 2025 Automation Experts. Delhi, India. All rights reserved.
+                </p>
             </div>
         </div>
     </footer>
 
     <script>
-        // 1. Scroll Reveal Animation
-        const observerOptions = {
-            threshold: 0.1,
-            rootMargin: "0px 0px -50px 0px"
-        };
-
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
                     entry.target.classList.add('active');
-                    observer.unobserve(entry.target); 
+                    observer.unobserve(entry.target);
                 }
             });
-        }, observerOptions);
+        }, { threshold: 0.1 });
 
-        document.querySelectorAll('.reveal').forEach(el => {
-            observer.observe(el);
-        });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        // 2. Navbar Glass Effect on Scroll
+        // Navbar Scroll Effect
         window.addEventListener('scroll', () => {
             const nav = document.getElementById('navbar');
-            if (window.scrollY > 50) {
-                nav.classList.add('scrolled');
-            } else {
-                nav.classList.remove('scrolled');
-            }
+            if (window.scrollY > 50) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
         });
     </script>
 </body>
