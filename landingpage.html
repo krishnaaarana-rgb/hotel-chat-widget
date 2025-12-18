@@ -38,22 +38,17 @@
             line-height: 1.5;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
-            /* Performance Fix: Optimize text rendering */
             text-rendering: optimizeSpeed; 
         }
 
-        /* -----------------------------------------------------------------
-           2. ANIMATION OPTIMIZATION (LAG KILLER)
-           ----------------------------------------------------------------- */
+        /* Animations */
         .reveal {
             opacity: 0;
-            transform: translateY(20px); /* Reduced movement for smoother paint */
+            transform: translateY(20px);
             transition: opacity 0.6s ease-out, transform 0.6s ease-out;
-            will-change: opacity, transform; /* Hardware Acceleration Hint */
+            will-change: opacity, transform;
         }
         .reveal.active { opacity: 1; transform: translateY(0); }
-
-        /* Disable heavy effects on low-power devices if needed, but optimized generally */
 
         h1, h2, h3, h4 { color: var(--text-primary); letter-spacing: -0.02em; }
         h1 { font-size: 4.5rem; line-height: 1.08; font-weight: 700; margin-bottom: 1.5rem; }
@@ -100,10 +95,10 @@
             margin-bottom: 24px; border: 1px solid #E5E5E5;
         }
 
-        /* Nav - Optimized */
+        /* Nav */
         nav {
             position: fixed; top: 0; width: 100%; z-index: 1000;
-            background: rgba(255, 255, 255, 0.95); /* High opacity reduces calculation */
+            background: rgba(255, 255, 255, 0.95);
             border-bottom: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease;
         }
         .nav-inner { height: 70px; display: flex; justify-content: space-between; align-items: center; }
@@ -112,7 +107,7 @@
         .nav-link { font-size: 14px; color: var(--text-secondary); font-weight: 500; text-decoration: none; transition: color 0.2s; }
         .nav-link:hover { color: var(--text-primary); }
 
-        /* Hero - Performance Optimized Blob */
+        /* Hero */
         .hero {
             padding-top: 180px; padding-bottom: 100px; position: relative; overflow: hidden;
             background: radial-gradient(circle at 50% 0%, #FFFFFF 0%, #F2F2F7 100%);
@@ -123,7 +118,6 @@
             width: 400px; height: 700px; background: #FFFFFF; border-radius: 24px;
             box-shadow: 0 40px 100px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.05);
             z-index: 10; transition: transform 0.4s var(--ease-apple); overflow: hidden;
-            /* GPU layer */
             transform: translateZ(0);
         }
         .chat-ui-wrapper:hover { transform: translateY(-5px); box-shadow: 0 50px 120px rgba(0,0,0,0.12); }
@@ -134,7 +128,7 @@
         .screen-content { width: 100%; height: calc(100% - 60px); background: #fff; }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* Static Gradient Blobs (No Blur Calculation = No Lag) */
+        /* Static Gradient Blobs */
         .blob {
             position: absolute; width: 600px; height: 600px;
             background: radial-gradient(circle, rgba(212,175,55,0.08) 0%, rgba(255,255,255,0) 70%);
@@ -167,47 +161,12 @@
         .calc-result { text-align: right; }
         .calc-big-num { font-size: 5rem; font-weight: 700; line-height: 1; color: #34C759; letter-spacing: -2px; }
 
-        /* -----------------------------------------------------------------
-           NEW SECTION 1: THE COMMAND CENTER (Admin Dashboard Visualization)
-           ----------------------------------------------------------------- */
-        .dashboard-preview-section { background: #F5F5F7; padding: 120px 0; overflow: hidden; }
-        .dashboard-mockup {
-            background: #FFFFFF; border-radius: 20px; box-shadow: 0 30px 60px rgba(0,0,0,0.08);
-            border: 1px solid #E5E5E5; display: grid; grid-template-columns: 240px 1fr; 
-            max-width: 1000px; margin: 60px auto 0; height: 600px; overflow: hidden;
-            transform: perspective(1000px) rotateX(2deg); /* 3D tilt effect */
-            transition: transform 0.5s ease;
-        }
-        .dashboard-mockup:hover { transform: perspective(1000px) rotateX(0deg); }
-        
-        .dash-sidebar { background: #FAFAFA; border-right: 1px solid #E5E5E5; padding: 20px; }
-        .dash-menu-item { padding: 10px; margin-bottom: 5px; border-radius: 8px; font-size: 0.9rem; color: var(--text-secondary); display: flex; align-items: center; gap: 10px; cursor: pointer; }
-        .dash-menu-item.active { background: #EAEAEA; color: var(--text-primary); font-weight: 600; }
-        .dash-dot { width: 8px; height: 8px; background: #DDD; border-radius: 50%; }
-        
-        .dash-main { padding: 30px; display: grid; grid-template-rows: auto 1fr; }
-        .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .dash-stats-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 30px; }
-        .dash-stat-card { background: #FFF; border: 1px solid #EEE; padding: 20px; border-radius: 12px; }
-        .dash-stat-num { font-size: 1.8rem; font-weight: 700; display: block; }
-        .dash-stat-label { font-size: 0.8rem; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
-        
-        .dash-live-feed { background: #FFF; border: 1px solid #EEE; border-radius: 12px; padding: 20px; flex-grow: 1; }
-        .live-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #F5F5F5; font-size: 0.9rem; }
-        .live-status { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 600; }
-        .status-bot { background: #E3F2FD; color: #0071E3; }
-        .status-escalated { background: #FFF3E0; color: #F57C00; }
-
-        /* -----------------------------------------------------------------
-           NEW SECTION 2: ZERO-FRICTION ONBOARDING (Timeline)
-           ----------------------------------------------------------------- */
+        /* TIMELINE (Onboarding) */
         .timeline-section { background: #FFF; padding: 120px 0; }
         .timeline-container { max-width: 800px; margin: 60px auto 0; position: relative; }
         .timeline-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: #E5E5E5; transform: translateX(-50%); }
-        
         .timeline-step { display: flex; justify-content: space-between; align-items: center; margin-bottom: 80px; position: relative; }
         .timeline-step:nth-child(even) { flex-direction: row-reverse; }
-        
         .timeline-content { width: 45%; padding: 30px; background: #FFF; border-radius: 20px; border: 1px solid #F0F0F0; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
         .timeline-number { 
             width: 50px; height: 50px; background: var(--text-primary); color: #FFF; 
@@ -218,16 +177,14 @@
         .timeline-title { font-size: 1.3rem; margin-bottom: 10px; font-weight: 600; }
         .timeline-desc { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; }
 
-        /* -----------------------------------------------------------------
-           NEW SECTION 3: ENTERPRISE SECURITY GRID
-           ----------------------------------------------------------------- */
-        .security-section { background: #000; color: #FFF; padding: 120px 0; }
+        /* SECURITY (Updated to Light Theme) */
+        .security-section { background: var(--bg-alt); color: var(--text-primary); padding: 120px 0; }
         .sec-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; margin-top: 60px; }
-        .sec-card { border: 1px solid #333; padding: 40px; border-radius: 20px; transition: background 0.3s; }
-        .sec-card:hover { background: #111; }
-        .sec-icon { font-size: 2rem; margin-bottom: 20px; color: #34C759; }
+        .sec-card { background: #FFFFFF; border: 1px solid #E5E5E5; padding: 40px; border-radius: 20px; transition: transform 0.3s, box-shadow 0.3s; box-shadow: var(--shadow-sm); }
+        .sec-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+        .sec-icon { font-size: 2rem; margin-bottom: 20px; display: block; }
         .sec-title { font-size: 1.4rem; margin-bottom: 15px; font-weight: 600; }
-        .sec-text { color: #888; line-height: 1.6; }
+        .sec-text { color: var(--text-secondary); line-height: 1.6; }
 
         /* Bento */
         .bento-section { background: var(--bg-alt); }
@@ -294,8 +251,6 @@
             .metrics-grid { grid-template-columns: 1fr; divide-x: none; divide-y: 1px solid #E5E5E5; }
             .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
             .pricing-container, .calc-grid, .sec-grid { grid-template-columns: 1fr; }
-            .dashboard-mockup { grid-template-columns: 1fr; height: auto; transform: none !important; }
-            .dash-sidebar { display: none; } /* Simplify on mobile */
             .timeline-line { left: 20px; }
             .timeline-step, .timeline-step:nth-child(even) { flex-direction: column; align-items: flex-start; margin-left: 50px; }
             .timeline-content { width: 100%; }
@@ -397,64 +352,6 @@
         </div>
     </section>
 
-    <section class="dashboard-preview-section">
-        <div class="container">
-            <div class="text-center">
-                <h2>Total Control. Zero Chaos.</h2>
-                <p class="lead">Your team gets a modern dashboard to oversee AI conversations, intervene when necessary, and track revenue.</p>
-            </div>
-
-            <div class="dashboard-mockup reveal">
-                <div class="dash-sidebar">
-                    <div style="margin-bottom: 30px; font-weight: 700; padding: 10px;">Command Center</div>
-                    <div class="dash-menu-item active"><span class="dash-dot" style="background: #0071E3;"></span> Live Chats</div>
-                    <div class="dash-menu-item"><span class="dash-dot"></span> Analytics</div>
-                    <div class="dash-menu-item"><span class="dash-dot"></span> Guest Database</div>
-                    <div class="dash-menu-item"><span class="dash-dot"></span> Settings</div>
-                </div>
-                <div class="dash-main">
-                    <div class="dash-header">
-                        <h4>Live Overview</h4>
-                        <div style="font-size: 0.9rem; color: #888;">Online: <strong>Automated Mode</strong></div>
-                    </div>
-                    <div class="dash-stats-row">
-                        <div class="dash-stat-card">
-                            <span class="dash-stat-num" style="color: #34C759;">14</span>
-                            <span class="dash-stat-label">Active Chats</span>
-                        </div>
-                        <div class="dash-stat-card">
-                            <span class="dash-stat-num">98%</span>
-                            <span class="dash-stat-label">AI Resolution</span>
-                        </div>
-                        <div class="dash-stat-card">
-                            <span class="dash-stat-num">$1,250</span>
-                            <span class="dash-stat-label">Revenue Today</span>
-                        </div>
-                    </div>
-                    <div class="dash-live-feed">
-                        <div style="font-size: 0.8rem; color: #999; margin-bottom: 10px; text-transform: uppercase;">Recent Activity</div>
-                        <div class="live-row">
-                            <span><strong>Room 304</strong> asking about Late Checkout</span>
-                            <span class="live-status status-bot">AI Handling</span>
-                        </div>
-                        <div class="live-row">
-                            <span><strong>New Guest</strong> looking for Suite availability</span>
-                            <span class="live-status status-bot">AI Selling</span>
-                        </div>
-                        <div class="live-row">
-                            <span><strong>Guest #902</strong> complaint about AC</span>
-                            <span class="live-status status-escalated">Escalated to Manager</span>
-                        </div>
-                        <div class="live-row">
-                            <span><strong>Room 101</strong> asking for Pool Hours</span>
-                            <span class="live-status status-bot">AI Handling</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <div class="container reveal" style="margin-top: 60px;">
         <div class="calculator-section">
             <h2 style="color: white; margin-bottom: 40px; font-size: 2.5rem;">See What You're Losing.</h2>
@@ -487,7 +384,7 @@
                     <div class="timeline-number">1</div>
                     <div class="timeline-content">
                         <h4 class="timeline-title">Data Ingestion</h4>
-                        <p class="timeline-desc">We scan your website and PDF compendiums. Our system learns your room types, amenities, policies, and local recommendations instantly.</p>
+                        <p class="timeline-desc">We scan your website and PDFs into a collaborative Airtable database. You can adjust prices, discounts, or policies instantly—our system syncs updates to our AI brain every 2 hours.</p>
                     </div>
                 </div>
                 
@@ -503,7 +400,7 @@
                     <div class="timeline-number">3</div>
                     <div class="timeline-content">
                         <h4 class="timeline-title">Go Live</h4>
-                        <p class="timeline-desc">Copy-paste one line of code into your site footer. That's it. The concierge is now live and selling 24/7.</p>
+                        <p class="timeline-desc">Copy-paste one line of code into your site footer (or we can help you). That's it. The concierge is now live and selling 24/7.</p>
                     </div>
                 </div>
             </div>
@@ -552,28 +449,28 @@
     <section class="security-section">
         <div class="container">
             <div class="text-center">
-                <h2 style="color: white;">Enterprise-Grade Security</h2>
-                <p class="lead" style="color: #888;">Built for chains that cannot compromise on data privacy.</p>
+                <h2>Enterprise-Grade Security</h2>
+                <p class="lead">Built for chains that cannot compromise on data privacy.</p>
             </div>
             
             <div class="sec-grid reveal">
                 <div class="sec-card">
-                    <div class="sec-icon">🔒</div>
+                    <span class="sec-icon">🔒</span>
                     <h4 class="sec-title">AES-256 Encryption</h4>
                     <p class="sec-text">All guest data is encrypted at rest and in transit. We use banking-grade standards to ensure no data ever leaks.</p>
                 </div>
                 <div class="sec-card">
-                    <div class="sec-icon">🇪🇺</div>
+                    <span class="sec-icon">🇪🇺</span>
                     <h4 class="sec-title">GDPR & CCPA Ready</h4>
                     <p class="sec-text">Fully compliant with European and Californian data laws. Automatic data purging and user consent management built-in.</p>
                 </div>
                 <div class="sec-card">
-                    <div class="sec-icon">🛡️</div>
+                    <span class="sec-icon">🛡️</span>
                     <h4 class="sec-title">Isolated Instances</h4>
                     <p class="sec-text">Your hotel's data lives in its own container. It is never mixed with other clients or used to train public models.</p>
                 </div>
                 <div class="sec-card">
-                    <div class="sec-icon">⚡</div>
+                    <span class="sec-icon">⚡</span>
                     <h4 class="sec-title">99.99% Uptime SLA</h4>
                     <p class="sec-text">Redundant server clusters across 3 continents ensure your concierge never sleeps, even during traffic spikes.</p>
                 </div>
