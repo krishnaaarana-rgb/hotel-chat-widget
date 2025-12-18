@@ -261,8 +261,9 @@
             overflow-y: auto;
             scroll-behavior: smooth;
             display: flex; flex-direction: column; gap: 18px;
-            /* FIXED: Clean white/grey gradient */
-            background: linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(245,245,247,1) 100%);
+            
+            /* FIXED: PURE WHITE (Removed Gradient) */
+            background: #ffffff;
         }
 
         #hotel-chatbot-messages::-webkit-scrollbar { width: 4px; }
@@ -556,7 +557,7 @@
         if (!chatWindow.classList.contains("open")) {
             nudge.classList.add("visible");
         }
-    }, 1000); // CHANGED FROM 5000 TO 1000 AS REQUESTED
+    }, 1000); 
 
     function closeNudge() {
         nudge.classList.remove("visible");
@@ -815,6 +816,16 @@
     inputField.addEventListener("input", () => {
         if (inputField.value.length > 0) clearQuickReplies();
     });
+
+    // ==========================================
+    // AUTO-OPEN LOGIC (Desktop Only)
+    // ==========================================
+    setTimeout(() => {
+        // Only open if on Desktop (>480px) and not already open
+        if (window.innerWidth > 480 && !chatWindow.classList.contains("open")) {
+            toggleChat();
+        }
+    }, 2000); // 3-second delay so it's polite
 
 </script>
 </body>
