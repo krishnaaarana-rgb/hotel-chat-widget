@@ -12,24 +12,17 @@
 
     <style>
         /* -----------------------------------------------------------------
-           1. ROOT VARIABLES & RESET
+           1. PERFORMANCE OPTIMIZED ROOT & RESET
            ----------------------------------------------------------------- */
         :root {
             --bg-body: #FFFFFF;
             --bg-alt: #F5F5F7;
-            --bg-card: #FFFFFF;
             --text-primary: #1D1D1F;
             --text-secondary: #86868B;
-            --text-tertiary: #6E6E73;
             --accent-blue: #0071E3;
             --accent-dark: #000000;
             --accent-gold: #D4AF37;
             
-            --shadow-sm: 0 2px 5px rgba(0,0,0,0.05);
-            --shadow-md: 0 8px 30px rgba(0,0,0,0.06);
-            --shadow-lg: 0 30px 60px rgba(0,0,0,0.12);
-            --shadow-float: 0 20px 80px rgba(0,0,0,0.15);
-
             --max-width: 1280px;
             --radius-lg: 32px;
             --ease-apple: cubic-bezier(0.25, 1, 0.5, 1);
@@ -45,7 +38,17 @@
             line-height: 1.5;
             overflow-x: hidden;
             -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
         }
+
+        /* HARDWARE ACCELERATION FOR ANIMATIONS (FIXES LAG) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px) translateZ(0); /* GPU Trigger */
+            transition: opacity 0.8s ease-out, transform 0.8s var(--ease-apple);
+            will-change: opacity, transform;
+        }
+        .reveal.active { opacity: 1; transform: translateY(0) translateZ(0); }
 
         h1, h2, h3 { color: var(--text-primary); letter-spacing: -0.02em; }
         h1 { font-size: 4.5rem; line-height: 1.08; font-weight: 700; margin-bottom: 1.5rem; }
@@ -53,12 +56,8 @@
         h3 { font-size: 1.75rem; font-weight: 600; margin-bottom: 0.5rem; }
 
         p.lead {
-            font-size: 1.35rem;
-            color: var(--text-secondary);
-            font-weight: 400;
-            max-width: 680px;
-            margin: 0 auto 2.5rem;
-            line-height: 1.5;
+            font-size: 1.35rem; color: var(--text-secondary); font-weight: 400;
+            max-width: 680px; margin: 0 auto 2.5rem; line-height: 1.5;
         }
 
         .text-gradient {
@@ -71,7 +70,7 @@
         .text-center { text-align: center; }
         .section-padding { padding: 120px 0; }
 
-        /* Buttons & Pulse Effect */
+        /* Buttons & Pulse */
         @keyframes pulse-glow {
             0% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2); }
             70% { box-shadow: 0 0 0 10px rgba(0, 0, 0, 0); }
@@ -81,13 +80,11 @@
         .btn {
             display: inline-flex; align-items: center; justify-content: center;
             padding: 16px 36px; border-radius: 980px; font-size: 16px; font-weight: 500;
-            cursor: pointer; transition: all 0.4s var(--ease-apple); border: none; text-decoration: none;
+            cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; border: none; text-decoration: none;
         }
         .btn-primary { background: var(--accent-dark); color: #FFFFFF; }
         .btn-primary:hover { transform: scale(1.03); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
-        
         .btn-pulse { animation: pulse-glow 2s infinite; }
-
         .btn-secondary { background: var(--bg-alt); color: var(--accent-blue); font-weight: 600; }
         .btn-secondary:hover { background: #E5E5EA; }
 
@@ -98,10 +95,12 @@
             margin-bottom: 24px; border: 1px solid #E5E5E5;
         }
 
-        /* Nav */
+        /* Nav - Optimized Blur */
         nav {
             position: fixed; top: 0; width: 100%; z-index: 1000;
-            background: rgba(255, 255, 255, 0.75); backdrop-filter: saturate(180%) blur(20px);
+            background: rgba(255, 255, 255, 0.85); /* Slightly more opaque for performance */
+            backdrop-filter: blur(12px); /* Reduced blur radius for speed */
+            -webkit-backdrop-filter: blur(12px);
             border-bottom: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease;
         }
         .nav-inner { height: 70px; display: flex; justify-content: space-between; align-items: center; }
@@ -116,12 +115,12 @@
             background: radial-gradient(circle at 50% 0%, #FFFFFF 0%, #F2F2F7 100%);
         }
         .hero-layout { display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; gap: 80px; }
-        .hero-visual { position: relative; height: 700px; display: flex; align-items: center; justify-content: center; }
-
+        
         .chat-ui-wrapper {
             width: 400px; height: 700px; background: #FFFFFF; border-radius: 24px;
             box-shadow: 0 40px 100px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.05);
             z-index: 10; transition: transform 0.4s var(--ease-apple); overflow: hidden;
+            transform: translateZ(0); /* GPU */
         }
         .chat-ui-wrapper:hover { transform: translateY(-10px); box-shadow: 0 50px 120px rgba(0,0,0,0.15); }
         .chat-header {
@@ -131,7 +130,7 @@
         .screen-content { width: 100%; height: calc(100% - 60px); background: #fff; }
         iframe { width: 100%; height: 100%; border: none; }
 
-        .blob { position: absolute; border-radius: 50%; filter: blur(80px); z-index: 1; }
+        .blob { position: absolute; border-radius: 50%; filter: blur(80px); z-index: 1; pointer-events: none; }
         .blob-1 { width: 400px; height: 400px; background: #D4AF37; top: 10%; right: -20%; opacity: 0.15; }
         .blob-2 { width: 300px; height: 300px; background: #0071E3; bottom: 10%; left: 0%; opacity: 0.1; }
 
@@ -146,94 +145,74 @@
         .metric-item { padding: 60px 40px; text-align: center; }
         .metric-val { font-size: 3.5rem; font-weight: 700; display: block; margin-bottom: 10px; line-height: 1; }
         .metric-lbl { font-size: 1.1rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 8px; }
-        .metric-desc { font-size: 0.95rem; color: var(--text-tertiary); max-width: 250px; margin: 0 auto; }
+
+        /* -----------------------------------------------------------------
+           NEW: ROI CALCULATOR (The "Go Crazy" Feature)
+           ----------------------------------------------------------------- */
+        .calculator-section { background: #111; color: white; border-radius: 30px; padding: 60px; margin: 60px 0; overflow: hidden; position: relative; }
+        .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; position: relative; z-index: 2; }
+        .calc-input label { display: block; margin-bottom: 20px; font-size: 1.2rem; font-weight: 500; color: #aaa; }
+        
+        /* Custom Range Slider */
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none; height: 30px; width: 30px; border-radius: 50%;
+            background: #fff; cursor: pointer; margin-top: -12px; box-shadow: 0 0 20px rgba(255,255,255,0.5);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%; height: 6px; cursor: pointer; background: #333; border-radius: 10px;
+        }
+        
+        .calc-result { text-align: right; }
+        .calc-big-num { font-size: 5rem; font-weight: 700; line-height: 1; color: #34C759; letter-spacing: -2px; }
+        .calc-sub { font-size: 1.1rem; color: #888; margin-top: 10px; }
 
         /* Bento */
         .bento-section { background: var(--bg-alt); }
         .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 450px); gap: 24px; margin-top: 60px; }
-        .card { background: #FFFFFF; border-radius: var(--radius-lg); padding: 40px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: var(--shadow-sm); transition: all 0.4s ease; }
-        .card:hover { box-shadow: var(--shadow-md); transform: translateY(-5px); }
+        .card { background: #FFFFFF; border-radius: var(--radius-lg); padding: 40px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card:hover { box-shadow: 0 20px 40px rgba(0,0,0,0.08); transform: translateY(-5px); }
         .card.span-2 { grid-column: span 2; }
         .card.row-2 { grid-row: span 2; }
         .card.dark { background: #1D1D1F; color: #FFFFFF; }
         .card.dark h3, .card.dark p { color: #FFF; }
         .card-icon { font-size: 3rem; margin-bottom: 20px; display: block; }
 
-        /* -----------------------------------------------------------------
-           NEW: SCROLLING TESTIMONIALS (Horizontal Snap)
-           ----------------------------------------------------------------- */
+        /* Testimonials Scroll */
         .testimonials { padding: 120px 0; background: #fff; overflow: hidden; }
-        
         .test-scroll-container {
-            display: flex;
-            gap: 32px;
-            overflow-x: auto;
-            padding: 40px 24px 60px; /* Space for shadow */
-            scroll-snap-type: x mandatory;
-            margin: 0 -24px; /* Pull to edges on mobile */
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none; /* Hide scrollbar Firefox */
+            display: flex; gap: 32px; overflow-x: auto; padding: 40px 24px 60px;
+            scroll-snap-type: x mandatory; margin: 0 -24px;
+            -webkit-overflow-scrolling: touch; scrollbar-width: none;
         }
         .test-scroll-container::-webkit-scrollbar { display: none; }
-
         .test-card {
-            min-width: 400px;
-            background: #F9F9F9;
-            padding: 40px;
-            border-radius: 24px;
-            border: 1px solid #EEE;
-            scroll-snap-align: center;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: all 0.3s ease;
+            min-width: 400px; background: #F9F9F9; padding: 40px; border-radius: 24px; border: 1px solid #EEE;
+            scroll-snap-align: center; display: flex; flex-direction: column; justify-content: space-between;
+            transition: transform 0.3s ease;
         }
-
-        .test-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            border-color: #E0E0E0;
-            background: #FFF;
-        }
-
-        .test-text {
-            font-size: 1.15rem;
-            color: #333;
-            font-weight: 400;
-            line-height: 1.6;
-            margin-bottom: 30px;
-            font-style: italic;
-        }
-
+        .test-card:hover { transform: translateY(-5px); background: #FFF; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .test-text { font-size: 1.15rem; color: #333; font-style: italic; margin-bottom: 30px; line-height: 1.6; }
         .test-author { display: flex; align-items: center; gap: 16px; }
-        
-        .test-avatar { 
-            width: 56px; 
-            height: 56px; 
-            border-radius: 50%; 
-            object-fit: cover; 
-            background: #E5E5E5; 
-            border: 2px solid white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
+        .test-avatar { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; background: #E5E5E5; }
 
-        .test-info h5 { font-size: 1rem; font-weight: 700; margin-bottom: 2px; color: var(--text-primary); }
-        .test-info span { font-size: 0.85rem; color: var(--text-secondary); display: block; }
-
-        /* Pricing & FAQ styles maintained... */
-        .comparison-table { width: 100%; border-collapse: collapse; margin-top: 60px; background: white; border-radius: 20px; overflow: hidden; box-shadow: var(--shadow-md); }
+        /* Table */
+        .comparison-table { width: 100%; border-collapse: collapse; margin-top: 60px; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.04); }
         .comparison-table th { text-align: left; padding: 30px; background: #FAFAFA; border-bottom: 1px solid #E5E5E5; color: var(--text-secondary); }
         .comparison-table td { padding: 25px 30px; border-bottom: 1px solid #F0F0F0; font-size: 1.05rem; }
         .col-highlight { background: #F5F9FF; color: var(--accent-blue) !important; font-weight: 600; }
-        
+        .icon-check { color: #34C759; margin-right: 8px; }
+
+        /* Pricing */
         .pricing-section { background: var(--bg-alt); }
         .pricing-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 960px; margin: 60px auto 0; }
-        .price-card { background: #FFF; padding: 50px; border-radius: 30px; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; position: relative; }
-        .price-card.featured { box-shadow: 0 0 0 2px var(--accent-gold), var(--shadow-lg); }
+        .price-card { background: #FFF; padding: 50px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); display: flex; flex-direction: column; position: relative; transition: transform 0.3s ease; }
+        .price-card:hover { transform: translateY(-5px); }
+        .price-card.featured { box-shadow: 0 0 0 2px var(--accent-gold), 0 20px 40px rgba(0,0,0,0.1); }
         .badge-popular { position: absolute; top: 20px; right: 20px; background: var(--accent-gold); color: #FFF; font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 20px; }
         .price-features li { margin-bottom: 16px; display: flex; align-items: center; color: var(--text-secondary); }
-        .icon-check { margin-right: 12px; color: var(--accent-blue); }
 
+        /* FAQ & Footer */
         .faq-item { border-bottom: 1px solid #E5E5E5; padding: 24px 0; }
         .faq-question { font-size: 1.2rem; font-weight: 500; cursor: pointer; display: flex; justify-content: space-between; }
         .faq-answer { margin-top: 15px; color: var(--text-secondary); display: none; }
@@ -241,6 +220,7 @@
         .footer { background: #FBFBFD; padding: 100px 0 40px; border-top: 1px solid #E5E5E5; }
         .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 80px; margin-bottom: 80px; }
         .footer-links a { color: var(--text-secondary); text-decoration: none; }
+        .legal-block { border-top: 1px solid #E5E5E5; padding-top: 40px; font-size: 0.8rem; color: var(--text-tertiary); }
 
         /* Responsive */
         @media (max-width: 1024px) {
@@ -251,12 +231,11 @@
             .chat-ui-wrapper { width: 100%; max-width: 380px; height: 600px; margin: 0 auto; }
             .metrics-grid { grid-template-columns: 1fr; divide-x: none; divide-y: 1px solid #E5E5E5; }
             .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
-            .pricing-container { grid-template-columns: 1fr; }
-            
-            /* Scroll adjustments for mobile */
+            .pricing-container, .calc-grid { grid-template-columns: 1fr; }
+            .calc-result { text-align: left; margin-top: 30px; }
+            .calc-big-num { font-size: 3.5rem; }
             .test-scroll-container { padding-left: 24px; padding-right: 24px; gap: 16px; }
             .test-card { min-width: 300px; padding: 30px; }
-            
             .logo-grid { flex-direction: column; gap: 30px; }
             .footer-grid { grid-template-columns: 1fr; gap: 40px; }
             .nav-menu a:not(.btn) { display: none; } 
@@ -268,7 +247,6 @@
     <nav id="navbar">
         <div class="container nav-inner">
             <div class="logo">Automation Experts</div>
-            
             <div class="nav-menu">
                 <a href="#features" class="nav-link">Capabilities</a>
                 <a href="#pricing" class="nav-link">Pricing</a>
@@ -281,28 +259,21 @@
     <section class="hero">
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
-
         <div class="container">
             <div class="hero-layout">
                 <div class="hero-text reveal active">
                     <span class="badge-chip">The New Standard</span>
-                    <h1>
-                        Hospitality.<br>
-                        <span class="text-gradient">Automated.</span>
-                    </h1>
+                    <h1>Hospitality.<br><span class="text-gradient">Automated.</span></h1>
                     <p class="lead">
                         The AI Concierge that answers guests instantly, captures leads, and escalates bookings to your team. 
                         <span style="color: var(--text-primary); font-weight: 500;">Setup is free. You only pay for results.</span>
                     </p>
-                    
                     <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: flex-start;">
                         <a href="#demo" class="btn btn-primary">Start Transformation</a>
                         <a href="#features" class="btn btn-secondary">See How It Works</a>
                     </div>
-                    
                     <div style="margin-top: 30px; display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: var(--text-secondary);">
-                        <span style="color: #34C759; font-size: 1.2rem;">●</span> 
-                        <span>Compatible with your current PMS</span>
+                        <span style="color: #34C759; font-size: 1.2rem;">●</span> <span>Compatible with your current PMS</span>
                     </div>
                 </div>
 
@@ -315,7 +286,7 @@
                             Live Concierge Demo
                         </div>
                         <div class="screen-content">
-                            <iframe src="https://krishnaaarana-rgb.github.io/hotel-chat-widget/widget.html" title="AI Chat Demo"></iframe>
+                            <iframe src="https://krishnaaarana-rgb.github.io/hotel-chat-widget/widget.html" title="AI Chat Demo" loading="lazy"></iframe>
                         </div>
                     </div>
                 </div>
@@ -358,19 +329,36 @@
         </div>
     </section>
 
+    <div class="container reveal">
+        <div class="calculator-section">
+            <h2 style="color: white; margin-bottom: 40px; font-size: 2.5rem;">See What You're Losing.</h2>
+            <div class="calc-grid">
+                <div class="calc-input">
+                    <label>Number of Rooms: <span id="roomCountVal" style="color: #34C759; font-weight: 700;">50</span></label>
+                    <input type="range" min="10" max="500" value="50" id="roomSlider">
+                    <p style="color: #666; font-size: 0.9rem; margin-top: 15px;">Drag to match your property size.</p>
+                </div>
+                <div class="calc-result">
+                    <div class="calc-big-num">$<span id="savingsVal">7,500</span></div>
+                    <div class="calc-sub">Estimated Monthly Revenue Unlock</div>
+                    <p style="color: #555; font-size: 0.85rem; margin-top: 20px;">*Based on average 15% OTA commission savings + labor reduction.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <section class="section-padding bento-section" id="features">
         <div class="container">
             <div class="text-center" style="margin-bottom: 60px;">
                 <h2>Intelligence at Scale</h2>
                 <p class="lead">A suite of capabilities designed to replace friction with flow.</p>
             </div>
-
             <div class="bento-grid">
                 <div class="card span-2 row-2 reveal">
                     <div>
                         <span class="card-icon">🧠</span>
                         <h3>Contextual Awareness</h3>
-                        <p>Unlike basic chatbots, Automation Experts understands nuance. It knows the difference between "Can I bring my dog?" and "Do you have hot dogs?". It sells your amenities, not just lists them.</p>
+                        <p>Unlike basic chatbots, Automation Experts understands nuance. It knows the difference between "Can I bring my dog?" and "Do you have hot dogs?".</p>
                     </div>
                     <img src="https://placehold.co/600x300/F5F5F7/cccccc?text=Contextual+AI+UI" alt="AI Visualization" style="margin-top: 30px; border-radius: 12px; opacity: 0.8;">
                 </div>
@@ -404,60 +392,40 @@
                 <h2>Trusted by Forward Thinkers</h2>
                 <p class="lead" style="max-width: 500px; margin: 0 auto;">See what business owners are saying about our impact.</p>
             </div>
-            
             <div class="test-scroll-container">
                 <div class="test-card reveal">
                     <p class="test-text">"Krishna’s deep research and constant testing lead to better outcomes, delivering a chatbot experience and client service that feels genuinely human."</p>
                     <div class="test-author">
                         <img src="https://lh3.googleusercontent.com/d/1jcswGP7q1NZ2CJa3ubrrSy-S-4wL7dI0" alt="Amisha" class="test-avatar">
-                        <div class="test-info">
-                            <h5>Amisha</h5>
-                            <span>Owner, Ahmedabad</span>
-                        </div>
+                        <div class="test-info"><h5>Amisha</h5><span>Owner, Ahmedabad</span></div>
                     </div>
                 </div>
-
                 <div class="test-card reveal">
                     <p class="test-text">"We use their AI assistant at our clinic, and it has made our daily work so much easier. Fast answers, fewer calls, and a smoother experience for everyone."</p>
                     <div class="test-author">
                         <img src="https://lh3.googleusercontent.com/d/1h00yT9GsyZlXo7SP3uiTYGFfb94yzA1m" alt="Aniket" class="test-avatar">
-                        <div class="test-info">
-                            <h5>Aniket</h5>
-                            <span>Owner, IRI Dream Care</span>
-                        </div>
+                        <div class="test-info"><h5>Aniket</h5><span>Owner, IRI Dream Care</span></div>
                     </div>
                 </div>
-
                 <div class="test-card reveal">
-                    <p class="test-text">"Before Automation Experts, we were drowning in operational chaos—juggling guest requests across different channels. Now, the system centralized everything. It’s the upgrade we didn't know we needed."</p>
+                    <p class="test-text">"Before Automation Experts, we were drowning in operational chaos. Now, the system centralized everything. It’s the upgrade we didn't know we needed."</p>
                     <div class="test-author">
                         <img src="https://lh3.googleusercontent.com/d/1CN1ABCC6VRJEaCbr2JXAPJz0EYnmrWOJ" alt="Gagan" class="test-avatar">
-                        <div class="test-info">
-                            <h5>Gagan</h5>
-                            <span>Director, Ample Publications</span>
-                        </div>
+                        <div class="test-info"><h5>Gagan</h5><span>Director, Ample Publications</span></div>
                     </div>
                 </div>
-
                 <div class="test-card reveal">
                     <p class="test-text">"Krishna’s AI agents helped us build the seamless system we always wanted. Everything feels smoother, and the output is great."</p>
                     <div class="test-author">
                         <img src="https://lh3.googleusercontent.com/d/1DeOubSXhRZUGGcrCzzkdpyngEgp2G3k3" alt="Andrew" class="test-avatar">
-                        <div class="test-info">
-                            <h5>Andrew</h5>
-                            <span>CEO, AdCrunch</span>
-                        </div>
+                        <div class="test-info"><h5>Andrew</h5><span>CEO, AdCrunch</span></div>
                     </div>
                 </div>
-
                 <div class="test-card reveal">
                     <p class="test-text">"We’re a data-driven company, and Krishna has transformed our raw sheets into clear, meaningful information and graphs that help us make informed decisions."</p>
                     <div class="test-author">
                         <img src="https://lh3.googleusercontent.com/d/1E2-DIQDrsrlT1M8Y0UECsUhWXXQQvEc2" alt="Tracy" class="test-avatar">
-                        <div class="test-info">
-                            <h5>Tracy</h5>
-                            <span>CTO, Michael Curtis Media</span>
-                        </div>
+                        <div class="test-info"><h5>Tracy</h5><span>CTO, Michael Curtis Media</span></div>
                     </div>
                 </div>
             </div>
@@ -472,38 +440,13 @@
             </div>
             <table class="comparison-table reveal">
                 <thead>
-                    <tr>
-                        <th style="width: 30%;">Feature</th>
-                        <th style="width: 25%;">Standard Chatbot</th>
-                        <th style="width: 25%;">Human Staff</th>
-                        <th class="col-highlight">Automation Experts</th>
-                    </tr>
+                    <tr><th style="width: 30%;">Feature</th><th style="width: 25%;">Standard Chatbot</th><th style="width: 25%;">Human Staff</th><th class="col-highlight">Automation Experts</th></tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>Response Time</td>
-                        <td>Instant (Generic)</td>
-                        <td>Minutes/Hours</td>
-                        <td class="col-highlight"><span class="icon-check">✓</span> 1.5 Seconds</td>
-                    </tr>
-                    <tr>
-                        <td>Tone & Voice</td>
-                        <td>Robotic</td>
-                        <td>Inconsistent</td>
-                        <td class="col-highlight"><span class="icon-check">✓</span> Customized Luxury</td>
-                    </tr>
-                    <tr>
-                        <td>Availability</td>
-                        <td>24/7</td>
-                        <td>8 Hours/Shift</td>
-                        <td class="col-highlight"><span class="icon-check">✓</span> 24/7/365</td>
-                    </tr>
-                    <tr>
-                        <td>Booking Action</td>
-                        <td>Link Only</td>
-                        <td>Manual Entry</td>
-                        <td class="col-highlight"><span class="icon-check">✓</span> Lead Capture</td>
-                    </tr>
+                    <tr><td>Response Time</td><td>Instant (Generic)</td><td>Minutes/Hours</td><td class="col-highlight"><span class="icon-check">✓</span> 1.5 Seconds</td></tr>
+                    <tr><td>Tone & Voice</td><td>Robotic</td><td>Inconsistent</td><td class="col-highlight"><span class="icon-check">✓</span> Customized Luxury</td></tr>
+                    <tr><td>Availability</td><td>24/7</td><td>8 Hours/Shift</td><td class="col-highlight"><span class="icon-check">✓</span> 24/7/365</td></tr>
+                    <tr><td>Booking Action</td><td>Link Only</td><td>Manual Entry</td><td class="col-highlight"><span class="icon-check">✓</span> Lead Capture</td></tr>
                 </tbody>
             </table>
         </div>
@@ -570,17 +513,14 @@
 
     <section class="section-padding" style="background: #FAFAFA; border-top: 1px solid #EEE;" id="demo">
         <div class="container">
-            <div style="background: white; padding: 60px; border-radius: 30px; box-shadow: var(--shadow-md); max-width: 700px; margin: 0 auto; border: 1px solid #EEE;">
+            <div style="background: white; padding: 60px; border-radius: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.06); max-width: 700px; margin: 0 auto; border: 1px solid #EEE;">
                 <div class="text-center">
                     <h2>Secure Your Spot</h2>
                     <p class="lead" style="margin-bottom: 30px; font-size: 1.1rem;">We are currently onboarding partners. Get your free audit.</p>
                 </div>
-
                 <form action="https://formsubmit.co/krishna@automationexperts.tech" method="POST">
-                    
                     <input type="hidden" name="_subject" value="New Hotel Audit Request!">
                     <input type="hidden" name="_captcha" value="false">
-
                     <div style="margin-bottom: 20px;">
                         <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;">Hotel Name</label>
                         <input type="text" name="Hotel Name" required placeholder="e.g. The Grand Budapest" style="width: 100%; padding: 16px; border: 1px solid #DDD; border-radius: 12px; font-size: 1rem; background: #F9F9F9;">
@@ -593,15 +533,10 @@
                         <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;">Website URL</label>
                         <input type="url" name="Website" required placeholder="https://" style="width: 100%; padding: 16px; border: 1px solid #DDD; border-radius: 12px; font-size: 1rem; background: #F9F9F9;">
                     </div>
-                    
                     <button type="submit" class="btn btn-primary btn-pulse" style="width: 100%;">Get Custom Demo</button>
-                    
                     <div style="margin-top: 25px; display: flex; align-items: center; justify-content: center; gap: 15px; border-top: 1px solid #f0f0f0; padding-top: 20px;">
                         <div style="width: 40px; height: 40px; background: #111; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold;">KR</div>
-                        <p style="font-size: 0.85rem; color: #666; text-align: left; line-height: 1.3;">
-                            "I personally oversee every new hotel setup to ensure your AI represents your brand perfectly."<br>
-                            <span style="font-weight: 600; color: #111;">- Krishna Rana, Founder</span>
-                        </p>
+                        <p style="font-size: 0.85rem; color: #666; text-align: left; line-height: 1.3;">"I personally oversee every new hotel setup to ensure your AI represents your brand perfectly."<br><span style="font-weight: 600; color: #111;">- Krishna Rana, Founder</span></p>
                     </div>
                 </form>
             </div>
@@ -613,9 +548,7 @@
             <div class="footer-grid">
                 <div>
                     <span class="footer-logo">Automation Experts</span>
-                    <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 0.95rem; line-height: 1.6;">
-                        Pioneering the intersection of Artificial Intelligence and Hospitality.
-                    </p>
+                    <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 0.95rem; line-height: 1.6;">Pioneering the intersection of Artificial Intelligence and Hospitality.</p>
                     <div style="display: flex; gap: 20px;">
                         <a href="https://www.linkedin.com/in/krishnaaarana/" target="_blank" style="color: var(--text-primary); font-weight: 600;">LinkedIn</a>
                         <a href="mailto:krishna@automationexperts.tech" style="color: var(--text-primary); font-weight: 600;">Email</a>
@@ -623,27 +556,19 @@
                 </div>
                 <div class="footer-links">
                     <h5>Company</h5>
-                    <ul>
-                        <li><a href="#features">Capabilities</a></li>
-                        <li><a href="#pricing">Pricing</a></li>
-                        <li><a href="#demo">Get a Demo</a></li>
-                    </ul>
+                    <ul><li><a href="#features">Capabilities</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#demo">Get a Demo</a></li></ul>
                 </div>
                 <div class="footer-links">
                     <h5>Legal</h5>
-                    <ul>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Terms of Service</a></li>
-                    </ul>
+                    <ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li></ul>
                 </div>
             </div>
-            <div class="legal-block">
-                <p>&copy; 2025 Automation Experts. Delhi, India. All rights reserved.</p>
-            </div>
+            <div class="legal-block"><p>&copy; 2025 Automation Experts. Delhi, India. All rights reserved.</p></div>
         </div>
     </footer>
 
     <script>
+        // Efficient Intersection Observer (Animations)
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {
                 if (entry.isIntersecting) {
@@ -652,18 +577,34 @@
                 }
             });
         }, { threshold: 0.1 });
-
         document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
+        // Optimized Navbar Scroll
+        let lastScrollY = window.scrollY;
+        const nav = document.getElementById('navbar');
         window.addEventListener('scroll', () => {
-            const nav = document.getElementById('navbar');
+            if (Math.abs(window.scrollY - lastScrollY) < 10) return; // Debounce
             if (window.scrollY > 50) {
                 nav.style.padding = "10px 0";
                 nav.style.background = "rgba(255,255,255,0.95)";
             } else {
                 nav.style.padding = "20px 0";
-                nav.style.background = "rgba(255,255,255,0.75)";
+                nav.style.background = "rgba(255,255,255,0.85)";
             }
+            lastScrollY = window.scrollY;
+        }, { passive: true }); // Performance boost
+
+        // ROI Calculator Logic
+        const slider = document.getElementById('roomSlider');
+        const roomCount = document.getElementById('roomCountVal');
+        const savings = document.getElementById('savingsVal');
+        
+        slider.addEventListener('input', function() {
+            const rooms = this.value;
+            roomCount.textContent = rooms;
+            // Logic: Assume average $150 saving per room/month via direct booking increase & labor
+            const calc = rooms * 150; 
+            savings.textContent = calc.toLocaleString();
         });
     </script>
 </body>
