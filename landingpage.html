@@ -177,7 +177,7 @@
         .timeline-title { font-size: 1.3rem; margin-bottom: 10px; font-weight: 600; }
         .timeline-desc { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; }
 
-        /* SECURITY (Updated to Light Theme) */
+        /* SECURITY (Light Theme) */
         .security-section { background: var(--bg-alt); color: var(--text-primary); padding: 120px 0; }
         .sec-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; margin-top: 60px; }
         .sec-card { background: #FFFFFF; border: 1px solid #E5E5E5; padding: 40px; border-radius: 20px; transition: transform 0.3s, box-shadow 0.3s; box-shadow: var(--shadow-sm); }
@@ -354,7 +354,7 @@
 
     <div class="container reveal" style="margin-top: 60px;">
         <div class="calculator-section">
-            <h2 style="color: white; margin-bottom: 40px; font-size: 2.5rem;">See What You're Losing.</h2>
+            <h2 style="color: white; margin-bottom: 40px; font-size: 2.5rem;">Unlock Hidden Revenue.</h2>
             <div class="calc-grid">
                 <div class="calc-input">
                     <label>Number of Rooms: <span id="roomCountVal" style="color: #34C759; font-weight: 700;">50</span></label>
@@ -362,9 +362,9 @@
                     <p style="color: #666; font-size: 0.9rem; margin-top: 15px;">Drag to match your property size.</p>
                 </div>
                 <div class="calc-result">
-                    <div class="calc-big-num">$<span id="savingsVal">7,500</span></div>
-                    <div class="calc-sub">Estimated Monthly Revenue Unlock</div>
-                    <p style="color: #555; font-size: 0.85rem; margin-top: 20px;">*Based on average 15% OTA commission savings + labor reduction.</p>
+                    <div class="calc-big-num">$<span id="savingsVal">4,500</span></div>
+                    <div class="calc-sub">Estimated Monthly Revenue Increase</div>
+                    <p style="color: #555; font-size: 0.85rem; margin-top: 20px;">*Based on recovering lost night-time leads and saving 15% OTA commissions.</p>
                 </div>
             </div>
         </div>
@@ -548,36 +548,53 @@
         <div class="container">
             <div class="text-center">
                 <h2>Transparent Investment</h2>
-                <p class="lead">No hidden fees. Cancel anytime.</p>
+                <p class="lead">Empower your team with a system that never sleeps.</p>
             </div>
+            
             <div class="pricing-container">
                 <div class="price-card reveal">
-                    <h3 class="price-title">Essential</h3>
-                    <div class="price-amt">$149</div>
-                    <div class="price-sub">per month</div>
-                    <span style="color: var(--accent-blue); font-weight: 600; margin-bottom: 20px; font-size: 0.9rem;">PERFECT FOR SMALL HOTELS</span>
-                    <ul class="price-features">
-                        <li><span class="icon-check">✓</span> <strong>Up to 1,000</strong> conversations</li>
-                        <li><span class="icon-check">✓</span> Captures Leads</li>
-                        <li><span class="icon-check">✓</span> <strong>Free Custom Setup</strong></li>
-                    </ul>
-                    <a href="#demo" class="btn btn-secondary" style="margin-top: auto; width: 100%;">Start Essential</a>
-                </div>
-                <div class="price-card featured reveal" style="transition-delay: 0.1s;">
-                    <div class="badge-popular">MOST POPULAR</div>
-                    <h3 class="price-title">Pro</h3>
+                    <h3 class="price-title">Concierge</h3>
                     <div class="price-amt">$199</div>
                     <div class="price-sub">per month</div>
-                    <span style="color: var(--accent-gold); font-weight: 600; margin-bottom: 20px; font-size: 0.9rem;">FOR RESORTS</span>
+                    <span style="color: var(--accent-blue); font-weight: 600; margin-bottom: 20px; font-size: 0.9rem;">FOR INDEPENDENT HOTELS</span>
+                    
                     <ul class="price-features">
-                        <li><span class="icon-check" style="color: var(--accent-gold);">✓</span> <strong>Unlimited</strong> conversations</li>
-                        <li><span class="icon-check">✓</span> Priority Support</li>
-                        <li><span class="icon-check">✓</span> Slack Alerts Integration</li>
-                        <li><span class="icon-check">✓</span> <strong>Free Custom Setup</strong></li>
+                        <li><span class="icon-check">✓</span> <strong>3,000</strong> AI Conversations/mo</li>
+                        <li><span class="icon-check">✓</span> 95+ Languages Auto-Translate</li>
+                        <li><span class="icon-check">✓</span> Instant FAQ Resolution</li>
+                        <li><span class="icon-check">✓</span> Email Lead Escalation</li>
+                        <li style="color: var(--text-primary); margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+                            <span class="icon-check">✓</span> 
+                            <span>Setup: <span style="text-decoration: line-through; color: #999;">$999</span> <strong>Waived</strong></span>
+                        </li>
                     </ul>
-                    <a href="#demo" class="btn btn-primary" style="margin-top: auto; width: 100%; background: var(--text-primary);">Go Pro</a>
+                    <a href="#demo" class="btn btn-secondary" style="margin-top: auto; width: 100%;">Start Concierge</a>
+                </div>
+
+                <div class="price-card featured reveal" style="transition-delay: 0.1s;">
+                    <div class="badge-popular">FULL SUITE</div>
+                    <h3 class="price-title">Autopilot</h3>
+                    <div class="price-amt">$499</div>
+                    <div class="price-sub">per month</div>
+                    <span style="color: var(--accent-gold); font-weight: 600; margin-bottom: 20px; font-size: 0.9rem;">FOR HIGH-VOLUME PROPERTIES</span>
+                    
+                    <ul class="price-features">
+                        <li><span class="icon-check" style="color: var(--accent-gold);">✓</span> <strong>10,000</strong> AI Conversations/mo</li>
+                        <li><span class="icon-check">✓</span> <strong>Live Admin Dashboard</strong> (Airtable)</li>
+                        <li><span class="icon-check">✓</span> Weekly Revenue & Insight Reports</li>
+                        <li><span class="icon-check">✓</span> Priority Slack Support Channel</li>
+                        <li style="color: var(--text-primary); margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+                            <span class="icon-check" style="color: var(--accent-gold);">✓</span> 
+                            <span>Setup: <span style="text-decoration: line-through; color: #999;">$1,500</span> <strong>Waived</strong></span>
+                        </li>
+                    </ul>
+                    <a href="#demo" class="btn btn-primary" style="margin-top: auto; width: 100%; background: var(--text-primary);">Go Autopilot</a>
                 </div>
             </div>
+            
+            <p class="text-center" style="margin-top: 40px; color: var(--text-tertiary); font-size: 0.9rem;">
+                Need an Enterprise SLA for 50+ locations? <a href="mailto:krishna@automationexperts.tech" style="color: var(--accent-blue);">Contact us.</a>
+            </p>
         </div>
     </section>
 
@@ -686,7 +703,7 @@
             lastScrollY = window.scrollY;
         }, { passive: true });
 
-        // ROI Calculator
+        // ROI Calculator Logic (Updated for Realism)
         const slider = document.getElementById('roomSlider');
         const roomCount = document.getElementById('roomCountVal');
         const savings = document.getElementById('savingsVal');
@@ -694,7 +711,9 @@
         slider.addEventListener('input', function() {
             const rooms = this.value;
             roomCount.textContent = rooms;
-            const calc = rooms * 150; 
+            // Realistic Math: 90 dollars "value" per room per month (saved commission + upsells)
+            // 50 rooms * 90 = 4,500.
+            const calc = rooms * 90; 
             savings.textContent = calc.toLocaleString();
         });
     </script>
