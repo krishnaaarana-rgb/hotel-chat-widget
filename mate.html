@@ -3,440 +3,859 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Veda Concierge | Hospitality Intelligence</title>
-    <meta name="description" content="AI Hospitality that understands context, not just keywords.">
-
+    <title>Veda Concierge | Enterprise Hospitality Intelligence Solutions</title>
+    <meta name="description" content="The industry standard for autonomous guest communication and revenue optimization.">
+    <meta name="theme-color" content="#000000">
+    
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,700;1,600&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
+            darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        veda: {
-                            black: '#111827',
-                            gold: '#D4AF37',
-                            goldLight: '#F3E5AB',
-                            cream: '#FDFBF7',
-                            gray: '#6B7280',
-                            border: '#E5E7EB'
+                        brand: {
+                            50: '#FDFBF7',
+                            100: '#F3E5AB',
+                            200: '#E6D298',
+                            300: '#D9BF85',
+                            400: '#CCAC72',
+                            500: '#C6A87C', // Primary Gold
+                            600: '#9E8663',
+                            700: '#76644A',
+                            800: '#4F4331',
+                            900: '#272118',
+                            950: '#0F0D09',
+                        },
+                        obsidian: {
+                            800: '#1A1A1A',
+                            900: '#111111',
+                            950: '#050505',
                         }
                     },
                     fontFamily: {
-                        sans: ['Inter', 'sans-serif'],
-                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                        serif: ['Playfair Display', 'Georgia', 'serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
                     },
                     animation: {
-                        'blob': 'blob 7s infinite',
-                        'scroll': 'scroll 40s linear infinite',
-                        'fade-in-up': 'fadeInUp 0.8s ease-out forwards',
+                        'float-slow': 'float 8s ease-in-out infinite',
+                        'float-medium': 'float 6s ease-in-out infinite',
+                        'pulse-glow': 'glow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'scroll-left': 'scrollLeft 40s linear infinite',
+                        'typing': 'typing 2s steps(20, end)',
+                        'fade-in': 'fadeIn 0.5s ease-out forwards',
                     },
                     keyframes: {
-                        blob: {
-                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
-                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
-                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
-                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-20px)' },
                         },
-                        scroll: {
+                        glow: {
+                            '0%, 100%': { opacity: '1', boxShadow: '0 0 20px rgba(198, 168, 124, 0.2)' },
+                            '50%': { opacity: '0.7', boxShadow: '0 0 10px rgba(198, 168, 124, 0)' },
+                        },
+                        scrollLeft: {
                             '0%': { transform: 'translateX(0)' },
                             '100%': { transform: 'translateX(-50%)' },
                         },
-                        fadeInUp: {
-                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
                             '100%': { opacity: '1', transform: 'translateY(0)' },
                         }
+                    },
+                    backgroundImage: {
+                        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+                        'noise': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E')",
                     }
                 }
             }
         }
     </script>
 
-    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.3/dist/cdn.min.js"></script>
 
     <style>
-        /* Custom Utilities for things Tailwind handles awkwardly */
-        .glass {
-            background: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+        /* 1. RESET & BASE */
+        :root {
+            --cursor-size: 20px;
         }
+        
+        body {
+            background-color: #050505;
+            color: #FAFAFA;
+            overflow-x: hidden;
+            cursor: default;
+        }
+
+        /* 2. CUSTOM SCROLLBAR (Luxury Feel) */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #050505;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #272118;
+            border-radius: 4px;
+            border: 1px solid #333;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #C6A87C;
+        }
+
+        /* 3. UTILITIES */
+        .glass-morphism {
+            background: rgba(10, 10, 10, 0.7);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
         .text-gradient {
-            background: linear-gradient(135deg, #111827 0%, #4B5563 100%);
+            background: linear-gradient(to right, #F3E5AB, #C6A87C, #9E8663);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: shine 5s linear infinite;
         }
-        /* Hiding scrollbar for clean UI */
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        @keyframes shine {
+            to {
+                background-position: 200% center;
+            }
+        }
+
+        .mesh-gradient {
+            background-color: #000000;
+            background-image: 
+                radial-gradient(at 40% 20%, hsla(28,100%,74%,0.1) 0px, transparent 50%),
+                radial-gradient(at 80% 0%, hsla(189,100%,56%,0.1) 0px, transparent 50%),
+                radial-gradient(at 0% 50%, hsla(340,100%,76%,0.1) 0px, transparent 50%);
+        }
+
+        /* 4. TYPOGRAPHY OVERRIDES */
+        h1, h2, h3, h4, h5, h6 {
+            letter-spacing: -0.02em;
+        }
+
+        .debug-grid {
+            /* Toggle this to show layout lines */
+            outline: 1px solid rgba(255, 0, 0, 0.1);
+        }
     </style>
 </head>
-<body class="bg-veda-cream text-veda-black antialiased overflow-x-hidden" x-data="{ mobileMenuOpen: false, scrolled: false }" @scroll.window="scrolled = (window.pageYOffset > 20)">
 
-    <div class="fixed inset-0 pointer-events-none z-0 overflow-hidden">
-        <div class="absolute top-0 left-1/4 w-96 h-96 bg-veda-gold/10 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob"></div>
-        <div class="absolute top-0 right-1/4 w-96 h-96 bg-blue-100 rounded-full mix-blend-multiply filter blur-3xl opacity-70 animate-blob animation-delay-2000"></div>
-    </div>
+<body x-data="appData()" class="mesh-gradient min-h-screen selection:bg-brand-500 selection:text-black">
 
-    <nav :class="scrolled ? 'glass py-3 shadow-sm' : 'bg-transparent py-6'" class="fixed w-full z-50 transition-all duration-300 top-0">
-        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
-            <a href="#" class="font-serif text-2xl font-bold tracking-tight">Veda<span class="text-veda-gold">.</span></a>
-            
-            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-600">
-                <a href="#capabilities" class="hover:text-veda-black transition-colors">Capabilities</a>
-                <a href="#calculator" class="hover:text-veda-black transition-colors">ROI Calculator</a>
-                <a href="#pricing" class="hover:text-veda-black transition-colors">Pricing</a>
-                <a href="#demo" class="bg-veda-black text-white px-6 py-2.5 rounded-full hover:scale-105 hover:shadow-lg transition-all duration-300">Get Audit</a>
+    <svg style="display: none;">
+        <symbol id="icon-logo" viewBox="0 0 24 24">
+            <path fill="currentColor" d="M12 2L2 19h20L12 2zm0 3.5l6.5 11.5h-13L12 5.5z"/>
+        </symbol>
+        
+        <symbol id="icon-check" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M20 6L9 17l-5-5"/>
+        </symbol>
+
+        <symbol id="icon-brain" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M9.5 2A2.5 2.5 0 0 1 12 4.5v15a2.5 2.5 0 0 1-4.96.44 2.5 2.5 0 0 1-2.96-3.08 3 3 0 0 1-.34-5.55 2.5 2.5 0 0 1 1.32-4.24 2.5 2.5 0 0 1 1.98-3A2.5 2.5 0 0 1 9.5 2Z"/>
+            <path fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" d="M14.5 2A2.5 2.5 0 0 0 12 4.5v15a2.5 2.5 0 0 0 4.96.44 2.5 2.5 0 0 0 2.96-3.08 3 3 0 0 0 .34-5.55 2.5 2.5 0 0 0-1.32-4.24 2.5 2.5 0 0 0-1.98-3A2.5 2.5 0 0 0 14.5 2Z"/>
+        </symbol>
+
+        <symbol id="icon-globe" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10" fill="none" stroke="currentColor" stroke-width="1.5"/>
+            <path fill="none" stroke="currentColor" stroke-width="1.5" d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+        </symbol>
+
+        <symbol id="icon-shield" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-width="1.5" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </symbol>
+        
+        <symbol id="icon-chart" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-width="1.5" d="M18 20V10M12 20V4M6 20v-6"/>
+        </symbol>
+
+        <symbol id="icon-chevron-down" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 9l6 6 6-6"/>
+        </symbol>
+
+        <symbol id="icon-close" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M18 6L6 18M6 6l12 12"/>
+        </symbol>
+
+        <symbol id="icon-menu" viewBox="0 0 24 24">
+            <path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </symbol>
+    </svg>
+
+    <script>
+        function appData() {
+            return {
+                // UI State
+                mobileMenuOpen: false,
+                scrolled: false,
+                activeTab: 'features',
+                
+                // Modal State
+                modalOpen: false,
+                modalContent: 'privacy', // 'privacy' or 'terms' or 'demo'
+                
+                // Calculator Logic State
+                rooms: 50,
+                occupancy: 75,
+                adr: 180,
+                
+                // Chat Simulation Logic
+                chatHistory: [
+                    { role: 'system', text: 'Connecting to Veda Core v2.4...', time: '00:00' },
+                    { role: 'ai', text: 'Welcome to The Grand Hotel. I am Veda. How may I assist with your reservation today?', time: '10:00 AM' }
+                ],
+                chatInput: '',
+                isTyping: false,
+
+                // Methods
+                init() {
+                    window.addEventListener('scroll', () => {
+                        this.scrolled = window.scrollY > 50;
+                    });
+                },
+
+                calculateROI() {
+                    // Logic: (Rooms * Occupancy% * 30 days) * 15% OTA shift * (ADR * 18% Commission)
+                    const monthlyRevenue = this.rooms * (this.occupancy / 100) * 30 * this.adr;
+                    const commissionSaved = monthlyRevenue * 0.15 * 0.18; 
+                    const upsellRevenue = (this.rooms * (this.occupancy / 100) * 30) * 0.05 * 25; // 5% upsell conversion at $25
+                    return Math.floor(commissionSaved + upsellRevenue).toLocaleString();
+                },
+
+                sendMessage() {
+                    if (this.chatInput.trim() === '') return;
+                    
+                    // Add User Message
+                    this.chatHistory.push({ role: 'user', text: this.chatInput, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
+                    const userMsg = this.chatInput;
+                    this.chatInput = '';
+                    this.isTyping = true;
+
+                    // Simulate AI Latency & Response
+                    setTimeout(() => {
+                        let reply = "I can certainly help with that. Could you please provide your reservation number?";
+                        
+                        if (userMsg.toLowerCase().includes('pool')) reply = "Yes, our infinity pool is open from 6:00 AM to 10:00 PM. It is heated to 28°C.";
+                        if (userMsg.toLowerCase().includes('breakfast')) reply = "Breakfast is served in the Solarium from 7:00 AM to 11:00 AM. We have vegan and gluten-free options available.";
+                        if (userMsg.toLowerCase().includes('wifi')) reply = "High-speed Wi-Fi (1Gbps) is complimentary for all guests. The password is 'GrandGuest2025'.";
+
+                        this.chatHistory.push({ role: 'ai', text: reply, time: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) });
+                        this.isTyping = false;
+                        
+                        // Auto scroll chat
+                        this.$nextTick(() => {
+                            const chatContainer = document.getElementById('chat-container');
+                            chatContainer.scrollTop = chatContainer.scrollHeight;
+                        });
+
+                    }, 800);
+                },
+
+                openModal(type) {
+                    this.modalContent = type;
+                    this.modalOpen = true;
+                    document.body.style.overflow = 'hidden';
+                },
+
+                closeModal() {
+                    this.modalOpen = false;
+                    document.body.style.overflow = 'auto';
+                }
+            }
+        }
+    </script>
+
+    <nav :class="scrolled ? 'glass-morphism py-4' : 'bg-transparent py-8'" class="fixed top-0 w-full z-50 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex items-center justify-between">
+                
+                <a href="#" class="flex items-center gap-3 group">
+                    <div class="w-10 h-10 bg-brand-500 rounded-lg flex items-center justify-center text-black shadow-[0_0_15px_rgba(198,168,124,0.5)] group-hover:scale-105 transition-transform duration-300">
+                        <svg class="w-6 h-6"><use href="#icon-logo"/></svg>
+                    </div>
+                    <div>
+                        <span class="block text-xl font-serif font-bold tracking-tight text-white leading-none">Veda<span class="text-brand-500">.</span></span>
+                        <span class="block text-[0.6rem] uppercase tracking-widest text-brand-400 font-medium">Enterprise AI</span>
+                    </div>
+                </a>
+
+                <div class="hidden md:flex items-center gap-8">
+                    <a href="#features" class="text-sm font-medium text-gray-400 hover:text-white transition-colors relative group">
+                        Capabilities
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-500 transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="#roi" class="text-sm font-medium text-gray-400 hover:text-white transition-colors relative group">
+                        ROI Engine
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-500 transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="#security" class="text-sm font-medium text-gray-400 hover:text-white transition-colors relative group">
+                        Security
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-500 transition-all group-hover:w-full"></span>
+                    </a>
+                    <a href="#pricing" class="text-sm font-medium text-gray-400 hover:text-white transition-colors relative group">
+                        Pricing
+                        <span class="absolute -bottom-1 left-0 w-0 h-0.5 bg-brand-500 transition-all group-hover:w-full"></span>
+                    </a>
+                </div>
+
+                <div class="flex items-center gap-4">
+                    <a href="#demo" class="hidden md:flex items-center gap-2 px-6 py-2.5 bg-brand-500 hover:bg-brand-400 text-black font-semibold rounded-full transition-all duration-300 shadow-[0_0_20px_rgba(198,168,124,0.3)] hover:shadow-[0_0_30px_rgba(198,168,124,0.6)] transform hover:-translate-y-0.5">
+                        <span>Get Audit</span>
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
+                    </a>
+
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden text-white p-2 hover:bg-white/10 rounded-lg transition-colors">
+                        <svg class="w-6 h-6"><use href="#icon-menu"/></svg>
+                    </button>
+                </div>
+
             </div>
-
-            <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden p-2 text-veda-black">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
         </div>
 
-        <div x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false" x-transition class="md:hidden absolute top-full left-0 w-full bg-white border-b border-gray-100 p-6 flex flex-col gap-4 shadow-xl">
-            <a href="#capabilities" class="text-lg font-medium">Capabilities</a>
-            <a href="#pricing" class="text-lg font-medium">Pricing</a>
-            <a href="#demo" class="text-lg font-medium text-veda-gold">Get Audit</a>
+        <div x-show="mobileMenuOpen" x-transition:enter="transition ease-out duration-200" x-transition:enter-start="opacity-0 -translate-y-2" x-transition:enter-end="opacity-100 translate-y-0" class="md:hidden absolute top-full left-0 w-full glass-morphism border-t border-brand-900/50">
+            <div class="p-6 flex flex-col gap-4">
+                <a href="#features" @click="mobileMenuOpen = false" class="text-lg font-medium text-white">Capabilities</a>
+                <a href="#roi" @click="mobileMenuOpen = false" class="text-lg font-medium text-white">ROI Calculator</a>
+                <a href="#pricing" @click="mobileMenuOpen = false" class="text-lg font-medium text-white">Pricing</a>
+                <a href="#demo" @click="mobileMenuOpen = false" class="text-lg font-bold text-brand-500">Get Free Audit</a>
+            </div>
         </div>
     </nav>
 
-    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 px-6 z-10">
-        <div class="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden z-10">
+        
+        <div class="absolute top-0 left-1/4 w-[500px] h-[500px] bg-brand-500/10 rounded-full blur-[120px] animate-float-slow -z-10"></div>
+        <div class="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-indigo-900/20 rounded-full blur-[120px] animate-float-medium -z-10"></div>
+
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-2 gap-16 items-center">
             
-            <div class="animate-fade-in-up">
-                <span class="inline-block py-1 px-3 rounded-full bg-white border border-veda-border text-xs font-semibold uppercase tracking-wider text-gray-500 mb-6 shadow-sm">
-                    <span class="w-2 h-2 rounded-full bg-green-500 inline-block mr-2 animate-pulse"></span>
-                    PMS Compatible
-                </span>
-                <h1 class="font-serif text-5xl lg:text-7xl font-bold leading-[1.1] mb-6">
-                    Hospitality. <br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-veda-gold to-yellow-600">Automated.</span>
-                </h1>
-                <p class="text-lg text-gray-600 mb-8 leading-relaxed max-w-lg">
-                    Guests don't want to wait, and they definitely don't want to call the front desk. 
-                    Give them instant answers, and they will give you their trust (and their money).
-                </p>
-                <div class="flex flex-wrap gap-4">
-                    <a href="#demo" class="bg-veda-black text-white px-8 py-4 rounded-full font-medium hover:bg-gray-900 transition-all hover:scale-105 hover:shadow-xl flex items-center gap-2">
-                        Start Transformation 
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3"></path></svg>
-                    </a>
-                    <a href="#capabilities" class="px-8 py-4 rounded-full font-medium text-veda-black border border-veda-border bg-white hover:bg-gray-50 transition-colors">
-                        Explore Features
-                    </a>
+            <div class="space-y-8 animate-fade-in">
+                <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-brand-800 bg-brand-900/50 backdrop-blur-sm">
+                    <span class="relative flex h-2 w-2">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+                    </span>
+                    <span class="text-xs font-mono text-brand-200 tracking-wider uppercase">System Operational v2.5</span>
                 </div>
-                
-                <div class="mt-8 flex items-center gap-4 text-sm text-gray-500">
-                    <div class="flex -space-x-2">
-                        <div class="w-8 h-8 rounded-full bg-gray-200 border-2 border-white"></div>
-                        <div class="w-8 h-8 rounded-full bg-gray-300 border-2 border-white"></div>
-                        <div class="w-8 h-8 rounded-full bg-gray-400 border-2 border-white"></div>
-                    </div>
-                    <p>Trusted by 50+ properties</p>
+
+                <h1 class="text-5xl lg:text-7xl font-serif font-bold leading-[1.1] text-white">
+                    Hospitality, <br>
+                    <span class="text-gradient">Automated.</span>
+                </h1>
+
+                <p class="text-lg text-gray-400 max-w-lg leading-relaxed border-l-2 border-brand-500 pl-6">
+                    Stop forcing guests to call the front desk. Veda is the autonomous concierge that handles bookings, inquiries, and revenue upsells with human-like warmth and machine-like speed.
+                </p>
+
+                <div class="flex flex-wrap gap-4 pt-4">
+                    <button @click="document.getElementById('demo').scrollIntoView()" class="px-8 py-4 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)] flex items-center gap-3">
+                        Start Transformation
+                        <svg class="w-5 h-5"><use href="#icon-check"/></svg>
+                    </button>
+                    
+                    <button class="px-8 py-4 border border-brand-700 text-brand-100 font-medium rounded-lg hover:bg-brand-900/50 transition-all duration-300 flex items-center gap-3 group">
+                        <svg class="w-5 h-5 text-brand-500 group-hover:scale-110 transition-transform"><use href="#icon-globe"/></svg>
+                        View Live Demo
+                    </button>
+                </div>
+
+                <div class="pt-8 flex items-center gap-6 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
+                    <div class="text-sm font-bold font-serif text-white">The Ritz-Carlton</div>
+                    <div class="w-px h-4 bg-gray-700"></div>
+                    <div class="text-sm font-bold font-mono text-white tracking-widest">HYATT</div>
+                    <div class="w-px h-4 bg-gray-700"></div>
+                    <div class="text-sm font-bold font-serif text-white">Four Seasons</div>
                 </div>
             </div>
 
-            <div class="relative group perspective-1000">
-                <div class="absolute -inset-1 bg-gradient-to-r from-veda-gold to-purple-600 rounded-[2.5rem] blur opacity-25 group-hover:opacity-40 transition duration-1000 group-hover:duration-200"></div>
-                <div class="relative bg-white rounded-[2rem] shadow-2xl border border-gray-100 overflow-hidden transform transition-transform duration-500 hover:rotate-0 rotate-1">
-                    <div class="bg-white/90 backdrop-blur-sm p-4 border-b border-gray-100 flex items-center gap-3 z-20 relative">
-                        <div class="w-10 h-10 rounded-full bg-veda-black flex items-center justify-center text-veda-gold font-serif font-bold text-xl">V</div>
-                        <div>
-                            <div class="font-bold text-sm text-gray-900">Concierge AI</div>
-                            <div class="text-xs text-green-500 flex items-center gap-1 font-medium">● Instant Reply</div>
+            <div class="relative perspective-[2000px] group">
+                <div class="absolute -top-10 -right-10 bg-brand-500 text-black font-bold text-xs px-4 py-2 rounded-lg shadow-xl z-20 animate-float-medium">
+                    + $142 Upsell
+                </div>
+                <div class="absolute bottom-20 -left-10 bg-white text-black font-bold text-xs px-4 py-2 rounded-lg shadow-xl z-20 animate-float-slow" style="animation-delay: 1s;">
+                    1.2s Response Time
+                </div>
+
+                <div class="relative bg-obsidian-900 border border-brand-800 rounded-3xl p-4 shadow-2xl transform rotate-y-[-10deg] rotate-x-[5deg] group-hover:rotate-y-[0deg] group-hover:rotate-x-[0deg] transition-transform duration-700 ease-out">
+                    <div class="bg-obsidian-950 border-b border-brand-900 p-4 rounded-t-2xl flex items-center gap-4">
+                        <div class="flex gap-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500/50"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500/50"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500/50"></div>
+                        </div>
+                        <div class="flex-1 bg-obsidian-800 rounded px-3 py-1 text-[10px] text-gray-500 font-mono text-center">
+                            secure://concierge.vedahotels.com
                         </div>
                     </div>
-                    <div class="h-[500px] w-full bg-white relative">
-                         <iframe src="https://vedaconcierge.com/widget.html?v=2" class="w-full h-full border-0" title="AI Chat Demo"></iframe>
+                    
+                    <div class="bg-obsidian-800 h-[400px] p-6 flex flex-col gap-4 overflow-hidden relative">
+                        <div class="absolute inset-0 bg-noise opacity-20 pointer-events-none"></div>
+                        
+                        <div class="self-start max-w-[80%]">
+                            <div class="bg-brand-900 border border-brand-700 text-brand-100 p-4 rounded-2xl rounded-tl-none shadow-sm">
+                                <p class="text-sm">Welcome back, Mr. Bond. Would you like me to book your usual table at the rooftop bar?</p>
+                            </div>
+                            <span class="text-[10px] text-gray-600 ml-2 mt-1">AI Agent • 10:02 AM</span>
+                        </div>
+
+                        <div class="self-end max-w-[80%]">
+                            <div class="bg-white text-black p-4 rounded-2xl rounded-tr-none shadow-sm">
+                                <p class="text-sm">Yes, please. And do you have any dry cleaning service available today?</p>
+                            </div>
+                            <span class="text-[10px] text-gray-600 text-right mr-2 mt-1 block">Guest • 10:05 AM</span>
+                        </div>
+
+                         <div class="self-start max-w-[80%] animate-pulse">
+                            <div class="bg-brand-900 border border-brand-700 text-brand-100 p-4 rounded-2xl rounded-tl-none shadow-sm">
+                                <div class="flex gap-1">
+                                    <div class="w-2 h-2 bg-brand-500 rounded-full animate-bounce"></div>
+                                    <div class="w-2 h-2 bg-brand-500 rounded-full animate-bounce" style="animation-delay: 0.1s"></div>
+                                    <div class="w-2 h-2 bg-brand-500 rounded-full animate-bounce" style="animation-delay: 0.2s"></div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <div class="border-y border-veda-border bg-white/50 backdrop-blur-sm py-10">
-        <div class="max-w-7xl mx-auto px-6">
-            <p class="text-center text-xs font-bold tracking-[0.2em] text-gray-400 mb-8 uppercase">Seamless integration with</p>
-            <div class="flex flex-wrap justify-center gap-12 opacity-50 grayscale hover:grayscale-0 transition-all duration-500">
-                <span class="text-xl font-bold font-serif">Oracle OPERA</span>
-                <span class="text-xl font-bold font-sans">Cloudbeds</span>
-                <span class="text-xl font-bold font-serif">SiteMinder</span>
-                <span class="text-xl font-bold font-sans tracking-tighter">Mews</span>
-                <span class="text-xl font-bold font-serif">Little Hotelier</span>
+    <section id="features" class="py-32 px-6 bg-obsidian-950 relative border-t border-brand-900">
+        
+        <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px] pointer-events-none"></div>
+
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="mb-20 max-w-3xl">
+                <h2 class="text-4xl md:text-5xl font-serif font-bold text-white mb-6">
+                    Intelligence beyond <br> simple keywords.
+                </h2>
+                <p class="text-xl text-gray-500">
+                    Legacy chatbots look for "wifi" and paste a generic snippet. 
+                    Veda analyzes intent, sentiment, and guest history to construct a 
+                    context-aware response.
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 grid-rows-2 gap-6 h-auto md:h-[800px]">
+                
+                <div class="md:col-span-2 md:row-span-2 group relative bg-obsidian-900 border border-brand-900/50 rounded-3xl overflow-hidden hover:border-brand-500/30 transition-all duration-500">
+                    <div class="absolute inset-0 bg-noise opacity-10"></div>
+                    
+                    <div class="p-10 relative z-10 h-full flex flex-col justify-between">
+                        <div>
+                            <div class="w-12 h-12 bg-brand-900 rounded-xl flex items-center justify-center text-brand-500 mb-6 border border-brand-800">
+                                <svg class="w-6 h-6"><use href="#icon-brain"/></svg>
+                            </div>
+                            <h3 class="text-2xl font-bold text-white mb-2">Long-Term Memory</h3>
+                            <p class="text-gray-400 max-w-md">
+                                Veda remembers details from 10 messages ago or 10 months ago. 
+                                If a guest mentioned a nut allergy last year, Veda reminds them 
+                                about the new nut-free menu this year.
+                            </p>
+                        </div>
+
+                        <div class="mt-8 space-y-4 font-mono text-xs">
+                            <div class="flex items-center gap-4 opacity-50">
+                                <div class="w-20 text-right text-gray-600">Oct 12, 2024</div>
+                                <div class="w-2 h-2 rounded-full bg-gray-700"></div>
+                                <div class="bg-obsidian-950 px-3 py-2 rounded text-gray-500 border border-brand-900">Guest: Is the pool heated?</div>
+                            </div>
+                            <div class="flex items-center gap-4 opacity-50">
+                                <div class="w-20 text-right text-gray-600">Oct 12, 2024</div>
+                                <div class="w-2 h-2 rounded-full bg-gray-700"></div>
+                                <div class="bg-obsidian-950 px-3 py-2 rounded text-gray-500 border border-brand-900">Veda: Yes, to 28°C.</div>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <div class="w-20 text-right text-brand-500 font-bold">Today</div>
+                                <div class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></div>
+                                <div class="bg-brand-900/20 px-4 py-3 rounded text-brand-100 border border-brand-500/30 w-full">
+                                    <span class="text-brand-500 font-bold block mb-1">Veda (Proactive):</span>
+                                    "Welcome back! The pool is heated and waiting for you. Would you like extra towels sent to your room again?"
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="md:col-span-1 bg-gradient-to-br from-brand-900 to-black border border-brand-800 rounded-3xl p-8 relative overflow-hidden group">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-brand-500/20 rounded-full blur-[50px] group-hover:bg-brand-500/40 transition-colors duration-500"></div>
+                    
+                    <div class="relative z-10">
+                        <div class="text-5xl font-mono font-bold text-white mb-2 tracking-tighter">
+                            98<span class="text-brand-500 text-2xl">ms</span>
+                        </div>
+                        <h3 class="text-lg font-bold text-white mb-2">Global Latency</h3>
+                        <p class="text-sm text-gray-400">
+                            Deployed on the Edge. Responses generate faster than the guest can type.
+                        </p>
+                    </div>
+
+                    <div class="mt-10 flex items-end justify-between h-20 gap-1 opacity-60">
+                        <div class="w-full bg-brand-500/20 h-[30%] rounded animate-pulse"></div>
+                        <div class="w-full bg-brand-500/40 h-[50%] rounded animate-pulse" style="animation-delay: 0.1s"></div>
+                        <div class="w-full bg-brand-500/60 h-[80%] rounded animate-pulse" style="animation-delay: 0.2s"></div>
+                        <div class="w-full bg-brand-500 h-[40%] rounded animate-pulse" style="animation-delay: 0.3s"></div>
+                        <div class="w-full bg-brand-500/30 h-[60%] rounded animate-pulse" style="animation-delay: 0.4s"></div>
+                    </div>
+                </div>
+
+                <div class="md:col-span-1 bg-obsidian-900 border border-brand-900/50 rounded-3xl p-8 hover:bg-obsidian-800 transition-colors duration-300">
+                    <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-white mb-6">
+                        <svg class="w-6 h-6"><use href="#icon-globe"/></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">95+ Languages</h3>
+                    <p class="text-sm text-gray-400 mb-6">
+                        Zero-latency translation. Guests speak Mandarin; your staff reads English.
+                    </p>
+                    <div class="flex flex-wrap gap-2">
+                        <span class="px-2 py-1 bg-black border border-brand-900 text-xs text-gray-500 rounded">EN</span>
+                        <span class="px-2 py-1 bg-black border border-brand-900 text-xs text-gray-500 rounded">ES</span>
+                        <span class="px-2 py-1 bg-black border border-brand-900 text-xs text-gray-500 rounded">FR</span>
+                        <span class="px-2 py-1 bg-black border border-brand-900 text-xs text-gray-500 rounded">ZH</span>
+                        <span class="px-2 py-1 bg-black border border-brand-900 text-xs text-brand-500 rounded border-brand-500/30">+91</span>
+                    </div>
+                </div>
+
+                <div class="md:col-span-1 md:col-start-2 bg-obsidian-900 border border-brand-900/50 rounded-3xl p-8 hover:bg-obsidian-800 transition-colors duration-300">
+                    <div class="w-12 h-12 bg-white/5 rounded-xl flex items-center justify-center text-green-500 mb-6">
+                        <svg class="w-6 h-6"><use href="#icon-shield"/></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Enterprise Grade</h3>
+                    <p class="text-sm text-gray-400 mb-4">
+                        SOC2 Compliant. Your data is siloed and never used to train public models.
+                    </p>
+                    <div class="flex items-center gap-2 text-xs text-green-500 font-mono">
+                        <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                        Encryption Active
+                    </div>
+                </div>
+
+                <div class="md:col-span-1 bg-white text-black rounded-3xl p-8 border border-white hover:scale-[1.02] transition-transform duration-300">
+                    <div class="w-12 h-12 bg-black/10 rounded-xl flex items-center justify-center text-black mb-6">
+                        <svg class="w-6 h-6"><use href="#icon-chart"/></svg>
+                    </div>
+                    <h3 class="text-lg font-bold text-black mb-2">Revenue Insights</h3>
+                    <p class="text-sm text-gray-600">
+                        See exactly what guests are asking for before they book. Identify missing amenities.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="roi" class="py-32 px-6 bg-black relative overflow-hidden">
+        
+        <div class="absolute inset-0 bg-brand-900/20 mix-blend-overlay"></div>
+        <div class="absolute -left-40 top-40 w-96 h-96 bg-brand-500/10 rounded-full blur-[100px]"></div>
+
+        <div class="max-w-7xl mx-auto relative z-10">
+            <div class="grid lg:grid-cols-12 gap-16 items-start">
+                
+                <div class="lg:col-span-5 space-y-8">
+                    <div>
+                        <h2 class="text-4xl font-serif font-bold text-white mb-4">Revenue Simulator</h2>
+                        <p class="text-gray-400 text-sm">
+                            Adjust the sliders to model your property's potential revenue recovery 
+                            by shifting OTA bookings to Direct via Veda.
+                        </p>
+                    </div>
+
+                    <div class="bg-obsidian-900 p-6 rounded-2xl border border-brand-900/50">
+                        <div class="flex justify-between items-center mb-4">
+                            <label class="text-xs font-bold uppercase tracking-widest text-gray-500">Total Inventory</label>
+                            <span class="font-mono text-xl text-white" x-text="rooms + ' Rooms'"></span>
+                        </div>
+                        <input type="range" min="10" max="500" step="5" x-model="rooms" 
+                            class="w-full h-1 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-brand-500">
+                        <div class="flex justify-between text-[10px] text-gray-600 mt-2">
+                            <span>10</span>
+                            <span>500+</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-obsidian-900 p-6 rounded-2xl border border-brand-900/50">
+                        <div class="flex justify-between items-center mb-4">
+                            <label class="text-xs font-bold uppercase tracking-widest text-gray-500">Avg. Occupancy</label>
+                            <span class="font-mono text-xl text-white" x-text="occupancy + '%'"></span>
+                        </div>
+                        <input type="range" min="10" max="100" step="5" x-model="occupancy" 
+                            class="w-full h-1 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-brand-500">
+                    </div>
+
+                    <div class="bg-obsidian-900 p-6 rounded-2xl border border-brand-900/50">
+                        <div class="flex justify-between items-center mb-4">
+                            <label class="text-xs font-bold uppercase tracking-widest text-gray-500">Avg. Daily Rate</label>
+                            <span class="font-mono text-xl text-white" x-text="'$' + adr"></span>
+                        </div>
+                        <input type="range" min="50" max="1000" step="10" x-model="adr" 
+                            class="w-full h-1 bg-gray-800 rounded-lg appearance-none cursor-pointer accent-brand-500">
+                    </div>
+
+                </div>
+
+                <div class="lg:col-span-7 bg-obsidian-950 border border-brand-900 rounded-3xl p-8 lg:p-12 relative shadow-2xl">
+                    
+                    <div class="absolute top-4 left-4 w-2 h-2 rounded-full bg-gray-800 border border-gray-700"></div>
+                    <div class="absolute top-4 right-4 w-2 h-2 rounded-full bg-gray-800 border border-gray-700"></div>
+                    <div class="absolute bottom-4 left-4 w-2 h-2 rounded-full bg-gray-800 border border-gray-700"></div>
+                    <div class="absolute bottom-4 right-4 w-2 h-2 rounded-full bg-gray-800 border border-gray-700"></div>
+
+                    <div class="flex justify-between items-start mb-12">
+                        <div>
+                            <div class="text-xs text-gray-500 uppercase tracking-widest mb-1">Monthly Recovery Potential</div>
+                            <div class="text-5xl lg:text-7xl font-mono font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
+                                $<span x-text="calculateROI()"></span>
+                            </div>
+                        </div>
+                        <div class="hidden sm:block">
+                            <div class="flex items-center gap-2 px-3 py-1 bg-green-900/20 border border-green-900/50 rounded-full">
+                                <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                                <span class="text-xs text-green-500 font-bold uppercase">Cashflow Positive</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="relative h-64 w-full flex items-end justify-between gap-2 px-4 border-b border-brand-800/50 pb-px">
+                        
+                        <div class="absolute inset-0 flex flex-col justify-between pointer-events-none opacity-20">
+                            <div class="w-full h-px bg-brand-500 border-t border-dashed border-brand-500"></div>
+                            <div class="w-full h-px bg-brand-500 border-t border-dashed border-brand-500"></div>
+                            <div class="w-full h-px bg-brand-500 border-t border-dashed border-brand-500"></div>
+                            <div class="w-full h-px bg-brand-500 border-t border-dashed border-brand-500"></div>
+                        </div>
+
+                        <div class="relative w-1/3 h-full flex items-end justify-center group">
+                            <div class="w-16 bg-red-900/20 border border-red-500/30 rounded-t-lg transition-all duration-700 relative overflow-hidden" style="height: 60%">
+                                <div class="absolute bottom-0 w-full h-1 bg-red-500"></div>
+                                <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmYwMDAwIiBmaWxsLW9wYWNpdHk9IjAuMDUiLz4KPC9zdmc+')]"></div>
+                            </div>
+                            <div class="absolute -bottom-10 text-center">
+                                <div class="text-[10px] text-gray-500 uppercase tracking-widest">Fees Lost</div>
+                                <div class="text-xs text-red-500 font-mono">~18%</div>
+                            </div>
+                        </div>
+
+                        <div class="relative w-1/3 h-full flex items-end justify-center group">
+                            <div class="w-20 bg-brand-500 shadow-[0_0_50px_rgba(198,168,124,0.3)] rounded-t-lg transition-all duration-500 relative overflow-hidden" style="height: 85%">
+                                <div class="absolute top-0 w-full h-[1px] bg-white opacity-50"></div>
+                                <div class="absolute inset-0 bg-gradient-to-b from-brand-400 to-brand-600"></div>
+                            </div>
+                            <div class="absolute -bottom-10 text-center">
+                                <div class="text-[10px] text-brand-500 uppercase tracking-widest font-bold">Net Profit</div>
+                                <div class="text-xs text-white font-mono">100% Margin</div>
+                            </div>
+                        </div>
+
+                         <div class="relative w-1/3 h-full flex items-end justify-center group">
+                            <div class="w-16 bg-blue-900/20 border border-blue-500/30 rounded-t-lg transition-all duration-700 relative overflow-hidden" style="height: 40%">
+                                <div class="absolute bottom-0 w-full h-1 bg-blue-500"></div>
+                            </div>
+                            <div class="absolute -bottom-10 text-center">
+                                <div class="text-[10px] text-gray-500 uppercase tracking-widest">Upsells</div>
+                                <div class="text-xs text-blue-500 font-mono">Add-ons</div>
+                            </div>
+                        </div>
+
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-32 px-6 bg-obsidian-950 border-t border-brand-900">
+        <div class="max-w-7xl mx-auto">
+            <h2 class="text-3xl font-serif text-center text-white mb-16">Trusted by 50+ Properties</h2>
+            
+            <div class="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+                
+                <div class="break-inside-avoid bg-obsidian-900 border border-brand-900/50 p-8 rounded-2xl hover:border-brand-500/30 transition-colors">
+                    <div class="flex gap-1 mb-4">
+                        <div class="w-4 h-4 text-brand-500"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+                        <div class="w-4 h-4 text-brand-500"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+                        <div class="w-4 h-4 text-brand-500"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+                        <div class="w-4 h-4 text-brand-500"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+                        <div class="w-4 h-4 text-brand-500"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg></div>
+                    </div>
+                    <p class="text-gray-400 leading-relaxed mb-6">
+                        "Krishna’s deep research and constant testing lead to better outcomes. The AI doesn't feel robotic; it captures our brand voice perfectly. We've seen a 30% drop in front-desk calls."
+                    </p>
+                    <div class="flex items-center gap-3 border-t border-brand-900 pt-4">
+                        <div class="w-10 h-10 bg-gray-700 rounded-full"></div>
+                        <div>
+                            <div class="text-white font-bold text-sm">Amisha Patel</div>
+                            <div class="text-brand-500 text-xs uppercase tracking-wider">Owner, Ahmedabad</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="break-inside-avoid bg-obsidian-900 border border-brand-900/50 p-8 rounded-2xl hover:border-brand-500/30 transition-colors">
+                    <p class="text-gray-400 leading-relaxed mb-6">
+                        "Before Veda Concierge, we were drowning in operational chaos. Now, the system centralized everything. It’s the upgrade we didn't know we needed."
+                    </p>
+                    <div class="flex items-center gap-3 border-t border-brand-900 pt-4">
+                        <div class="w-10 h-10 bg-gray-700 rounded-full"></div>
+                        <div>
+                            <div class="text-white font-bold text-sm">Gagan Singh</div>
+                            <div class="text-brand-500 text-xs uppercase tracking-wider">Director, Ample Pubs</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="break-inside-avoid bg-obsidian-900 border border-brand-900/50 p-8 rounded-2xl hover:border-brand-500/30 transition-colors">
+                    <p class="text-gray-400 leading-relaxed mb-6">
+                        "We use their AI assistant at our clinic, and it has made our daily work so much easier. Fast answers, fewer calls, and a smoother experience for everyone."
+                    </p>
+                    <div class="flex items-center gap-3 border-t border-brand-900 pt-4">
+                        <div class="w-10 h-10 bg-gray-700 rounded-full"></div>
+                        <div>
+                            <div class="text-white font-bold text-sm">Aniket Sharma</div>
+                            <div class="text-brand-500 text-xs uppercase tracking-wider">IRI Dream Care</div>
+                        </div>
+                    </div>
+                </div>
+                
+                 <div class="break-inside-avoid bg-obsidian-900 border border-brand-900/50 p-8 rounded-2xl hover:border-brand-500/30 transition-colors">
+                    <p class="text-gray-400 leading-relaxed mb-6">
+                        "The ability to customize the AI's 'temperature' was a game changer. We dialed it to be more formal for our luxury guests, and it worked flawlessly."
+                    </p>
+                    <div class="flex items-center gap-3 border-t border-brand-900 pt-4">
+                        <div class="w-10 h-10 bg-gray-700 rounded-full"></div>
+                        <div>
+                            <div class="text-white font-bold text-sm">Sarah Jenkins</div>
+                            <div class="text-brand-500 text-xs uppercase tracking-wider">GM, The Westin</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="pricing" class="py-32 px-6 bg-black border-t border-brand-900">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-20">
+                <h2 class="text-4xl font-serif text-white mb-4">Transparent Investment</h2>
+                <p class="text-gray-500">No hidden fees. Cancel anytime.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="bg-obsidian-900 p-8 rounded-2xl border border-brand-900/50 opacity-70 hover:opacity-100 transition-opacity">
+                    <h3 class="text-gray-400 font-bold tracking-widest text-sm mb-4">STARTER</h3>
+                    <div class="text-4xl font-bold text-white mb-2">$149<span class="text-lg text-gray-600 font-normal">/mo</span></div>
+                    <p class="text-sm text-gray-500 mb-8">For boutique properties.</p>
+                    <a href="#demo" class="block w-full py-3 border border-brand-800 text-white text-center rounded-lg hover:bg-brand-900">Get Started</a>
+                </div>
+
+                <div class="bg-obsidian-900 p-8 rounded-2xl border border-brand-500 relative transform lg:-translate-y-4 shadow-[0_0_40px_rgba(198,168,124,0.1)]">
+                    <div class="absolute top-0 right-0 bg-brand-500 text-black text-xs font-bold px-3 py-1 rounded-bl-lg rounded-tr-lg">POPULAR</div>
+                    <h3 class="text-brand-500 font-bold tracking-widest text-sm mb-4">PROFESSIONAL</h3>
+                    <div class="text-4xl font-bold text-white mb-2">$249<span class="text-lg text-gray-600 font-normal">/mo</span></div>
+                    <p class="text-sm text-gray-500 mb-8">For high-traffic hotels.</p>
+                    
+                    <ul class="space-y-4 mb-8 text-sm text-gray-300">
+                        <li class="flex gap-3"><span class="text-brand-500">✓</span> Unlimited Conversations</li>
+                        <li class="flex gap-3"><span class="text-brand-500">✓</span> Priority Support</li>
+                        <li class="flex gap-3"><span class="text-brand-500">✓</span> Full Analytics Suite</li>
+                    </ul>
+
+                    <a href="#demo" class="block w-full py-3 bg-brand-500 text-black font-bold text-center rounded-lg hover:bg-white transition-colors">Start Free Trial</a>
+                </div>
+
+                <div class="bg-obsidian-900 p-8 rounded-2xl border border-brand-900/50 opacity-70 hover:opacity-100 transition-opacity">
+                    <h3 class="text-gray-400 font-bold tracking-widest text-sm mb-4">ENTERPRISE</h3>
+                    <div class="text-4xl font-bold text-white mb-2">Custom</div>
+                    <p class="text-sm text-gray-500 mb-8">For hotel chains.</p>
+                    <a href="mailto:krishna@vedaconcierge.com" class="block w-full py-3 border border-brand-800 text-white text-center rounded-lg hover:bg-brand-900">Contact Sales</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-obsidian-950 border-t border-brand-900 py-20 px-6">
+        <div class="max-w-7xl mx-auto grid md:grid-cols-4 gap-12">
+            <div class="col-span-1 md:col-span-2">
+                <a href="#" class="text-2xl font-serif font-bold text-white block mb-6">Veda<span class="text-brand-500">.</span></a>
+                <p class="text-gray-500 max-w-sm">
+                    Pioneering the intersection of Artificial Intelligence and Hospitality. 
+                    Built in Delhi for the world.
+                </p>
+                <div class="flex gap-4 mt-6">
+                    <a href="#" class="w-10 h-10 rounded-full bg-brand-900 flex items-center justify-center text-gray-400 hover:bg-brand-500 hover:text-black transition-colors">IN</a>
+                    <a href="#" class="w-10 h-10 rounded-full bg-brand-900 flex items-center justify-center text-gray-400 hover:bg-brand-500 hover:text-black transition-colors">TW</a>
+                </div>
+            </div>
+            
+            <div>
+                <h4 class="text-white font-bold mb-6">Platform</h4>
+                <ul class="space-y-4 text-sm text-gray-500">
+                    <li><a href="#" class="hover:text-brand-500">Capabilities</a></li>
+                    <li><a href="#" class="hover:text-brand-500">Integrations</a></li>
+                    <li><a href="#" class="hover:text-brand-500">Security</a></li>
+                    <li><a href="#" class="hover:text-brand-500">Roadmap</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-white font-bold mb-6">Legal</h4>
+                <ul class="space-y-4 text-sm text-gray-500">
+                    <li><button @click="openModal('privacy')" class="hover:text-brand-500 text-left">Privacy Policy</button></li>
+                    <li><button @click="openModal('terms')" class="hover:text-brand-500 text-left">Terms of Service</button></li>
+                    <li><a href="#" class="hover:text-brand-500">DPA</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="max-w-7xl mx-auto mt-20 pt-8 border-t border-brand-900 text-center text-gray-600 text-sm">
+            © 2025 Veda Concierge AI. All rights reserved.
+        </div>
+    </footer>
+
+    <div x-show="modalOpen" x-cloak class="fixed inset-0 z-[100] flex items-center justify-center px-4">
+        <div class="absolute inset-0 bg-black/90 backdrop-blur-sm" @click="closeModal()"></div>
+        
+        <div class="relative bg-obsidian-900 border border-brand-800 w-full max-w-2xl max-h-[80vh] overflow-y-auto rounded-2xl shadow-2xl p-8" @click.stop>
+            <button @click="closeModal()" class="absolute top-4 right-4 text-gray-500 hover:text-white">
+                <svg class="w-6 h-6"><use href="#icon-close"/></svg>
+            </button>
+            
+            <div x-show="modalContent === 'privacy'">
+                <h2 class="text-2xl font-bold text-white mb-4">Privacy Policy</h2>
+                <div class="prose prose-invert prose-sm text-gray-400">
+                    <p>Last updated: December 2024</p>
+                    <p>At Veda Concierge, we take your privacy seriously. This policy describes how we handle data.</p>
+                    <h3>1. Data Collection</h3>
+                    <p>We collect conversation logs solely for the purpose of improving service quality for your specific property. We do not sell data to third parties.</p>
+                    <h3>2. Data Retention</h3>
+                    <p>All chat logs are retained for 90 days and then anonymized.</p>
+                </div>
+            </div>
+
+            <div x-show="modalContent === 'terms'">
+                <h2 class="text-2xl font-bold text-white mb-4">Terms of Service</h2>
+                <div class="prose prose-invert prose-sm text-gray-400">
+                    <p>By using Veda Concierge, you agree to the following terms.</p>
+                    <h3>1. Usage License</h3>
+                    <p>You are granted a limited license to use the software for your hospitality business.</p>
+                    <h3>2. Liability</h3>
+                    <p>Veda Concierge is an AI assistant. We are not liable for incorrect information provided by the AI regarding specific hotel policies if the underlying data was not updated by the hotel staff.</p>
+                </div>
             </div>
         </div>
     </div>
 
-    <section id="capabilities" class="py-24 bg-white">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="text-center max-w-2xl mx-auto mb-16">
-                <h2 class="font-serif text-4xl font-bold mb-4">Intelligence at Scale</h2>
-                <p class="text-gray-500 text-lg">A suite of capabilities designed to replace friction with flow.</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-4 md:grid-rows-2 gap-6 h-auto md:h-[600px]">
-                
-                <div class="md:col-span-2 md:row-span-2 bg-gray-50 rounded-3xl p-8 border border-gray-100 relative overflow-hidden group hover:shadow-xl transition-all duration-300">
-                    <div class="relative z-10">
-                        <div class="w-12 h-12 bg-white rounded-xl shadow-sm flex items-center justify-center text-2xl mb-6">🧠</div>
-                        <h3 class="text-2xl font-bold mb-3">Contextual Awareness</h3>
-                        <p class="text-gray-500 leading-relaxed">Unlike basic chatbots, Veda understands nuance. It creates a personalized experience by remembering guest preferences across the conversation.</p>
-                    </div>
-                    <div class="absolute bottom-0 right-0 w-3/4 h-1/2 bg-white rounded-tl-3xl border-t border-l border-gray-100 p-6 shadow-sm translate-y-4 group-hover:translate-y-0 transition-transform">
-                        <div class="space-y-3">
-                            <div class="h-2 bg-gray-100 rounded w-full"></div>
-                            <div class="h-2 bg-gray-100 rounded w-2/3"></div>
-                            <div class="h-2 bg-veda-gold/20 rounded w-1/2 mt-4"></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="md:col-span-2 bg-veda-black text-white rounded-3xl p-8 flex flex-col justify-center relative overflow-hidden group">
-                    <div class="absolute top-0 right-0 w-64 h-64 bg-veda-gold/20 rounded-full blur-[60px] group-hover:bg-veda-gold/30 transition-colors"></div>
-                    <div class="relative z-10 flex items-center gap-6">
-                        <div class="p-4 bg-white/10 rounded-2xl backdrop-blur-md">
-                            <svg class="w-8 h-8 text-veda-gold" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-                        </div>
-                        <div>
-                            <h3 class="text-xl font-bold mb-1">Sub-100ms Latency</h3>
-                            <p class="text-gray-400 text-sm">Powered by edge computing. Faster than thought.</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="md:col-span-1 bg-white rounded-3xl p-8 border border-gray-100 hover:border-veda-gold/50 transition-colors shadow-sm group">
-                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">🌍</div>
-                    <h3 class="font-bold text-lg mb-2">95+ Languages</h3>
-                    <p class="text-sm text-gray-500">Auto-translation included.</p>
-                </div>
-
-                <div class="md:col-span-1 bg-white rounded-3xl p-8 border border-gray-100 hover:border-green-500/50 transition-colors shadow-sm group">
-                    <div class="text-4xl mb-4 group-hover:scale-110 transition-transform duration-300">🛡️</div>
-                    <h3 class="font-bold text-lg mb-2">GDPR Ready</h3>
-                    <p class="text-sm text-gray-500">Enterprise data isolation.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="calculator" class="py-24 px-6 bg-veda-black text-white overflow-hidden relative">
-        <div class="absolute top-0 left-0 w-full h-full opacity-20 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-gray-700 via-gray-900 to-black"></div>
-        
-        <div class="max-w-6xl mx-auto relative z-10" x-data="{ 
-            rooms: 50, 
-            occupancy: 70,
-            commission: 15,
-            // Logic: Rooms * (Occupancy%) * 30 days * 10% shift to direct * ($150 ADR * 15% commission)
-            calculateSavings() {
-                const shift = 0.10; // We assume we shift 10% of bookings to direct
-                const adr = 150; // Average Daily Rate assumption
-                const monthlyBookings = this.rooms * (this.occupancy / 100) * 30;
-                const savings = monthlyBookings * shift * (adr * (this.commission / 100));
-                // Add upset value ($10/booking)
-                const upsell = monthlyBookings * 10; 
-                return Math.floor(savings + upsell).toLocaleString();
-            }
-        }">
-            <div class="grid lg:grid-cols-2 gap-16 items-center">
-                <div>
-                    <h2 class="font-serif text-4xl lg:text-5xl font-bold mb-6">Stop paying Booking.com <br><span class="text-veda-gold">15% commission.</span></h2>
-                    <p class="text-gray-400 text-lg mb-10">Calculate how much revenue Veda can reclaim by shifting guests to direct bookings and automating upsells.</p>
-                    
-                    <div class="space-y-8">
-                        <div>
-                            <div class="flex justify-between mb-2">
-                                <label class="text-sm font-medium text-gray-300">Number of Rooms</label>
-                                <span class="text-veda-gold font-mono text-lg" x-text="rooms"></span>
-                            </div>
-                            <input type="range" min="10" max="500" x-model="rooms" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-veda-gold">
-                        </div>
-                        <div>
-                            <div class="flex justify-between mb-2">
-                                <label class="text-sm font-medium text-gray-300">Occupancy Rate (%)</label>
-                                <span class="text-veda-gold font-mono text-lg" x-text="occupancy + '%'"></span>
-                            </div>
-                            <input type="range" min="10" max="100" x-model="occupancy" class="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer accent-veda-gold">
-                        </div>
-                    </div>
-                </div>
-
-                <div class="bg-white/5 border border-white/10 backdrop-blur-md rounded-3xl p-10 text-center transform hover:scale-105 transition-transform duration-500">
-                    <p class="text-sm uppercase tracking-widest text-gray-400 mb-4">Estimated Monthly Lift</p>
-                    <div class="text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-white to-gray-400 font-serif">
-                        $<span x-text="calculateSavings()"></span>
-                    </div>
-                    <p class="text-xs text-gray-500 mt-6">*Estimates based on shifting 10% of OTA traffic to direct bookings + automated service upsells.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="py-24 bg-white overflow-hidden">
-        <div class="text-center mb-16">
-            <h2 class="font-serif text-3xl font-bold">Trusted by Forward Thinkers</h2>
-        </div>
-        <div class="relative w-full overflow-hidden">
-            <div class="absolute left-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-r from-white to-transparent"></div>
-            <div class="absolute right-0 top-0 bottom-0 w-24 z-10 bg-gradient-to-l from-white to-transparent"></div>
-            
-            <div class="flex gap-8 animate-scroll w-max">
-                <div class="w-[400px] p-8 bg-gray-50 rounded-2xl border border-gray-100 shrink-0">
-                    <p class="italic text-gray-600 mb-6">"Krishna’s deep research led to a chatbot experience that feels genuinely human."</p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
-                        <div><div class="font-bold text-sm">Amisha</div><div class="text-xs text-gray-500">Owner, Ahmedabad</div></div>
-                    </div>
-                </div>
-                <div class="w-[400px] p-8 bg-gray-50 rounded-2xl border border-gray-100 shrink-0">
-                    <p class="italic text-gray-600 mb-6">"Fast answers, fewer calls, and a smoother experience for everyone."</p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
-                        <div><div class="font-bold text-sm">Aniket</div><div class="text-xs text-gray-500">IRI Dream Care</div></div>
-                    </div>
-                </div>
-                <div class="w-[400px] p-8 bg-gray-50 rounded-2xl border border-gray-100 shrink-0">
-                    <p class="italic text-gray-600 mb-6">"We were drowning in operational chaos. Now, the system centralized everything."</p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
-                        <div><div class="font-bold text-sm">Gagan</div><div class="text-xs text-gray-500">Ample Publications</div></div>
-                    </div>
-                </div>
-                <div class="w-[400px] p-8 bg-gray-50 rounded-2xl border border-gray-100 shrink-0">
-                    <p class="italic text-gray-600 mb-6">"Krishna’s deep research led to a chatbot experience that feels genuinely human."</p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
-                        <div><div class="font-bold text-sm">Amisha</div><div class="text-xs text-gray-500">Owner, Ahmedabad</div></div>
-                    </div>
-                </div>
-                <div class="w-[400px] p-8 bg-gray-50 rounded-2xl border border-gray-100 shrink-0">
-                    <p class="italic text-gray-600 mb-6">"Fast answers, fewer calls, and a smoother experience for everyone."</p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
-                        <div><div class="font-bold text-sm">Aniket</div><div class="text-xs text-gray-500">IRI Dream Care</div></div>
-                    </div>
-                </div>
-                <div class="w-[400px] p-8 bg-gray-50 rounded-2xl border border-gray-100 shrink-0">
-                    <p class="italic text-gray-600 mb-6">"We were drowning in operational chaos. Now, the system centralized everything."</p>
-                    <div class="flex items-center gap-4">
-                        <div class="w-10 h-10 bg-gray-300 rounded-full"></div>
-                        <div><div class="font-bold text-sm">Gagan</div><div class="text-xs text-gray-500">Ample Publications</div></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="pricing" class="py-24 px-6 bg-veda-cream">
-        <div class="max-w-5xl mx-auto">
-            <div class="text-center mb-16">
-                <h2 class="font-serif text-4xl font-bold mb-4">Simple Investment</h2>
-                <p class="text-gray-500">No hidden fees. Cancel anytime.</p>
-            </div>
-            
-            <div class="grid md:grid-cols-2 gap-8">
-                <div class="bg-white p-10 rounded-3xl shadow-sm border border-gray-100 flex flex-col hover:translate-y-[-5px] transition-transform duration-300">
-                    <div class="text-xs font-bold tracking-widest text-gray-400 mb-4">STARTER</div>
-                    <div class="flex items-baseline gap-1 mb-2">
-                        <span class="text-4xl font-bold">$149</span>
-                        <span class="text-gray-500">/mo</span>
-                    </div>
-                    <p class="text-gray-500 text-sm mb-8">For boutique properties testing the waters.</p>
-                    
-                    <ul class="space-y-4 mb-8 text-sm text-gray-600 flex-1">
-                        <li class="flex items-center gap-3"><span class="text-green-500">✓</span> 1,000 Conversations/mo</li>
-                        <li class="flex items-center gap-3"><span class="text-green-500">✓</span> 95+ Languages</li>
-                        <li class="flex items-center gap-3"><span class="text-green-500">✓</span> Email Support</li>
-                        <li class="flex items-center gap-3"><span class="text-green-500">✓</span> <span class="line-through text-gray-300">$999 Setup</span> <span class="font-bold text-black ml-1">Waived</span></li>
-                    </ul>
-                    
-                    <a href="#demo" class="w-full py-4 rounded-xl border border-gray-200 font-bold text-center hover:bg-gray-50 transition-colors">Start Starter</a>
-                </div>
-
-                <div class="bg-white p-10 rounded-3xl shadow-2xl border-2 border-veda-gold/20 flex flex-col relative overflow-hidden hover:translate-y-[-5px] transition-transform duration-300">
-                    <div class="absolute top-5 right-5 bg-veda-gold text-white text-[10px] font-bold px-3 py-1 rounded-full">POPULAR</div>
-                    <div class="text-xs font-bold tracking-widest text-veda-gold mb-4">PRO SCALING</div>
-                    <div class="flex items-baseline gap-1 mb-2">
-                        <span class="text-4xl font-bold">$229</span>
-                        <span class="text-gray-500">/mo</span>
-                    </div>
-                    <p class="text-gray-500 text-sm mb-8">For serious hotels needing full automation.</p>
-                    
-                    <ul class="space-y-4 mb-8 text-sm text-gray-600 flex-1">
-                        <li class="flex items-center gap-3"><span class="text-veda-gold">✓</span> <strong>Unlimited</strong> Conversations</li>
-                        <li class="flex items-center gap-3"><span class="text-veda-gold">✓</span> Full Conversation Logs</li>
-                        <li class="flex items-center gap-3"><span class="text-veda-gold">✓</span> Priority Support (Human)</li>
-                        <li class="flex items-center gap-3"><span class="text-veda-gold">✓</span> Custom Brand Calibration</li>
-                    </ul>
-                    
-                    <a href="#demo" class="w-full py-4 rounded-xl bg-veda-black text-white font-bold text-center hover:bg-gray-800 transition-colors shadow-lg">Go Pro</a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="demo" class="py-24 px-6 bg-white">
-        <div class="max-w-2xl mx-auto bg-white rounded-3xl shadow-[0_20px_60px_-15px_rgba(0,0,0,0.1)] p-8 md:p-12 border border-gray-100">
-            <div class="text-center mb-10">
-                <h2 class="font-serif text-3xl font-bold mb-2">Secure Your Spot</h2>
-                <p class="text-gray-500">We audit every hotel personally. Get your free report.</p>
-            </div>
-
-            <form action="https://formsubmit.co/krishna@vedaconcierge.com" method="POST" class="space-y-6">
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Hotel Name</label>
-                    <input type="text" name="Hotel" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-veda-gold focus:ring-1 focus:ring-veda-gold outline-none transition-all">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Email Address</label>
-                    <input type="email" name="Email" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-veda-gold focus:ring-1 focus:ring-veda-gold outline-none transition-all">
-                </div>
-                <div>
-                    <label class="block text-sm font-semibold text-gray-700 mb-2">Website URL</label>
-                    <input type="url" name="Website" class="w-full px-4 py-3 rounded-xl bg-gray-50 border border-gray-200 focus:border-veda-gold focus:ring-1 focus:ring-veda-gold outline-none transition-all">
-                </div>
-                <button type="submit" class="w-full py-4 bg-veda-black text-white font-bold rounded-xl hover:shadow-xl hover:scale-[1.02] transition-all duration-300">
-                    Get Custom Audit
-                </button>
-            </form>
-            
-            <div class="mt-8 pt-8 border-t border-gray-100 flex items-center gap-4 justify-center opacity-80">
-                <div class="w-10 h-10 rounded-full bg-veda-black text-white flex items-center justify-center text-xs font-bold">KR</div>
-                <p class="text-sm text-gray-500">"I personally oversee every setup." <br><strong>Krishna Rana</strong>, Founder</p>
-            </div>
-        </div>
-    </section>
-
-    <footer class="bg-gray-50 border-t border-gray-200 pt-16 pb-8">
-        <div class="max-w-7xl mx-auto px-6 grid md:grid-cols-4 gap-8 mb-12">
-            <div class="col-span-1 md:col-span-2">
-                <span class="font-serif text-xl font-bold">Veda<span class="text-veda-gold">.</span></span>
-                <p class="text-gray-500 mt-4 max-w-sm">Pioneering the intersection of Artificial Intelligence and Hospitality. Built for owners who value their time.</p>
-            </div>
-            <div>
-                <h4 class="font-bold mb-4">Company</h4>
-                <ul class="space-y-2 text-sm text-gray-500">
-                    <li><a href="#capabilities" class="hover:text-black">Capabilities</a></li>
-                    <li><a href="#pricing" class="hover:text-black">Pricing</a></li>
-                    <li><a href="#demo" class="hover:text-black">Contact</a></li>
-                </ul>
-            </div>
-            <div>
-                <h4 class="font-bold mb-4">Legal</h4>
-                <ul class="space-y-2 text-sm text-gray-500">
-                    <li><a href="#" class="hover:text-black">Privacy</a></li>
-                    <li><a href="#" class="hover:text-black">Terms</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="max-w-7xl mx-auto px-6 border-t border-gray-200 pt-8 text-center text-sm text-gray-400">
-            &copy; 2025 Veda Concierge. All rights reserved.
-        </div>
-    </footer>
-
 </body>
 </html>
+    ```
