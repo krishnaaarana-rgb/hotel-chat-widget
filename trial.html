@@ -1,832 +1,890 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <title>Mona Montreux | Concierge</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Veda Concierge | The Wisdom of Hospitality AI.">
+    <title>Veda Concierge | Hospitality Intelligence</title>
     
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-25PMEDR1BF"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-25PMEDR1BF');
+    </script>
+
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,700;1,600&display=swap" rel="stylesheet">
 
     <style>
-        /* ========================================================================
-           DESIGN SYSTEM: LUXURY / APPLE AESTHETIC
-        ======================================================================== */
+        /* -----------------------------------------------------------------
+           1. CORE VARIABLES & RESET
+           ----------------------------------------------------------------- */
         :root {
-            /* Premium Monochrome Palette */
-            --primary-color: #111111; /* Onyx Black */
-            --accent-color: #000000;
-            --bg-color: #ffffff;
-            --secondary-bg: #F5F5F7; /* Apple Light Grey */
+            --bg-body: #FFFFFF;
+            --bg-alt: #F9FAFB;
+            --bg-warm: #FDFBF7;
+            --text-primary: #111827;
+            --text-secondary: #6B7280;
+            --accent-blue: #0071E3;
+            --accent-dark: #000000;
+            --accent-gold: #D4AF37;
             
-            /* FIXED: SOLID WHITE BACKGROUND (No Transparency) */
-            --glass-bg: #ffffff; 
-            
-            --glass-border: rgba(0, 0, 0, 0.08);
-            --text-main: #1d1d1f;
-            --text-sub: #86868b;
-            
-            /* Animations */
-            --bezier-apple: cubic-bezier(0.25, 1, 0.5, 1);
-            --shadow-soft: 0 12px 40px rgba(0,0,0,0.12);
-            --shadow-float: 0 20px 50px rgba(0,0,0,0.15);
+            --max-width: 1280px;
+            --radius-lg: 32px;
+            --ease-apple: cubic-bezier(0.25, 1, 0.5, 1);
+            --shadow-sm: 0 2px 10px rgba(0,0,0,0.03);
+            --shadow-md: 0 10px 30px rgba(0,0,0,0.08);
         }
 
-        * { box-sizing: border-box; -webkit-font-smoothing: antialiased; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; font-size: 16px; }
 
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: transparent;
-            overflow: hidden;
-        }
-
-        /* ========================================================================
-           WRAPPER
-        ======================================================================== */
-        #chatbot-wrapper {
-            position: fixed; 
-            bottom: 0; 
-            right: 0;
-            z-index: 9999999;
-            display: flex; flex-direction: column; align-items: flex-end;
-            pointer-events: none;
-            
-            /* THIS PADDING PREVENTS SHADOW CUT-OFFS */
-            padding: 30px; 
-        }
-        
-        #chatbot-wrapper > * {
-            pointer-events: auto;
-        }
-
-        /* ========================================================================
-           PROACTIVE NUDGE (Refined)
-        ======================================================================== */
-        #proactive-nudge {
-            background: white;
-            padding: 14px 20px;
-            border-radius: 18px;
-            box-shadow: var(--shadow-soft);
-            margin-bottom: 15px;
-            margin-right: 5px;
-            font-size: 14px;
-            font-weight: 500;
-            color: var(--text-main);
-            opacity: 0;
-            transform: translateY(10px) scale(0.95);
-            transition: all 0.5s var(--bezier-apple);
-            position: relative;
-            cursor: pointer;
-            border: 1px solid rgba(0,0,0,0.04);
-            display: flex; align-items: center; gap: 10px;
-            white-space: nowrap;
-        }
-
-        #proactive-nudge.visible {
-            opacity: 1; transform: translateY(0) scale(1);
-        }
-
-        /* Tooltip Arrow */
-        #proactive-nudge::after {
-            content: ''; position: absolute; bottom: -6px; right: 28px;
-            width: 12px; height: 12px; background: white;
-            transform: rotate(45deg);
-            box-shadow: 2px 2px 2px rgba(0,0,0,0.03);
-        }
-
-        #proactive-nudge .close-nudge {
-            margin-left: 8px; color: #C7C7CC; cursor: pointer;
-            font-size: 18px; line-height: 1; transition: color 0.2s;
-        }
-        #proactive-nudge .close-nudge:hover { color: var(--text-main); }
-
-        /* ========================================================================
-           LAUNCHER BUTTON (Sleek Pill)
-        ======================================================================== */
-        #hotel-chatbot-launcher {
-            height: 64px;
-            width: auto;
-            min-width: 64px;
-            padding: 0 28px;
-            border-radius: 40px; /* More rounded */
-            border: none;
-            background: var(--primary-color);
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
-            cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            gap: 12px;
-            transition: all 0.4s var(--bezier-apple);
-            position: relative;
-            overflow: hidden;
-            transform-origin: center right;
-        }
-
-        .launcher-label {
-            color: white;
-            font-weight: 500;
-            font-size: 15px;
-            letter-spacing: -0.01em;
-            white-space: nowrap;
-            opacity: 1;
-            transform: translateX(0);
-            transition: all 0.3s ease;
-        }
-
-        .icon-container {
-            position: relative;
-            width: 24px; height: 24px;
-            display: flex; align-items: center; justify-content: center;
-        }
-
-        #hotel-chatbot-launcher svg {
-            width: 24px; height: 24px; stroke: white; fill: none; stroke-width: 2;
-            transition: transform 0.4s var(--bezier-apple), opacity 0.3s ease;
-            position: absolute;
-        }
-        
-        #launcher-close-icon { opacity: 0; transform: scale(0.5) rotate(-90deg); }
-        #launcher-chat-icon { opacity: 1; transform: scale(1) rotate(0deg); }
-
-        #hotel-chatbot-launcher:hover { 
-            transform: translateY(-2px); 
-            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3); 
-        }
-
-        #hotel-chatbot-launcher.active {
-            width: 64px; 
-            padding: 0; 
-            border-radius: 50%;
-            background: #333; /* Slightly lighter black for close state */
-        }
-
-        #hotel-chatbot-launcher.active .launcher-label {
-            opacity: 0; width: 0; margin: 0; transform: translateX(20px);
-        }
-
-        #hotel-chatbot-launcher.active #launcher-close-icon { opacity: 1; transform: scale(1) rotate(0deg); }
-        #hotel-chatbot-launcher.active #launcher-chat-icon { opacity: 0; transform: scale(0.5) rotate(90deg); }
-
-        /* ========================================================================
-           MAIN CHAT CONTAINER (SOLID WHITE)
-        ======================================================================== */
-        #hotel-chatbot {
-            position: absolute; bottom: 90px; right: 0;
-            width: 380px; height: 720px;
-            max-width: calc(100vw - 40px); max-height: calc(100vh - 120px);
-            
-            /* FIXED: SOLID WHITE */
-            background: #ffffff; 
-            
-            border-radius: 28px;
-            border: 1px solid rgba(0,0,0,0.1); /* Subtle border for crispness */
-            box-shadow: var(--shadow-float);
-            display: flex; flex-direction: column;
-            transform-origin: bottom right;
-            transform: scale(0.95) translateY(20px);
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.4s var(--bezier-apple);
-            overflow: hidden;
-        }
-
-        #hotel-chatbot.open {
-            opacity: 1; visibility: visible;
-            transform: scale(1) translateY(0);
-        }
-
-        /* ========================================================================
-           HEADER (Minimalist)
-        ======================================================================== */
-        #hotel-chatbot-header {
-            padding: 18px 24px;
-            
-            /* FIXED: SOLID WHITE */
-            background: #ffffff;
-            
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            display: flex; align-items: center; justify-content: space-between;
-            z-index: 10;
-        }
-
-        .brand { display: flex; align-items: center; gap: 12px; }
-        
-        .avatar-container {
-            position: relative;
-            width: 44px; height: 44px;
-        }
-
-        .avatar-img {
-            width: 100%; height: 100%;
-            border-radius: 50%; /* Circle avatar is more "Apple" */
-            object-fit: cover;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .status-dot {
-            position: absolute; bottom: 0; right: 0;
-            width: 12px; height: 12px;
-            background: #34C759; /* Apple Green */
-            border: 2px solid white;
-            border-radius: 50%;
-        }
-
-        .header-info h3 { 
-            margin: 0; font-size: 16px; font-weight: 600; 
-            color: var(--text-main); letter-spacing: -0.01em; 
-        }
-        .header-info p { 
-            margin: 2px 0 0; font-size: 12px; 
-            color: var(--text-sub); font-weight: 400; 
-        }
-
-        .header-actions { display: flex; gap: 4px; }
-
-        .action-btn {
-            background: transparent; border: none; cursor: pointer;
-            padding: 8px; border-radius: 50%; color: var(--text-sub);
-            transition: all 0.2s;
-        }
-        .action-btn:hover { background: rgba(0,0,0,0.05); color: var(--text-main); }
-
-        /* ========================================================================
-           MESSAGES AREA
-        ======================================================================== */
-        #hotel-chatbot-messages {
-            flex: 1;
-            padding: 24px;
-            overflow-y: auto;
-            scroll-behavior: smooth;
-            display: flex; flex-direction: column; gap: 18px;
-            
-            /* FIXED: PURE WHITE (Removed Gradient) */
-            background: #ffffff;
-        }
-
-        #hotel-chatbot-messages::-webkit-scrollbar { width: 4px; }
-        #hotel-chatbot-messages::-webkit-scrollbar-thumb {
-            background: rgba(0,0,0,0.1); border-radius: 10px;
-        }
-
-        .message-row {
-            display: flex; width: 100%;
-            animation: messageEnter 0.4s var(--bezier-apple) forwards;
-            opacity: 0; transform: translateY(10px);
-        }
-        
-        @keyframes messageEnter { to { opacity: 1; transform: translateY(0); } }
-
-        .message-row.user { justify-content: flex-end; }
-        .message-row.bot { justify-content: flex-start; }
-
-        /* Chat Bubbles */
-        .bubble {
-            max-width: 80%;
-            padding: 12px 16px;
-            border-radius: 18px;
-            font-size: 14px;
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-primary);
+            font-family: 'Inter', -apple-system, sans-serif;
             line-height: 1.5;
-            position: relative;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-        }
-        
-        /* BOT BUBBLE: Clean Light Grey */
-        .bubble.bot {
-            background: #F2F4F7;
-            color: var(--text-main);
-            border-bottom-left-radius: 4px;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeSpeed; 
         }
 
-        /* USER BUBBLE: Luxury Black */
-        .bubble.user {
-            background: var(--primary-color);
-            color: white;
-            border-bottom-right-radius: 4px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        /* -----------------------------------------------------------------
+           2. ANIMATIONS & UTILITIES
+           ----------------------------------------------------------------- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+            will-change: opacity, transform;
         }
-        
-        /* MARKDOWN STYLES */
-        .bubble p { margin: 0 0 8px 0; }
-        .bubble p:last-child { margin: 0; }
-        .bubble ul, .bubble ol { margin: 8px 0; padding-left: 20px; }
-        .bubble li { margin-bottom: 4px; }
-        .bubble strong { font-weight: 600; color: inherit; } 
-        
-        /* Links inside bubbles */
-        .bubble a { 
-            color: #007AFF; /* Apple Blue */
-            text-decoration: none; 
-            font-weight: 500; 
-        }
-        .bubble a:hover { text-decoration: underline; }
-        
-        .bubble.user a { color: white; text-decoration: underline; }
+        .reveal.active { opacity: 1; transform: translateY(0); }
 
-        /* ========================================================================
-           TYPING INDICATOR
-        ======================================================================== */
-        .typing-indicator {
-            padding: 10px 14px; background: #F2F4F7;
-            border-radius: 18px; border-bottom-left-radius: 4px;
-            display: inline-flex; gap: 4px; align-items: center;
-            width: fit-content;
+        h1, h2, h3, h4 { color: var(--text-primary); letter-spacing: -0.02em; }
+        h1 { font-size: 4.5rem; line-height: 1.08; font-weight: 700; margin-bottom: 1.5rem; }
+        h2 { font-size: 3.5rem; font-weight: 600; margin-bottom: 1rem; }
+        h3 { font-size: 1.75rem; font-weight: 600; margin-bottom: 0.5rem; }
+
+        p.lead {
+            font-size: 1.35rem; color: var(--text-secondary); font-weight: 400;
+            max-width: 680px; margin: 0 auto 2.5rem; line-height: 1.5;
         }
 
-        .dot {
-            width: 6px; height: 6px; background: #8E8E93; border-radius: 50%;
-            animation: bounce 1.4s infinite ease-in-out both;
-        }
-        .dot:nth-child(1) { animation-delay: -0.32s; }
-        .dot:nth-child(2) { animation-delay: -0.16s; }
-        
-        @keyframes bounce { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.6; } 40% { transform: scale(1); opacity: 1; } }
-
-        /* ========================================================================
-           QUICK REPLIES
-        ======================================================================== */
-        #quick-replies {
-            display: flex; gap: 8px; padding: 0 24px 16px 24px;
-            overflow-x: auto; flex-wrap: wrap;
-            scrollbar-width: none;
-        }
-        #quick-replies::-webkit-scrollbar { display: none; }
-
-        .chip {
-            background: #ffffff; /* Solid white background */
-            border: 1px solid rgba(0,0,0,0.08);
-            padding: 8px 14px;
-            border-radius: 20px;
-            font-size: 13px; font-weight: 500;
-            color: var(--text-main);
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s ease;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        .text-gradient {
+            background: linear-gradient(135deg, #111827 0%, #4B5563 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
         
-        .chip:hover {
-            background: var(--primary-color);
-            color: white;
-            border-color: var(--primary-color);
-            transform: translateY(-1px);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        .container { max-width: var(--max-width); margin: 0 auto; padding: 0 24px; }
+        .text-center { text-align: center; }
+        .section-padding { padding: 120px 0; }
+
+        /* Buttons */
+        @keyframes pulse-glow {
+            0% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.2); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 0, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
         }
 
-        /* ========================================================================
-           INPUT AREA
-        ======================================================================== */
-        #input-area {
-            padding: 16px 24px 24px 24px;
-            
-            /* FIXED: SOLID WHITE */
-            background: #ffffff;
-            
-            border-top: 1px solid rgba(0,0,0,0.06);
-            display: flex; gap: 10px; align-items: center;
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 16px 36px; border-radius: 980px; font-size: 16px; font-weight: 500;
+            cursor: pointer; transition: transform 0.2s ease, box-shadow 0.2s ease; border: none; text-decoration: none;
+        }
+        .btn-primary { background: var(--accent-dark); color: #FFFFFF; }
+        .btn-primary:hover { transform: scale(1.03); box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
+        .btn-pulse { animation: pulse-glow 2s infinite; }
+        .btn-secondary { background: var(--bg-alt); color: var(--text-primary); border: 1px solid #E5E7EB; font-weight: 600; }
+        .btn-secondary:hover { background: #F3F4F6; }
+
+        .badge-chip {
+            display: inline-block; padding: 8px 16px; border-radius: 20px;
+            background: #F3F4F6; color: var(--text-secondary); font-size: 12px;
+            font-weight: 600; letter-spacing: 0.5px; text-transform: uppercase;
+            margin-bottom: 24px; border: 1px solid #E5E7EB;
         }
 
-        .input-wrapper {
-            flex: 1; position: relative;
-            background: #F2F4F7;
-            border-radius: 24px;
-            transition: all 0.3s ease;
-            border: 1px solid transparent;
+        /* -----------------------------------------------------------------
+           3. COMPONENT STYLES (Nav, Hero, etc)
+           ----------------------------------------------------------------- */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 1000;
+            background: rgba(255, 255, 255, 0.95);
+            border-bottom: 1px solid rgba(0,0,0,0.05); transition: all 0.3s ease;
         }
+        .nav-inner { height: 70px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 1.4rem; color: var(--text-primary); letter-spacing: -0.5px; }
+        .nav-menu { display: flex; gap: 40px; align-items: center; }
+        .nav-link { font-size: 14px; color: var(--text-secondary); font-weight: 500; text-decoration: none; transition: color 0.2s; }
+        .nav-link:hover { color: var(--text-primary); }
+
+        .hero {
+            padding-top: 180px; padding-bottom: 100px; position: relative; overflow: hidden;
+            background: radial-gradient(circle at 50% 0%, #FFFFFF 0%, #F3F4F6 100%);
+        }
+        .hero-layout { display: grid; grid-template-columns: 1.1fr 1fr; align-items: center; gap: 80px; }
         
-        .input-wrapper:focus-within {
-            background: white;
-            border-color: rgba(0,0,0,0.1);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        /* Chatbot Interface - Upsized */
+        .chat-ui-wrapper {
+            width: 450px; height: 750px; background: #FFFFFF; border-radius: 24px;
+            box-shadow: 0 40px 100px rgba(0,0,0,0.12), 0 0 0 1px rgba(0,0,0,0.05);
+            z-index: 10; transition: transform 0.4s var(--ease-apple); overflow: hidden;
+            transform: translateZ(0); display: flex; flex-direction: column;
         }
+        .chat-ui-wrapper:hover { transform: translateY(-5px); box-shadow: 0 50px 120px rgba(0,0,0,0.15); }
+        .chat-header {
+            height: 55px; min-height: 55px; background: rgba(255,255,255,0.98); border-bottom: 1px solid #f0f0f0;
+            display: flex; align-items: center; justify-content: center; font-weight: 600; font-size: 0.95rem; color: var(--text-primary);
+        }
+        .screen-content { width: 100%; flex-grow: 1; background: #fff; position: relative; }
+        iframe { width: 100%; height: 100%; border: none; display: block; }
 
-        #chat-input {
-            width: 100%; padding: 12px 18px;
-            border: none; background: transparent;
-            font-family: inherit; font-size: 15px; color: var(--text-main);
-            outline: none;
+        .blob {
+            position: absolute; width: 600px; height: 600px;
+            background: radial-gradient(circle, rgba(212,175,55,0.08) 0%, rgba(255,255,255,0) 70%);
+            z-index: 1; pointer-events: none;
         }
-        
-        #send-btn {
-            width: 42px; height: 42px;
-            border-radius: 50%; border: none;
-            background: var(--primary-color);
-            color: white; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-        
-        #send-btn:hover { transform: scale(1.05); box-shadow: 0 6px 15px rgba(0,0,0,0.15); }
-        #send-btn:active { transform: scale(0.95); }
-        #send-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; margin-left: -2px; }
+        .blob-1 { top: -100px; right: -100px; }
+        .blob-2 { bottom: -100px; left: -100px; background: radial-gradient(circle, rgba(0,113,227,0.05) 0%, rgba(255,255,255,0) 70%); }
 
+        /* Philosophy Section */
+        .philosophy-section { background-color: var(--bg-warm); padding: 100px 0; border-bottom: 1px solid #E5E5E5; }
+        .philosophy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+
+        /* NEW: INDUSTRY STATS (Premium Dark) */
+        .industry-stats {
+            background-color: #111827; /* Deep Premium Black */
+            padding: 100px 0; color: #FFFFFF; position: relative; overflow: hidden;
+        }
+        .stat-cards-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; margin-top: 60px; z-index: 2; position: relative; }
+        .stat-card {
+            background: rgba(255,255,255,0.03); padding: 40px 30px; border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.08); text-align: center; transition: all 0.3s ease;
+        }
+        .stat-card:hover { background: rgba(255,255,255,0.06); transform: translateY(-5px); }
+        .stat-number { font-size: 3rem; font-weight: 700; display: block; margin-bottom: 12px; color: var(--accent-gold); }
+        .stat-label { font-size: 0.95rem; color: rgba(255,255,255,0.7); line-height: 1.5; }
+
+        /* Integration Strip */
+        .integration-strip { padding: 40px 0; border-bottom: 1px solid #E5E5E5; background: white; }
+        .logo-grid { display: flex; justify-content: center; gap: 60px; flex-wrap: wrap; opacity: 0.5; filter: grayscale(100%); }
+        .logo-item { font-size: 1.2rem; font-weight: 600; font-family: 'Inter', sans-serif; color: #000; display: flex; align-items: center; gap: 10px; }
+
+        /* Metrics */
+        .metrics-section { background: #fff; border-bottom: 1px solid #E5E5E5; }
+        .metrics-grid { display: grid; grid-template-columns: repeat(3, 1fr); divide-x: 1px solid #E5E5E5; }
+        .metric-item { padding: 60px 40px; text-align: center; }
+        .metric-val { font-size: 3.5rem; font-weight: 700; display: block; margin-bottom: 10px; line-height: 1; }
+        .metric-lbl { font-size: 1.1rem; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; margin-bottom: 8px; }
+
+        /* ROI Calculator */
+        .calculator-section { background: #111; color: white; border-radius: 30px; padding: 60px; margin: 60px 0; overflow: hidden; position: relative; }
+        .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; position: relative; z-index: 2; }
+        input[type=range] { -webkit-appearance: none; width: 100%; background: transparent; }
+        input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; height: 30px; width: 30px; border-radius: 50%; background: #fff; cursor: pointer; margin-top: -12px; }
+        input[type=range]::-webkit-slider-runnable-track { width: 100%; height: 6px; cursor: pointer; background: #333; border-radius: 10px; }
+        .calc-result { text-align: right; }
+        .calc-big-num { font-size: 5rem; font-weight: 700; line-height: 1; color: #34C759; letter-spacing: -2px; }
+
+        /* TIMELINE */
+        .timeline-section { background: #FFF; padding: 120px 0; }
+        .timeline-container { max-width: 800px; margin: 60px auto 0; position: relative; }
+        .timeline-line { position: absolute; left: 50%; top: 0; bottom: 0; width: 2px; background: #E5E5E5; transform: translateX(-50%); }
+        .timeline-step { display: flex; justify-content: space-between; align-items: center; margin-bottom: 80px; position: relative; }
+        .timeline-step:nth-child(even) { flex-direction: row-reverse; }
+        .timeline-content { width: 45%; padding: 30px; background: #FFF; border-radius: 20px; border: 1px solid #F0F0F0; box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
+        .timeline-number { width: 50px; height: 50px; background: var(--text-primary); color: #FFF; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 1.2rem; position: absolute; left: 50%; transform: translateX(-50%); z-index: 2; box-shadow: 0 0 0 8px #FFF; }
+        .timeline-title { font-size: 1.3rem; margin-bottom: 10px; font-weight: 600; }
+        .timeline-desc { font-size: 0.95rem; color: var(--text-secondary); line-height: 1.6; }
+
+        /* NEW: PROCESS VISUAL */
+        .process-visual { background: var(--bg-alt); padding: 120px 0; border-bottom: 1px solid #E5E5E5; }
+        .process-steps { display: flex; justify-content: space-between; margin-top: 80px; position: relative; }
+        .process-steps::before { content: ''; position: absolute; top: 60px; left: 10%; right: 10%; height: 2px; background: linear-gradient(90deg, #E5E7EB 0%, var(--accent-gold) 50%, #E5E7EB 100%); z-index: 0; }
+        .process-step { flex: 1; text-align: center; position: relative; z-index: 1; }
+        .process-circle { width: 120px; height: 120px; background: #FFF; border: 1px solid #E5E7EB; border-radius: 50%; margin: 0 auto 24px; display: flex; align-items: center; justify-content: center; font-size: 3rem; box-shadow: 0 10px 30px rgba(0,0,0,0.03); transition: transform 0.3s ease; }
+        .process-step:hover .process-circle { transform: scale(1.05); border-color: var(--accent-gold); }
+        .process-label { font-size: 1.1rem; font-weight: 600; margin-bottom: 8px; color: var(--text-primary); }
+        .process-detail { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.5; max-width: 200px; margin: 0 auto; }
+
+        /* Bento Grid */
+        .bento-section { background: var(--bg-alt); }
+        .bento-grid { display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 450px); gap: 24px; margin-top: 60px; }
+        .card { background: #FFFFFF; border-radius: var(--radius-lg); padding: 40px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 2px 10px rgba(0,0,0,0.02); transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card:hover { box-shadow: 0 20px 40px rgba(0,0,0,0.08); transform: translateY(-5px); }
+        .card.span-2 { grid-column: span 2; }
+        .card.row-2 { grid-row: span 2; }
+        .card.dark { background: #1D1D1F; color: #FFFFFF; }
+        .card.dark h3, .card.dark p { color: #FFF; }
+        .card-icon { font-size: 3rem; margin-bottom: 20px; display: block; }
+
+        /* NEW: USE CASES */
+        .use-cases-section { background: #FFFFFF; padding: 120px 0; border-bottom: 1px solid #E5E5E5; }
+        .use-case-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; margin-top: 60px; }
+        .use-case-card { background: var(--bg-alt); padding: 40px; border-radius: 24px; border: 1px solid #E5E7EB; transition: all 0.3s ease; }
+        .use-case-card:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.05); background: #FFF; }
+        .use-case-icon { font-size: 2.5rem; margin-bottom: 20px; display: block; }
+        .use-case-title { font-size: 1.3rem; font-weight: 600; margin-bottom: 12px; color: var(--text-primary); }
+        .use-case-desc { color: var(--text-secondary); line-height: 1.6; font-size: 0.95rem; }
+
+        /* Security */
+        .security-section { background: var(--bg-alt); color: var(--text-primary); padding: 120px 0; }
+        .sec-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; margin-top: 60px; }
+        .sec-card { background: #FFFFFF; border: 1px solid #E5E5E5; padding: 40px; border-radius: 20px; transition: transform 0.3s, box-shadow 0.3s; box-shadow: var(--shadow-sm); }
+        .sec-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+        .sec-icon { font-size: 2rem; margin-bottom: 20px; display: block; }
+        .sec-title { font-size: 1.4rem; margin-bottom: 15px; font-weight: 600; }
+        .sec-text { color: var(--text-secondary); line-height: 1.6; }
+
+        /* Testimonials */
+        .testimonials { padding: 120px 0; background: #fff; overflow: hidden; }
+        .test-scroll-container { display: flex; gap: 32px; overflow-x: auto; padding: 40px 24px 60px; scroll-snap-type: x mandatory; margin: 0 -24px; scrollbar-width: none; }
+        .test-scroll-container::-webkit-scrollbar { display: none; }
+        .test-card { min-width: 400px; background: #F9F9F9; padding: 40px; border-radius: 24px; border: 1px solid #EEE; scroll-snap-align: center; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.3s ease; }
+        .test-card:hover { transform: translateY(-5px); background: #FFF; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .test-text { font-size: 1.15rem; color: #333; font-style: italic; margin-bottom: 30px; line-height: 1.6; }
+        .test-author { display: flex; align-items: center; gap: 16px; }
+        .test-avatar { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; background: #E5E5E5; }
+
+        /* Table */
+        .comparison-table { width: 100%; border-collapse: collapse; margin-top: 60px; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.04); }
+        .comparison-table th { text-align: left; padding: 30px; background: #F9FAFB; border-bottom: 1px solid #E5E7EB; color: var(--text-secondary); }
+        .comparison-table td { padding: 25px 30px; border-bottom: 1px solid #F3F4F6; font-size: 1.05rem; }
+        .col-highlight { background: #F0F9FF; color: var(--accent-blue) !important; font-weight: 600; }
+        .icon-check { color: #34C759; margin-right: 8px; }
+
+        /* Pricing */
+        .pricing-section { background: var(--bg-alt); }
+        .pricing-container { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; max-width: 960px; margin: 60px auto 0; }
+        .price-card { background: #FFF; padding: 50px; border-radius: 30px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); display: flex; flex-direction: column; position: relative; transition: transform 0.3s ease; }
+        .price-card:hover { transform: translateY(-5px); }
+        .price-card.featured { box-shadow: 0 0 0 2px var(--accent-gold), 0 20px 40px rgba(0,0,0,0.1); }
+        .badge-popular { position: absolute; top: 20px; right: 20px; background: var(--accent-gold); color: #FFF; font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 20px; }
+        .price-features li { margin-bottom: 16px; display: flex; align-items: center; color: var(--text-secondary); }
+
+        /* FAQ & Footer */
+        .faq-item { border-bottom: 1px solid #E5E5E5; padding: 24px 0; }
+        .faq-question { font-size: 1.2rem; font-weight: 500; cursor: pointer; display: flex; justify-content: space-between; }
+        .faq-answer { margin-top: 15px; color: var(--text-secondary); display: none; }
+
+        .footer { background: #F9FAFB; padding: 100px 0 40px; border-top: 1px solid #E5E5E5; }
+        .footer-grid { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 80px; margin-bottom: 80px; }
+        .footer-links a { color: var(--text-secondary); text-decoration: none; }
+        .legal-block { border-top: 1px solid #E5E5E5; padding-top: 40px; font-size: 0.8rem; color: var(--text-tertiary); }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            h1 { font-size: 3.5rem; }
+            .hero-layout { grid-template-columns: 1fr; text-align: center; gap: 40px; }
+            .hero-text { order: 1; }
+            .hero-visual { order: 2; height: auto; }
+            .chat-ui-wrapper { width: 100%; max-width: 380px; height: 650px; margin: 0 auto; }
+            .metrics-grid { grid-template-columns: 1fr; divide-x: none; divide-y: 1px solid #E5E5E5; }
+            .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+            .pricing-container, .calc-grid, .sec-grid, .use-case-grid, .stat-cards-grid { grid-template-columns: 1fr; }
+            .timeline-line { left: 20px; }
+            .timeline-step, .timeline-step:nth-child(even) { flex-direction: column; align-items: flex-start; margin-left: 50px; }
+            .timeline-content { width: 100%; }
+            .timeline-number { left: 20px; transform: translateX(-50%); }
+            .calc-result { text-align: left; margin-top: 30px; }
+            .calc-big-num { font-size: 3.5rem; }
+            .test-scroll-container { padding-left: 24px; padding-right: 24px; gap: 16px; }
+            .test-card { min-width: 300px; padding: 30px; }
+            .logo-grid { flex-direction: column; gap: 30px; }
+            .philosophy-grid { grid-template-columns: 1fr; gap: 40px; }
+            .process-steps { flex-direction: column; gap: 60px; }
+            .process-steps::before { display: none; }
+            .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+            .nav-menu a:not(.btn) { display: none; } 
+        }
     </style>
 </head>
 <body>
 
-<div id="chatbot-wrapper">
-    
-    <div id="proactive-nudge" onclick="toggleChat()">
-        <span>👋 Imagine this for your Hotel!</span>
-        <span class="close-nudge" onclick="event.stopPropagation(); closeNudge()">×</span>
+    <nav id="navbar">
+        <div class="container nav-inner">
+            <div class="logo">Veda Concierge</div>
+            <div class="nav-menu">
+                <a href="#features" class="nav-link">Capabilities</a>
+                <a href="#pricing" class="nav-link">Pricing</a>
+                <a href="#faq" class="nav-link">FAQ</a>
+                <a href="#demo" class="btn btn-primary btn-pulse" style="padding: 10px 24px; font-size: 14px;">Get Audit</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="blob blob-1"></div>
+        <div class="blob blob-2"></div>
+        <div class="container">
+            <div class="hero-layout">
+                <div class="hero-text reveal active">
+                    <span class="badge-chip">The New Standard</span>
+                    <h1>Hospitality.<br><span class="text-gradient">Automated.</span></h1>
+                    <p class="lead">
+                        Guests don't want to wait, and they definitely don't want to call the front desk.
+                        Give them instant answers, and they will give you their trust (and their money).
+                        <br><br>
+                        <strong style="color: var(--text-primary);">Go ahead, test the live demo on the right ⮕</strong>
+                    </p>
+                    <div style="display: flex; gap: 15px; flex-wrap: wrap; justify-content: flex-start;">
+                        <a href="#demo" class="btn btn-primary">Start Transformation</a>
+                        <a href="#features" class="btn btn-secondary">See How It Works</a>
+                    </div>
+                    <div style="margin-top: 30px; display: flex; align-items: center; gap: 10px; font-size: 0.9rem; color: var(--text-secondary);">
+                        <span style="color: #34C759; font-size: 1.2rem;">●</span> <span>Compatible with your current PMS</span>
+                    </div>
+                </div>
+
+                <div class="hero-visual reveal active" style="transition-delay: 0.2s;">
+                    <div class="chat-ui-wrapper">
+                        <div class="chat-header">
+                            <span style="width: 10px; height: 10px; background: #FF5F56; border-radius: 50%; display: inline-block; margin-right: 6px;"></span>
+                            <span style="width: 10px; height: 10px; background: #FFBD2E; border-radius: 50%; display: inline-block; margin-right: 6px;"></span>
+                            <span style="width: 10px; height: 10px; background: #27C93F; border-radius: 50%; display: inline-block; margin-right: 15px;"></span>
+                            Live Concierge Demo
+                        </div>
+                        <div class="screen-content">
+                            <iframe src="https://vedaconcierge.com/widget.html?v=2" title="AI Chat Demo" loading="lazy"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="philosophy-section reveal">
+        <div class="container">
+            <div class="philosophy-grid">
+                <div>
+                    <div style="width: 2px; height: 60px; background: #D4AF37; margin-bottom: 30px;"></div>
+                    <h2 style="font-family: 'Playfair Display', serif; font-size: 3.5rem; line-height: 1.1; color: #111827; margin-bottom: 20px;">
+                        The Wisdom of<br>
+                        <span style="color: #D4AF37; font-style: italic;">Veda (वेद)</span>
+                    </h2>
+                </div>
+                <div>
+                    <p style="font-size: 1.1rem; color: #6B7280; line-height: 1.8;">
+                        In ancient Sanskrit, <strong>Veda means "Knowledge."</strong>
+                    </p>
+                    <p style="font-size: 1.1rem; color: #6B7280; line-height: 1.8; margin-top: 20px;">
+                        We believe true hospitality isn't just answering questions—it's <em>knowing</em> your guest. 
+                        We chose the name <strong>Veda</strong> because our AI is built on a foundation of deep knowledge about your property, allowing it to serve guests with the wisdom and patience of your best staff member.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="industry-stats">
+        <div class="container">
+            <div class="text-center reveal">
+                <h2 style="color: white; margin-bottom: 20px;">The Industry Truth</h2>
+                <p class="lead" style="color: rgba(255,255,255,0.7); max-width: 700px;">These numbers show why AI concierge is no longer optional.</p>
+            </div>
+            <div class="stat-cards-grid">
+                <div class="stat-card reveal">
+                    <span class="stat-number">73%</span>
+                    <p class="stat-label">of guests expect instant responses to their queries</p>
+                </div>
+                <div class="stat-card reveal">
+                    <span class="stat-number">15%</span>
+                    <p class="stat-label">commission lost to OTAs on every booking</p>
+                </div>
+                <div class="stat-card reveal">
+                    <span class="stat-number">40%</span>
+                    <p class="stat-label">increase in direct bookings with AI assistance</p>
+                </div>
+                <div class="stat-card reveal">
+                    <span class="stat-number">24/7</span>
+                    <p class="stat-label">availability eliminates missed opportunities</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="integration-strip">
+        <div class="container">
+            <p class="text-center" style="font-size: 0.85rem; text-transform: uppercase; color: #999; letter-spacing: 1px; margin-bottom: 20px;">Seamless integration with</p>
+            <div class="logo-grid">
+                <div class="logo-item"><span style="font-size: 1.5rem;">❖</span> Oracle OPERA</div>
+                <div class="logo-item"><span style="font-size: 1.5rem;">☁</span> Cloudbeds</div>
+                <div class="logo-item"><span style="font-size: 1.5rem;">⚡</span> SiteMinder</div>
+                <div class="logo-item"><span style="font-size: 1.5rem;">◒</span> Little Hotelier</div>
+                <div class="logo-item"><span style="font-size: 1.5rem;">W</span> WordPress</div>
+            </div>
+        </div>
     </div>
 
-    <div id="hotel-chatbot">
-        
-        <div id="hotel-chatbot-header">
-            <div class="brand">
-                <div class="avatar-container">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMgAAADICAMAAACahl6sAAAAe1BMVEUAAAD////8/PwICAgEBARCQkJISEjKysrHx8deXl7AwMA+Pj75+fn29vYLCwsUFBQxMTHv7++Pj4/Q0NDn5+cYGBg5OTkiIiKkpKTg4OC6urpMTEx1dXUnJycsLCwRERGvr6+EhITZ2dlvb2+enp5iYmJXV1eJiYmxsbHNzZA3AAAFHklEQVR4nO2c6XqiMBhGCQGXmoBsAnWr2jq9/yucJAQEDcLTmWB/vOepWOEryckKFnAcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAC/Ha9Z6GVng3rzOlu8TmD3bx42T4ZH2zkQH4Nwv14f9vmxmxuqF169mh5zEXaQca2i6P42ITJRqt+90N8Vi5RHUSRe6bzY+ZnOeqUb6D8K1tf4vZRhjPOofIuvh7o4aLPXyakTDa8fKXcJIeolF4Sw9GMZ1uWtXB0vWJ/mnOgY8VJvLDmt6+p6TdOqk17Hpco7Z1pFCxFSxmtZ0CJQxh6X70zkm1RoX/HuEv72lYl9UTqUpCVUuusirbPfrhD9iRUbHUov50bDJTcJ/VtyCfVeX9LbneyUVhlz3VYGNVz+RHEmA7cLrltUFXXTZdUrms/CF3mIJLfJrfQfVFSuCSPnq5PFvLOtCXXbdRnncreTti9PpXc8RWQM/DNxH6rLADv7lQn1pqsYkVD2IdJ2h/Mno2TNDCGCoi9aGUxTLVSls5+rXjDGgxg6UE/oqRrlpkGN9vm8GpbGNBkRM1whqs8z/qce1e2jiixfqKTdcQU9qu6q9sd2TWlZRxx0hAtX18VwUTM97A7D5FDs1v1kCmihC3FcJxlXc0xbR1vHmcRFjI0Xpia22/w2pDEqjuhjnHPu2G5atOrp63Hzx48pAvt9RO3/nYyaPn4Kd6+e3TFY7/tr5KTwc5JwghnRC8/uqJn653Cys9y01FR4UYnZrZNygioJEsvtSmG7SgTXsYdYP0c03SQczsm/Qb9dYnfQqg5WZrZF8qfVoafJgfmvFWEIrEaST5sS8nzna8RM/nxE04doSoEbhKs1Z9tt6+NJFln1DY/0MOWwCatPg0n/waRLVnY9gvJpjchv59zBOuEuidKIaymDhFTd2ZOQA+LhSRfh/Hu7D/fbgg8NB+fdJgs3u8Tcl9RK9m13/L0+yWC6DdS3BtRPntUJc4tQHUvRLJYnhcYYcZgS1IVnhV2/RzRrvvE8lM+m/oJS/T0M/dMrS9LcoojnxP0ZbCZj8XZl/R56PJKV54ULQ4A+0dlbFHGcwpSuWpTBzcMJTBnUobv6q21ZL9f+gvFtOSiMo68ap4pO4cXGTizhh/aJbJ72eRC7c/ubyUNNCZdO3LJXpAz0f7HU0kse4yYRMbdpybITNzPHieafHJ1W06eL3qZlV2Tekz92J+Kb275YuQjUv1b0CEdNVfyqGlEF7bZEPCnSE0gW1SmTPnHyfpeIzOLXkIiuonnQ+icbfZmIsbPLmZh1mhZdGQ/PlUhdF1Xg76oR2U3u+0gf86AdBxGIQAQiEIEIRCACEYhABCIQgQhEIAIRiEAEIhCBCEQgAhGIQAQiEIEIRCACEYhABCIQgQhEIAIRiEDk/yLvZn8z3m4nL2FetuOMIlwFd0WOBhFWXRK9ldut3Qjzbrp4Xz6rgTeXlKsrxjfmaiPNtfGOfgrGu9pkumzbt3dLu9jz7tGDqftgorwTmZcGE/m3PK6zV72fjBUiQsv8Pvn/CHWCT8P9e9x102UnzHG2BhN5e8Z31i2b4yc3VAcj5dWehmozwWF1h7/a+Kus05rlDW3Hx7iV7+87PUR+OK43d4GzzWa2yaw+9sG8a8OjZeRdhj2xt/W9j6iY4OFnnhOYVso2d/tMm8V94N1Kaswr7SpYuxPR/ExCerfGlAHTEwB7s/l8KwAAAAAAAAAAAAAAAAAAAAAAAAAAAACA1/EXj9dRzT+CgSsAAAAASUVORK5CYII=" alt="Mona" class="avatar-img">
-                    <div class="status-dot"></div>
+    <section class="metrics-section">
+        <div class="container">
+            <div class="metrics-grid">
+                <div class="metric-item reveal">
+                    <span class="metric-val">30%</span>
+                    <span class="metric-lbl">More Direct Bookings</span>
+                    <p class="metric-desc">Guests book direct. You keep 100% margin instead of paying 15% to OTAs.</p>
                 </div>
-                <div class="header-info">
-                    <h3>Mona Montreux</h3>
-                    <p>Concierge</p>
+                <div class="metric-item reveal">
+                    <span class="metric-val">50hrs</span>
+                    <span class="metric-lbl">Time Saved Monthly</span>
+                    <p class="metric-desc">Stop answering "do you have wifi" 100 times a day. Automate the mundane.</p>
                 </div>
-            </div>
-            <div class="header-actions">
-                <button class="action-btn" id="reset-btn" title="Start New Chat">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
-                </button>
-                <button class="action-btn" id="minimize-btn" title="Minimize">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-                </button>
+                <div class="metric-item reveal">
+                    <span class="metric-val">1.5s</span>
+                    <span class="metric-lbl">Avg Response Time</span>
+                    <p class="metric-desc">Instant answers in their native language mean happier guests who actually book.</p>
+                </div>
             </div>
         </div>
+    </section>
 
-        <div id="hotel-chatbot-messages"></div>
-        <div id="quick-replies"></div>
-
-        <div id="input-area">
-            <div class="input-wrapper">
-                <input type="text" id="chat-input" placeholder="Type a message..." autocomplete="off">
+    <div class="container reveal" style="margin-top: 60px;">
+        <div class="calculator-section">
+            <h2 style="color: white; margin-bottom: 40px; font-size: 2.5rem;">Unlock Hidden Revenue.</h2>
+            <div class="calc-grid">
+                <div class="calc-input">
+                    <label>Number of Rooms: <span id="roomCountVal" style="color: #34C759; font-weight: 700;">50</span></label>
+                    <input type="range" min="10" max="500" value="50" id="roomSlider">
+                    <p style="color: #666; font-size: 0.9rem; margin-top: 15px;">Drag to match your property size.</p>
+                </div>
+                <div class="calc-result">
+                    <div class="calc-big-num">$<span id="savingsVal">4,500</span></div>
+                    <div class="calc-sub">Estimated Monthly Revenue Increase</div>
+                    <p style="color: #555; font-size: 0.85rem; margin-top: 20px;">*Based on saving 15% OTA commission per room plus capturing just one extra room night per month via instant replies.</p>
+                </div>
             </div>
-            <button id="send-btn">
-                <svg viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" /></svg>
-            </button>
         </div>
-
     </div>
 
-    <button id="hotel-chatbot-launcher">
-        <div class="icon-container">
-            <svg id="launcher-chat-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path>
-            </svg>
-            <svg id="launcher-close-icon" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
-                <line x1="18" y1="6" x2="6" y2="18"></line>
-                <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
+    <section class="timeline-section">
+        <div class="container">
+            <div class="text-center">
+                <h2>Zero Friction Onboarding</h2>
+                <p class="lead">From signup to live in less than 48 hours.</p>
+            </div>
+            <div class="timeline-container">
+                <div class="timeline-line"></div>
+                <div class="timeline-step reveal">
+                    <div class="timeline-number">1</div>
+                    <div class="timeline-content">
+                        <h4 class="timeline-title">Data Ingestion</h4>
+                        <p class="timeline-desc">We scan your website and PDFs into a collaborative Airtable database. You can adjust prices, discounts, or policies instantly—our system syncs updates to our AI brain every 2 hours.</p>
+                    </div>
+                </div>
+                <div class="timeline-step reveal">
+                    <div class="timeline-number">2</div>
+                    <div class="timeline-content">
+                        <h4 class="timeline-title">Brand Calibration</h4>
+                        <p class="timeline-desc">We tweak the AI's personality. Want it formal and "White Lotus"? Or casual and "Airbnb"? You choose the voice.</p>
+                    </div>
+                </div>
+                <div class="timeline-step reveal">
+                    <div class="timeline-number">3</div>
+                    <div class="timeline-content">
+                        <h4 class="timeline-title">Go Live</h4>
+                        <p class="timeline-desc">Copy-paste one line of code into your site footer (or we can help you). That's it. The concierge is now live and selling 24/7.</p>
+                    </div>
+                </div>
+            </div>
         </div>
-        <span class="launcher-label">Try Our Demo</span>
-    </button>
+    </section>
 
-</div>
+    <section class="process-visual">
+        <div class="container">
+            <div class="text-center reveal">
+                <h2>How It Works Behind the Scenes</h2>
+                <p class="lead">Sophisticated technology, simple experience.</p>
+            </div>
+            <div class="process-steps">
+                <div class="process-step reveal">
+                    <div class="process-circle">👤</div>
+                    <h4 class="process-label">Guest Asks</h4>
+                    <p class="process-detail">Visitor types question in any language, any time</p>
+                </div>
+                <div class="process-step reveal">
+                    <div class="process-circle">🧠</div>
+                    <h4 class="process-label">AI Analyzes</h4>
+                    <p class="process-detail">Neural network processes intent & context in milliseconds</p>
+                </div>
+                <div class="process-step reveal">
+                    <div class="process-circle">🗄️</div>
+                    <h4 class="process-label">Database Query</h4>
+                    <p class="process-detail">Retrieves accurate info from your custom knowledge base</p>
+                </div>
+                <div class="process-step reveal">
+                    <div class="process-circle">💬</div>
+                    <h4 class="process-label">Smart Response</h4>
+                    <p class="process-detail">Delivers personalized answer in guest's native language</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<script>
-    /** * MONA MONTREUX CORE LOGIC * */
+    <section class="section-padding bento-section" id="features">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 60px;">
+                <h2>Intelligence at Scale</h2>
+                <p class="lead">A suite of capabilities designed to replace friction with flow.</p>
+            </div>
+            <div class="bento-grid">
+                <div class="card span-2 row-2 reveal">
+                    <div>
+                        <span class="card-icon">🧠</span>
+                        <h3>Contextual Awareness</h3>
+                        <p>Unlike basic chatbots, Veda Concierge understands nuance. It knows the difference between "Can I bring my dog?" and "Do you have hot dogs?".</p>
+                    </div>
+                    <img src="https://placehold.co/600x300/F5F5F7/cccccc?text=Contextual+AI+UI" alt="AI Visualization" style="margin-top: 30px; border-radius: 12px; opacity: 0.8;">
+                </div>
+                <div class="card dark reveal">
+                    <span class="card-icon">⚡</span>
+                    <h3>Sub-100ms</h3>
+                    <p>Latency so low, it feels like magic. Powered by edge computing.</p>
+                </div>
+                <div class="card reveal">
+                    <span class="card-icon">🌍</span>
+                    <h3>95+ Languages</h3>
+                    <p>Speak to guests in their native tongue automatically.</p>
+                </div>
+                <div class="card span-2 reveal">
+                    <span class="card-icon">🛡️</span>
+                    <h3>Custom Database Hosted</h3>
+                    <p>We host a secure, isolated database of your hotel's specific facts. The AI references this exclusively, ensuring zero hallucinations.</p>
+                </div>
+                <div class="card span-2 reveal">
+                    <span class="card-icon">📊</span>
+                    <h3>Insight Engine</h3>
+                    <p>See exactly what guests are asking. Discover trends like "Vegan options" or "Late check-out" and adjust your operations.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    // --- References ---
-    const launcher = document.getElementById("hotel-chatbot-launcher");
-    const chatWindow = document.getElementById("hotel-chatbot");
-    const minimizeBtn = document.getElementById("minimize-btn");
-    const resetBtn = document.getElementById("reset-btn");
-    const messagesContainer = document.getElementById("hotel-chatbot-messages");
-    const inputField = document.getElementById("chat-input");
-    const sendButton = document.getElementById("send-btn");
-    const quickRepliesContainer = document.getElementById("quick-replies");
-    const nudge = document.getElementById("proactive-nudge");
+    <section class="use-cases-section">
+        <div class="container">
+            <div class="text-center reveal">
+                <h2>Built for Every Guest Journey</h2>
+                <p class="lead">From browsing to booking, Veda Concierge handles it all.</p>
+            </div>
+            <div class="use-case-grid">
+                <div class="use-case-card reveal">
+                    <span class="use-case-icon">🔍</span>
+                    <h4 class="use-case-title">Pre-Arrival Questions</h4>
+                    <p class="use-case-desc">Answer questions about amenities, policies, and local attractions before guests even book. Convert browsers into bookers.</p>
+                </div>
+                <div class="use-case-card reveal">
+                    <span class="use-case-icon">🏨</span>
+                    <h4 class="use-case-title">Digital Compendium</h4>
+                    <p class="use-case-desc">Guests get instant answers to "What is the Wi-Fi password?" or "Pool hours" without calling the front desk.</p>
+                </div>
+                <div class="use-case-card reveal">
+                    <span class="use-case-icon">🗺️</span>
+                    <h4 class="use-case-title">Local Expert</h4>
+                    <p class="use-case-desc">The AI recommends your preferred restaurants and attractions, acting as a virtual concierge 24/7.</p>
+                </div>
+                <div class="use-case-card reveal">
+                    <span class="use-case-icon">✉️</span>
+                    <h4 class="use-case-title">Lead Handoff</h4>
+                    <p class="use-case-desc">For complex requests like Weddings or Corporate Events, the AI collects details and instantly emails your sales team.</p>
+                </div>
+                <div class="use-case-card reveal">
+                    <span class="use-case-icon">🌐</span>
+                    <h4 class="use-case-title">International Travelers</h4>
+                    <p class="use-case-desc">Communicate seamlessly in 95+ languages. Break down language barriers and expand your market reach globally.</p>
+                </div>
+                <div class="use-case-card reveal">
+                    <span class="use-case-icon">📱</span>
+                    <h4 class="use-case-title">Mobile-First Experience</h4>
+                    <p class="use-case-desc">Optimized for smartphones where 70% of travel planning happens. Fast, intuitive, and always accessible.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    // --- Configuration ---
-    const WEBHOOK_URL = "https://n8n.srv1106816.hstgr.cloud/webhook/595269c9-1640-45c9-9c2b-861a69417966"; 
-    const INITIAL_GREETING = "Bonjour! Welcome to Mona Montreux. How may I assist with your stay today? You're welcome to communicate in any language you prefer.";
-    const STARTER_OPTIONS = [
-        "Show me the rooms",
-        "Check-in / Check-out",
-        "Parking",
-        "Contact reception"
-    ];
+    <section class="security-section">
+        <div class="container">
+            <div class="text-center">
+                <h2>Enterprise-Grade Security</h2>
+                <p class="lead">Built for chains that cannot compromise on data privacy.</p>
+            </div>
+            <div class="sec-grid reveal">
+                <div class="sec-card">
+                    <span class="sec-icon">🔒</span>
+                    <h4 class="sec-title">AES-256 Encryption</h4>
+                    <p class="sec-text">All guest data is encrypted at rest and in transit. We use banking-grade standards to ensure no data ever leaks.</p>
+                </div>
+                <div class="sec-card">
+                    <span class="sec-icon">🇪🇺</span>
+                    <h4 class="sec-title">GDPR & CCPA Ready</h4>
+                    <p class="sec-text">Fully compliant with European and Californian data laws. Automatic data purging and user consent management built-in.</p>
+                </div>
+                <div class="sec-card">
+                    <span class="sec-icon">🛡️</span>
+                    <h4 class="sec-title">Isolated Instances</h4>
+                    <p class="sec-text">Your hotel's data lives in its own container. It is never mixed with other clients or used to train public models.</p>
+                </div>
+                <div class="sec-card">
+                    <span class="sec-icon">⚡</span>
+                    <h4 class="sec-title">99.99% Uptime SLA</h4>
+                    <p class="sec-text">Redundant server clusters across 3 continents ensure your concierge never sleeps, even during traffic spikes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    // --- Configure Marked (Markdown) - FIXED RENDERER ---
-    const renderer = new marked.Renderer();
-    renderer.link = function(href, title, text) {
-        // CRITICAL FIX: Convert href to string if it's an object
-        let cleanHref = '#';
-        
-        if (href) {
-            // If href is an object, try to extract URL properties
-            if (typeof href === 'object') {
-                cleanHref = href.url || href.href || href.link || '#';
-                console.warn("Link href is an object:", href);
-            } else {
-                cleanHref = String(href);
-            }
-        }
-        
-        // Ensure it's a valid URL
-        if (cleanHref !== '#' && !cleanHref.match(/^https?:\/\//i)) {
-            console.warn("Relative URL detected:", cleanHref);
-        }
-        
-        const cleanTitle = title ? String(title) : '';
-        const cleanText = text ? String(text) : cleanHref;
-        
-        return `<a href="${cleanHref}" target="_blank" rel="noopener noreferrer" title="${cleanTitle}">${cleanText}</a>`;
-    };
+    <section class="testimonials">
+        <div class="container">
+            <div class="text-center" style="margin-bottom: 50px;">
+                <h2>Trusted by Forward Thinkers</h2>
+                <p class="lead" style="max-width: 500px; margin: 0 auto;">See what business owners are saying about our impact.</p>
+            </div>
+            <div class="test-scroll-container">
+                <div class="test-card reveal">
+                    <p class="test-text">"Krishna's deep research and constant testing lead to better outcomes, delivering a chatbot experience and client service that feels genuinely human."</p>
+                    <div class="test-author">
+                        <img src="https://lh3.googleusercontent.com/d/1jcswGP7q1NZ2CJa3ubrrSy-S-4wL7dI0" alt="Amisha" class="test-avatar">
+                        <div class="test-info"><h5>Amisha</h5><span>Owner, Ahmedabad</span></div>
+                    </div>
+                </div>
+                <div class="test-card reveal">
+                    <p class="test-text">"We use their AI assistant at our clinic, and it has made our daily work so much easier. Fast answers, fewer calls, and a smoother experience for everyone."</p>
+                    <div class="test-author">
+                        <img src="https://lh3.googleusercontent.com/d/1h00yT9GsyZlXo7SP3uiTYGFfb94yzA1m" alt="Aniket" class="test-avatar">
+                        <div class="test-info"><h5>Aniket</h5><span>Owner, IRI Dream Care</span></div>
+                    </div>
+                </div>
+                <div class="test-card reveal">
+                    <p class="test-text">"Before Veda Concierge, we were drowning in operational chaos. Now, the system centralized everything. It's the upgrade we didn't know we needed."</p>
+                    <div class="test-author">
+                        <img src="https://lh3.googleusercontent.com/d/1CN1ABCC6VRJEaCbr2JXAPJz0EYnmrWOJ" alt="Gagan" class="test-avatar">
+                        <div class="test-info"><h5>Gagan</h5><span>Director, Ample Publications</span></div>
+                    </div>
+                </div>
+                <div class="test-card reveal">
+                    <p class="test-text">"Krishna's AI agents helped us build the seamless system we always wanted. Everything feels smoother, and the output is great."</p>
+                    <div class="test-author">
+                        <img src="https://lh3.googleusercontent.com/d/1DeOubSXhRZUGGcrCzzkdpyngEgp2G3k3" alt="Andrew" class="test-avatar">
+                        <div class="test-info"><h5>Andrew</h5><span>CEO, AdCrunch</span></div>
+                    </div>
+                </div>
+                <div class="test-card reveal">
+                    <p class="test-text">"We're a data-driven company, and Krishna has transformed our raw sheets into clear, meaningful information and graphs that help us make informed decisions."</p>
+                    <div class="test-author">
+                        <img src="https://lh3.googleusercontent.com/d/1E2-DIQDrsrlT1M8Y0UECsUhWXXQQvEc2" alt="Tracy" class="test-avatar">
+                        <div class="test-info"><h5>Tracy</h5><span>CTO, Michael Curtis Media</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-    marked.setOptions({ 
-        renderer: renderer,
-        breaks: true,
-        gfm: true
-    });
+    <section class="section-padding">
+        <div class="container">
+            <div class="text-center">
+                <h2>Evolution vs. Tradition</h2>
+                <p class="lead">Why "Staff Only" support is costing you reviews.</p>
+            </div>
+            <table class="comparison-table reveal">
+                <thead>
+                    <tr><th style="width: 30%;">Feature</th><th style="width: 25%;">Standard Chatbot</th><th style="width: 25%;">Human Staff</th><th class="col-highlight">Veda Concierge</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Response Time</td><td>Instant (Generic)</td><td>Minutes/Hours</td><td class="col-highlight"><span class="icon-check">✓</span> 1.5 Seconds</td></tr>
+                    <tr><td>Tone & Voice</td><td>Robotic</td><td>Stressed/Busy</td><td class="col-highlight"><span class="icon-check">✓</span> Always Polite & Patient</td></tr>
+                    <tr><td>Availability</td><td>24/7</td><td>8 Hours/Shift</td><td class="col-highlight"><span class="icon-check">✓</span> 24/7/365</td></tr>
+                    <tr><td>Guest Satisfaction</td><td>Low (Frustrating)</td><td>Variable</td><td class="col-highlight"><span class="icon-check">✓</span> Consistently High</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
 
-    // --- Session Management ---
-    let sessionId = localStorage.getItem("hotel_session_id");
-    if (!sessionId) {
-        sessionId = "sess_" + Math.random().toString(36).substring(2) + Date.now().toString(36);
-        localStorage.setItem("hotel_session_id", sessionId);
-    }
-
-    // --- Proactive Nudge (Logic Update: 1000ms delay) ---
-    setTimeout(() => {
-        if (!chatWindow.classList.contains("open")) {
-            nudge.classList.add("visible");
-        }
-    }, 1000); 
-
-    function closeNudge() {
-        nudge.classList.remove("visible");
-    }
-
-    // --- State ---
-    let isTyping = false;
-    let typingElement = null;
-
-    // --- Toggle Chat ---
-    function toggleChat() {
-        closeNudge();
-        const isOpen = chatWindow.classList.contains("open");
-        if (isOpen) {
-            chatWindow.classList.remove("open");
-            launcher.classList.remove("active");
-            try { window.parent.postMessage("chat-close", "*"); } catch(e){}
-        } else {
-            chatWindow.classList.add("open");
-            launcher.classList.add("active");
-            inputField.focus();
-            try { window.parent.postMessage("chat-open", "*"); } catch(e){}
+    <section class="section-padding pricing-section" id="pricing">
+        <div class="container">
+            <div class="text-center">
+                <h2>An Investment in Guest Happiness</h2>
+                <p class="lead">Empower your team with a system that never sleeps.</p>
+            </div>
             
-            if (messagesContainer.children.length === 0) {
-                setTimeout(() => {
-                    appendMessage(INITIAL_GREETING, "bot");
-                    showStarterOptions();
-                }, 400);
-            }
-        }
-    }
+            <div class="pricing-container">
+                <div class="price-card reveal">
+                    <div style="font-size: 0.85rem; font-weight: 700; color: #aaa; letter-spacing: 1px; margin-bottom: 10px;">PROOF OF CONCEPT</div>
+                    <h3 class="price-title">Concierge</h3>
+                    <div class="price-amt">$149</div>
+                    <div class="price-sub">per month</div>
+                    <span style="color: var(--accent-blue); font-weight: 600; margin-bottom: 20px; font-size: 0.9rem;">WHEN YOU WANT TO SEE VALUE</span>
+                    
+                    <ul class="price-features">
+                        <li><span class="icon-check">✓</span> <strong>1,000</strong> Conversations/mo</li>
+                        <li><span class="icon-check">✓</span> 95+ Languages Auto-Translate</li>
+                        <li><span class="icon-check">✓</span> Instant FAQ Resolution</li>
+                        <li><span class="icon-check">✓</span> Email Support (48hr)</li>
+                        <li style="color: var(--text-primary); margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+                            <span class="icon-check">✓</span> 
+                            <span>Setup: <span style="text-decoration: line-through; color: #999;">$999</span> <strong>Waived</strong></span>
+                        </li>
+                    </ul>
+                    <a href="#demo" class="btn btn-secondary" style="margin-top: auto; width: 100%;">Start Concierge</a>
+                </div>
 
-    resetBtn.addEventListener("click", () => {
-        sessionId = "sess_" + Math.random().toString(36).substring(2) + Date.now().toString(36);
-        localStorage.setItem("hotel_session_id", sessionId);
-        messagesContainer.innerHTML = "";
-        appendMessage(INITIAL_GREETING, "bot");
-        showStarterOptions();
-    });
-
-    launcher.addEventListener("click", toggleChat);
-    minimizeBtn.addEventListener("click", toggleChat);
-
-    // --- UI Helpers ---
-    function createMessageElement(text, sender) {
-        const row = document.createElement("div");
-        row.className = `message-row ${sender}`;
-        const bubble = document.createElement("div");
-        bubble.className = `bubble ${sender}`;
-        
-        if (sender === "bot") {
-            try {
-                // Parse markdown and set innerHTML
-                const parsed = marked.parse(text || "");
-                console.log("=== MARKDOWN DEBUG ===");
-                console.log("Original text:", text);
-                console.log("Parsed HTML:", parsed);
-                bubble.innerHTML = parsed;
-                
-                // CRITICAL FIX: Ensure all links have proper event handling
-                setTimeout(() => {
-                    const links = bubble.querySelectorAll('a');
-                    console.log("Found links:", links.length);
-                    links.forEach((link, idx) => {
-                        console.log(`Link ${idx}:`, {
-                            href: link.href,
-                            text: link.textContent,
-                            target: link.target
-                        });
-                        // Ensure click events work properly
-                        link.addEventListener('click', function(e) {
-                            console.log("Link clicked!", link.href);
-                            e.stopPropagation();
-                            // Let the browser handle the link naturally
-                        });
-                    });
-                    console.log("===================");
-                }, 0);
-                
-            } catch(e) {
-                console.error("Markdown Error:", e);
-                bubble.textContent = text;
-            }
-        } else {
-            bubble.textContent = text;
-        }
-        
-        row.appendChild(bubble);
-        return { row, bubble };
-    }
-
-    function appendMessage(text, sender) {
-        const { row } = createMessageElement(text, sender);
-        messagesContainer.appendChild(row);
-        scrollToBottom();
-    }
-
-    function showTypingIndicator() {
-        if (isTyping) return;
-        isTyping = true;
-        const row = document.createElement("div");
-        row.className = "message-row bot";
-        row.id = "typing-row";
-        const indicator = document.createElement("div");
-        indicator.className = "typing-indicator";
-        indicator.innerHTML = `<div class="dot"></div><div class="dot"></div><div class="dot"></div>`;
-        row.appendChild(indicator);
-        messagesContainer.appendChild(row);
-        scrollToBottom();
-        typingElement = row;
-    }
-
-    function removeTypingIndicator() {
-        if (typingElement) {
-            typingElement.remove();
-            typingElement = null;
-        }
-        isTyping = false;
-    }
-
-    function scrollToBottom() {
-        messagesContainer.scrollTop = messagesContainer.scrollHeight;
-    }
-
-    // --- Streaming Text Logic ---
-    function appendStreamingMessage(text) {
-        const { row, bubble } = createMessageElement("", "bot");
-        messagesContainer.appendChild(row);
-
-        // Safety: If text is huge, render instantly
-        if (text.length > 2000) {
-            bubble.innerHTML = marked.parse(text);
+                <div class="price-card featured reveal" style="transition-delay: 0.1s;">
+                    <div class="badge-popular">MOST POPULAR</div>
+                    <div style="font-size: 0.85rem; font-weight: 700; color: var(--accent-gold); letter-spacing: 1px; margin-bottom: 10px;">FULL SCALABILITY</div>
+                    <h3 class="price-title">Pro</h3>
+                    <div class="price-amt">$229</div>
+                    <div class="price-sub">per month</div>
+                    <span style="color: var(--accent-gold); font-weight: 600; margin-bottom: 20px; font-size: 0.9rem;">WHEN YOU HAVE THE NEED</span>
+                    
+                    <ul class="price-features">
+                        <li><span class="icon-check" style="color: var(--accent-gold);">✓</span> <strong>Unlimited</strong> Conversations</li>
+                        <li><span class="icon-check">✓</span> <strong>Access to Conversation Logs</strong> (Airtable)</li>
+                        <li><span class="icon-check">✓</span> Priority Email Support (Human)</li>
+                        <li><span class="icon-check">✓</span> Advanced Brand Voice Tuning</li>
+                        <li style="color: var(--text-primary); margin-top: 15px; border-top: 1px solid #eee; padding-top: 15px;">
+                            <span class="icon-check" style="color: var(--accent-gold);">✓</span> 
+                            <span>Setup: <span style="text-decoration: line-through; color: #999;">$1,500</span> <strong>Waived</strong></span>
+                        </li>
+                    </ul>
+                    <a href="#demo" class="btn btn-primary" style="margin-top: auto; width: 100%; background: var(--text-primary);">Go Pro</a>
+                </div>
+            </div>
             
-            // Fix links after rendering
-            const links = bubble.querySelectorAll('a');
-            links.forEach(link => {
-                link.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                });
+            <p class="text-center" style="margin-top: 40px; color: var(--text-tertiary); font-size: 0.9rem;">
+                Need an Enterprise SLA for 50+ locations? <a href="mailto:krishna@vedaconcierge.com" style="color: var(--accent-blue);">Contact us.</a>
+            </p>
+        </div>
+    </section>
+
+    <section class="section-padding" id="faq">
+        <div class="container" style="max-width: 800px;">
+            <div class="text-center" style="margin-bottom: 50px;">
+                <h2>Frequently Asked Questions</h2>
+            </div>
+            <div class="faq-list">
+                <details class="faq-item">
+                    <summary class="faq-question">Do I need technical skills to install this?</summary>
+                    <p class="faq-answer" style="display: block; margin-top: 10px;">No. We handle the setup for you. We provide a single line of code that you copy and paste into your website builder. If you don't know how, we will do it for you for free.</p>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-question">Does it support my language?</summary>
+                    <p class="faq-answer" style="display: block; margin-top: 10px;">Yes. The AI automatically detects the language of the guest and responds in that language, whether it's Spanish, French, German, Chinese, or 90+ others.</p>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-question">What happens if the AI doesn't know the answer?</summary>
+                    <p class="faq-answer" style="display: block; margin-top: 10px;">It is trained to never "guess." If it doesn't know the answer based on your database, it will politely ask the guest for their email so a human manager can follow up.</p>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-question">Can I approve custom discounts?</summary>
+                    <p class="faq-answer" style="display: block; margin-top: 10px;">Absolutely. We set rules during the "Brand Calibration" phase. You can tell the AI, "Offer a 10% discount if they book 3+ nights," and it will execute that policy flawlessly.</p>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-question">Can I see what guests are asking?</summary>
+                    <p class="faq-answer" style="display: block; margin-top: 10px;">Yes. We provide transparent access to conversation logs via a private Airtable link, so you can see exactly what your guests are interested in.</p>
+                </details>
+                <details class="faq-item">
+                    <summary class="faq-question">Does it integrate with my calendar?</summary>
+                    <p class="faq-answer" style="display: block; margin-top: 10px;">The AI focuses on Q&A and Lead Capture. When a guest is ready to book, the AI guides them directly to your existing booking engine link (SynXis, Cloudbeds, etc.) to finalize the reservation.</p>
+                </details>
+            </div>
+        </div>
+    </section>
+
+    <section class="section-padding" style="background: #FAFAFA; border-top: 1px solid #EEE;" id="demo">
+        <div class="container">
+            <div style="background: white; padding: 60px; border-radius: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.06); max-width: 700px; margin: 0 auto; border: 1px solid #EEE;">
+                <div class="text-center">
+                    <h2>Secure Your Spot</h2>
+                    <p class="lead" style="margin-bottom: 30px; font-size: 1.1rem;">We are currently onboarding partners. Get your free audit.</p>
+                </div>
+                <form action="https://formsubmit.co/krishna@vedaconcierge.com" method="POST">
+                    <input type="hidden" name="_subject" value="New Hotel Audit Request!">
+                    <input type="hidden" name="_captcha" value="false">
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;">Hotel Name</label>
+                        <input type="text" name="Hotel Name" required placeholder="e.g. The Grand Budapest" style="width: 100%; padding: 16px; border: 1px solid #DDD; border-radius: 12px; font-size: 1rem; background: #F9F9F9;">
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;">Email Address</label>
+                        <input type="email" name="Email" required placeholder="manager@hotel.com" style="width: 100%; padding: 16px; border: 1px solid #DDD; border-radius: 12px; font-size: 1rem; background: #F9F9F9;">
+                    </div>
+                    <div style="margin-bottom: 30px;">
+                        <label style="display: block; margin-bottom: 8px; font-weight: 600; font-size: 0.9rem;">Website URL</label>
+                        <input type="url" name="Website" required placeholder="https://" style="width: 100%; padding: 16px; border: 1px solid #DDD; border-radius: 12px; font-size: 1rem; background: #F9F9F9;">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-pulse" style="width: 100%;">Get Custom Demo</button>
+                    <div style="margin-top: 25px; display: flex; align-items: center; justify-content: center; gap: 15px; border-top: 1px solid #f0f0f0; padding-top: 20px;">
+                        <div style="width: 40px; height: 40px; background: #111; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; font-weight: bold;">KR</div>
+                        <p style="font-size: 0.85rem; color: #666; text-align: left; line-height: 1.3;">"I personally oversee every new hotel setup to ensure your AI represents your brand perfectly."<br><span style="font-weight: 600; color: #111;">Krishna Rana, Founder</span></p>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <span class="footer-logo">Veda Concierge</span>
+                    <p style="color: var(--text-secondary); margin-bottom: 20px; font-size: 0.95rem; line-height: 1.6;">Pioneering the intersection of Artificial Intelligence and Hospitality.</p>
+                    <div style="display: flex; gap: 20px;">
+                        <a href="https://www.linkedin.com/in/krishnaaarana/" target="_blank" style="color: var(--text-primary); font-weight: 600;">LinkedIn</a>
+                        <a href="mailto:krishna@vedaconcierge.com" style="color: var(--text-primary); font-weight: 600;">Email</a>
+                    </div>
+                </div>
+                <div class="footer-links">
+                    <h5>Company</h5>
+                    <ul><li><a href="#features">Capabilities</a></li><li><a href="#pricing">Pricing</a></li><li><a href="#demo">Get a Demo</a></li></ul>
+                </div>
+                <div class="footer-links">
+                    <h5>Legal</h5>
+                    <ul><li><a href="#">Privacy Policy</a></li><li><a href="#">Terms of Service</a></li></ul>
+                </div>
+            </div>
+            <div class="legal-block"><p>© 2025 Veda Concierge. Delhi, India. All rights reserved.</p></div>
+        </div>
+    </footer>
+
+    <script>
+        // Efficient Intersection Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target);
+                }
             });
-            
-            scrollToBottom();
-            return;
-        }
+        }, { threshold: 0.1 });
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-        let rawText = "";
-        let index = 0;
-        const length = text.length;
-        const speed = length > 200 ? 3 : 10; 
-
-        function typeChar() {
-            if (index < length) {
-                rawText += text.charAt(index);
-                try {
-                    // Update markdown preview occasionally
-                    if (index % 3 === 0 || index === length - 1) {
-                         bubble.innerHTML = marked.parse(rawText);
-                    }
-                } catch (e) {}
-                index++;
-                
-                if (index % 5 === 0) scrollToBottom();
-                setTimeout(typeChar, speed);
+        // Optimized Navbar Scroll
+        let lastScrollY = window.scrollY;
+        const nav = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (Math.abs(window.scrollY - lastScrollY) < 10) return; 
+            if (window.scrollY > 50) {
+                nav.style.padding = "10px 0";
+                nav.style.background = "rgba(255,255,255,0.98)";
             } else {
-                bubble.innerHTML = marked.parse(text);
-                
-                // CRITICAL: Fix links after streaming completes
-                const links = bubble.querySelectorAll('a');
-                links.forEach(link => {
-                    link.addEventListener('click', function(e) {
-                        e.stopPropagation();
-                    });
-                });
-                
-                scrollToBottom();
+                nav.style.padding = "20px 0";
+                nav.style.background = "rgba(255,255,255,0.95)";
             }
-        }
-        requestAnimationFrame(typeChar);
-    }
+            lastScrollY = window.scrollY;
+        }, { passive: true });
 
-    // --- Quick Replies ---
-    function showStarterOptions() {
-        quickRepliesContainer.innerHTML = "";
-        STARTER_OPTIONS.forEach((opt, idx) => {
-            const chip = document.createElement("button");
-            chip.className = "chip";
-            chip.textContent = opt;
-            chip.style.animationDelay = `${idx * 0.1}s`;
-            chip.onclick = () => {
-                handleUserSend(opt);
-                clearQuickReplies();
-            };
-            quickRepliesContainer.appendChild(chip);
+        // ROI Calculator Logic
+        const slider = document.getElementById('roomSlider');
+        const roomCount = document.getElementById('roomCountVal');
+        const savings = document.getElementById('savingsVal');
+        
+        slider.addEventListener('input', function() {
+            const rooms = this.value;
+            roomCount.textContent = rooms;
+            const calc = rooms * 90; 
+            savings.textContent = calc.toLocaleString();
         });
-    }
-
-    function clearQuickReplies() {
-        quickRepliesContainer.innerHTML = "";
-    }
-
-    // --- Networking ---
-    async function postToWebhook(payload) {
-        try {
-            const response = await fetch(WEBHOOK_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
-            return await response.json();
-        } catch (error) {
-            console.error("Webhook error:", error);
-            throw error;
-        }
-    }
-
-    // --- Main Send Logic ---
-    async function handleUserSend(text) {
-        if (!text || !text.trim()) return;
-
-        appendMessage(text, "user");
-        inputField.value = "";
-        clearQuickReplies();
-        showTypingIndicator();
-
-        try {
-            const data = await postToWebhook({ chatInput: text, sessionId });
-            removeTypingIndicator();
-
-            let botText = "I apologize, I am having trouble connecting.";
-            
-            // ROBUST DATA HANDLING - check all possible response formats
-            if (Array.isArray(data) && data.length > 0) {
-                botText = data[0].result || data[0].output || data[0].text || data[0].reply || botText;
-            } else if (typeof data === 'object') {
-                botText = data.result || data.output || data.text || data.reply || botText;
-            }
-            
-            // Safety: Ensure it's a string
-            if (typeof botText !== 'string') {
-                botText = String(botText);
-            }
-
-            appendStreamingMessage(botText);
-            
-        } catch (error) {
-            removeTypingIndicator();
-            appendMessage("Connection issue. Please try again.", "bot");
-        }
-    }
-
-    // --- Event Listeners ---
-    sendButton.addEventListener("click", () => handleUserSend(inputField.value));
-    inputField.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") handleUserSend(inputField.value);
-    });
-    inputField.addEventListener("input", () => {
-        if (inputField.value.length > 0) clearQuickReplies();
-    });
-
-    // ==========================================
-    // AUTO-OPEN LOGIC (Desktop Only)
-    // ==========================================
-    setTimeout(() => {
-        // Only open if on Desktop (>480px) and not already open
-        if (window.innerWidth > 480 && !chatWindow.classList.contains("open")) {
-            toggleChat();
-        }
-    }, 3000); // 3-second delay so it's polite
-
-</script>
+    </script>
 </body>
 </html>
