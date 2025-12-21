@@ -246,42 +246,53 @@
         /* -----------------------------------------------------------------
            ANIMATED TESTIMONIALS (Marquee Style)
            ----------------------------------------------------------------- */
+        /* -----------------------------------------------------------------
+           ANIMATED TESTIMONIALS (Updated: Smaller Cards, 3 Visible)
+           ----------------------------------------------------------------- */
         .testimonials { 
-            padding: 120px 0; 
+            padding: 100px 0; 
             background: #fff; 
-            overflow: hidden; /* Hide scrollbars */
+            overflow: hidden; 
         }
         
-        /* The moving track */
         .test-scroll-container {
             display: flex; 
-            gap: 32px; 
-            width: max-content; /* Force single line */
-            animation: scroll-left 60s linear infinite; /* The engine */
+            gap: 24px; /* Reduced gap for tighter grouping */
+            width: max-content; 
+            animation: scroll-left 50s linear infinite; /* Slightly faster flow */
         }
 
-        /* Pause when mouse hovers so people can read */
         .test-scroll-container:hover {
             animation-play-state: paused;
         }
 
         .test-card {
-            min-width: 400px; 
+            /* KEY CHANGE: 400px -> 320px allows 3-4 cards to fit on screen */
+            min-width: 320px; 
+            max-width: 320px; /* Enforce consistency */
             background: #F9F9F9; 
-            padding: 40px; 
-            border-radius: 24px; 
+            padding: 30px; /* Tighter padding */
+            border-radius: 20px; 
             border: 1px solid #EEE;
             display: flex; 
             flex-direction: column; 
             justify-content: space-between;
-            /* No hover lift here to keep animation smooth */
         }
 
-        .test-text { font-size: 1.15rem; color: #333; font-style: italic; margin-bottom: 30px; line-height: 1.6; }
-        .test-author { display: flex; align-items: center; gap: 16px; }
-        .test-avatar { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; background: #E5E5E5; }
+        /* Smaller text to match the smaller card */
+        .test-text { 
+            font-size: 1rem; 
+            color: #333; 
+            font-style: italic; 
+            margin-bottom: 20px; 
+            line-height: 1.5; 
+        }
+        
+        .test-author { display: flex; align-items: center; gap: 12px; }
+        .test-avatar { width: 48px; height: 48px; border-radius: 50%; object-fit: cover; background: #E5E5E5; }
+        .test-info h5 { font-size: 0.95rem; margin-bottom: 0; }
+        .test-info span { font-size: 0.8rem; color: #666; }
 
-        /* The Animation Logic */
         @keyframes scroll-left {
             0% { transform: translateX(0); }
             100% { transform: translateX(-50%); } 
@@ -289,8 +300,11 @@
 
         /* Mobile Adjustment */
         @media (max-width: 1024px) {
-            .test-card { min-width: 300px; padding: 30px; }
-            .test-scroll-container { animation-duration: 40s; /* Faster on mobile */ }
+            .test-card { 
+                min-width: 280px; /* Even smaller on phone to show part of next card */
+                max-width: 280px;
+                padding: 24px; 
+            }
         }
 
         /* Table */
