@@ -243,14 +243,55 @@
         .sec-text { color: var(--text-secondary); line-height: 1.6; }
 
         /* Testimonials */
-        .testimonials { padding: 120px 0; background: #fff; overflow: hidden; }
-        .test-scroll-container { display: flex; gap: 32px; overflow-x: auto; padding: 40px 24px 60px; scroll-snap-type: x mandatory; margin: 0 -24px; scrollbar-width: none; }
-        .test-scroll-container::-webkit-scrollbar { display: none; }
-        .test-card { min-width: 400px; background: #F9F9F9; padding: 40px; border-radius: 24px; border: 1px solid #EEE; scroll-snap-align: center; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.3s ease; }
-        .test-card:hover { transform: translateY(-5px); background: #FFF; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        /* -----------------------------------------------------------------
+           ANIMATED TESTIMONIALS (Marquee Style)
+           ----------------------------------------------------------------- */
+        .testimonials { 
+            padding: 120px 0; 
+            background: #fff; 
+            overflow: hidden; /* Hide scrollbars */
+        }
+        
+        /* The moving track */
+        .test-scroll-container {
+            display: flex; 
+            gap: 32px; 
+            width: max-content; /* Force single line */
+            animation: scroll-left 60s linear infinite; /* The engine */
+        }
+
+        /* Pause when mouse hovers so people can read */
+        .test-scroll-container:hover {
+            animation-play-state: paused;
+        }
+
+        .test-card {
+            min-width: 400px; 
+            background: #F9F9F9; 
+            padding: 40px; 
+            border-radius: 24px; 
+            border: 1px solid #EEE;
+            display: flex; 
+            flex-direction: column; 
+            justify-content: space-between;
+            /* No hover lift here to keep animation smooth */
+        }
+
         .test-text { font-size: 1.15rem; color: #333; font-style: italic; margin-bottom: 30px; line-height: 1.6; }
         .test-author { display: flex; align-items: center; gap: 16px; }
         .test-avatar { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; background: #E5E5E5; }
+
+        /* The Animation Logic */
+        @keyframes scroll-left {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); } 
+        }
+
+        /* Mobile Adjustment */
+        @media (max-width: 1024px) {
+            .test-card { min-width: 300px; padding: 30px; }
+            .test-scroll-container { animation-duration: 40s; /* Faster on mobile */ }
+        }
 
         /* Table */
         .comparison-table { width: 100%; border-collapse: collapse; margin-top: 60px; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 40px rgba(0,0,0,0.04); }
@@ -655,52 +696,90 @@
         </div>
     </section>
 
-    <section class="testimonials">
+   <section class="testimonials">
         <div class="container">
             <div class="text-center" style="margin-bottom: 50px;">
                 <h2>Trusted by Forward Thinkers</h2>
                 <p class="lead" style="max-width: 500px; margin: 0 auto;">See what business owners are saying about our impact.</p>
             </div>
+            
             <div class="test-scroll-container">
-                <div class="test-card reveal">
+                
+                <div class="test-card">
                     <p class="test-text">"Krishna's deep research and constant testing lead to better outcomes, delivering a chatbot experience and client service that feels genuinely human."</p>
                     <div class="test-author">
                         <img src="https://lh3.googleusercontent.com/d/1jcswGP7q1NZ2CJa3ubrrSy-S-4wL7dI0" alt="Amisha" class="test-avatar">
                         <div class="test-info"><h5>Amisha</h5><span>Owner, Ahmedabad</span></div>
                     </div>
                 </div>
-                <div class="test-card reveal">
+                <div class="test-card">
                     <p class="test-text">"We use their AI assistant at our clinic, and it has made our daily work so much easier. Fast answers, fewer calls, and a smoother experience for everyone."</p>
                     <div class="test-author">
                         <img src="https://lh3.googleusercontent.com/d/1h00yT9GsyZlXo7SP3uiTYGFfb94yzA1m" alt="Aniket" class="test-avatar">
                         <div class="test-info"><h5>Aniket</h5><span>Owner, IRI Dream Care</span></div>
                     </div>
                 </div>
-                <div class="test-card reveal">
+                <div class="test-card">
                     <p class="test-text">"Before Veda Concierge, we were drowning in operational chaos. Now, the system centralized everything. It's the upgrade we didn't know we needed."</p>
                     <div class="test-author">
                         <img src="https://lh3.googleusercontent.com/d/1CN1ABCC6VRJEaCbr2JXAPJz0EYnmrWOJ" alt="Gagan" class="test-avatar">
                         <div class="test-info"><h5>Gagan</h5><span>Director, Ample Publications</span></div>
                     </div>
                 </div>
-                <div class="test-card reveal">
+                <div class="test-card">
                     <p class="test-text">"Krishna's AI agents helped us build the seamless system we always wanted. Everything feels smoother, and the output is great."</p>
                     <div class="test-author">
                         <img src="https://lh3.googleusercontent.com/d/1DeOubSXhRZUGGcrCzzkdpyngEgp2G3k3" alt="Andrew" class="test-avatar">
                         <div class="test-info"><h5>Andrew</h5><span>CEO, AdCrunch</span></div>
                     </div>
                 </div>
-                <div class="test-card reveal">
+                <div class="test-card">
                     <p class="test-text">"We're a data-driven company, and Krishna has transformed our raw sheets into clear, meaningful information and graphs that help us make informed decisions."</p>
                     <div class="test-author">
                         <img src="https://lh3.googleusercontent.com/d/1E2-DIQDrsrlT1M8Y0UECsUhWXXQQvEc2" alt="Tracy" class="test-avatar">
                         <div class="test-info"><h5>Tracy</h5><span>CTO, Michael Curtis Media</span></div>
                     </div>
                 </div>
+
+                <div class="test-card">
+                    <p class="test-text">"Krishna's deep research and constant testing lead to better outcomes, delivering a chatbot experience and client service that feels genuinely human."</p>
+                    <div class="test-author">
+                        <img src="https://lh3.googleusercontent.com/d/1jcswGP7q1NZ2CJa3ubrrSy-S-4wL7dI0" alt="Amisha" class="test-avatar">
+                        <div class="test-info"><h5>Amisha</h5><span>Owner, Ahmedabad</span></div>
+                    </div>
+                </div>
+                <div class="test-card">
+                    <p class="test-text">"We use their AI assistant at our clinic, and it has made our daily work so much easier. Fast answers, fewer calls, and a smoother experience for everyone."</p>
+                    <div class="test-author">
+                        <img src="https://lh3.googleusercontent.com/d/1h00yT9GsyZlXo7SP3uiTYGFfb94yzA1m" alt="Aniket" class="test-avatar">
+                        <div class="test-info"><h5>Aniket</h5><span>Owner, IRI Dream Care</span></div>
+                    </div>
+                </div>
+                <div class="test-card">
+                    <p class="test-text">"Before Veda Concierge, we were drowning in operational chaos. Now, the system centralized everything. It's the upgrade we didn't know we needed."</p>
+                    <div class="test-author">
+                        <img src="https://lh3.googleusercontent.com/d/1CN1ABCC6VRJEaCbr2JXAPJz0EYnmrWOJ" alt="Gagan" class="test-avatar">
+                        <div class="test-info"><h5>Gagan</h5><span>Director, Ample Publications</span></div>
+                    </div>
+                </div>
+                <div class="test-card">
+                    <p class="test-text">"Krishna's AI agents helped us build the seamless system we always wanted. Everything feels smoother, and the output is great."</p>
+                    <div class="test-author">
+                        <img src="https://lh3.googleusercontent.com/d/1DeOubSXhRZUGGcrCzzkdpyngEgp2G3k3" alt="Andrew" class="test-avatar">
+                        <div class="test-info"><h5>Andrew</h5><span>CEO, AdCrunch</span></div>
+                    </div>
+                </div>
+                <div class="test-card">
+                    <p class="test-text">"We're a data-driven company, and Krishna has transformed our raw sheets into clear, meaningful information and graphs that help us make informed decisions."</p>
+                    <div class="test-author">
+                        <img src="https://lh3.googleusercontent.com/d/1E2-DIQDrsrlT1M8Y0UECsUhWXXQQvEc2" alt="Tracy" class="test-avatar">
+                        <div class="test-info"><h5>Tracy</h5><span>CTO, Michael Curtis Media</span></div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </section>
-
     <section class="section-padding">
         <div class="container">
             <div class="text-center">
