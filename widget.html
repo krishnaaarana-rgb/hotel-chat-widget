@@ -832,40 +832,7 @@
             toggleChat();
         }
     }, 2000);
-    // ---------------------------------------------------------
-    // AUTO-DETECT IFRAME (DEMO MODE)
-    // ---------------------------------------------------------
-    // This checks if the widget is running inside an iframe (like on your landing page)
-    if (window.self !== window.top) {
-        
-        // 1. Force the Chat Window to be Full Screen & Always Open
-        const chatWindow = document.getElementById('hotel-chatbot');
-        chatWindow.style.position = 'fixed';
-        chatWindow.style.top = '0';
-        chatWindow.style.bottom = '0';
-        chatWindow.style.left = '0';
-        chatWindow.style.right = '0';
-        chatWindow.style.width = '100%';
-        chatWindow.style.height = '100%';
-        chatWindow.style.maxWidth = '100%';
-        chatWindow.style.maxHeight = '100%';
-        chatWindow.style.borderRadius = '0'; // Remove rounded corners (the iframe has them)
-        chatWindow.style.transform = 'none'; // Remove animation transform
-        chatWindow.style.opacity = '1';
-        chatWindow.style.visibility = 'visible';
-        chatWindow.classList.add('open');
 
-        // 2. Hide the "Launcher" Button and "Nudge" (Not needed in demo)
-        document.getElementById('hotel-chatbot-launcher').style.display = 'none';
-        document.getElementById('proactive-nudge').style.display = 'none';
-
-        // 3. Adjust Header to look like a native app title
-        document.getElementById('hotel-chatbot-header').style.padding = '15px 20px';
-        
-        // 4. Remove the "Minimize" button (Users shouldn't close the demo)
-        const minBtn = document.getElementById('minimize-btn');
-        if(minBtn) minBtn.style.display = 'none';
-    }
 </script>
 </body>
 </html>
