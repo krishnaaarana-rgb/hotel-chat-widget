@@ -347,19 +347,24 @@
         @keyframes bounce { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.6; } 40% { transform: scale(1); opacity: 1; } }
 
         /* ========================================================================
-           QUICK REPLIES
+           QUICK REPLIES (FIXED: HORIZONTAL SCROLL)
         ======================================================================== */
         #quick-replies {
-            display: flex; gap: 8px; padding: 0 24px 16px 24px;
-            overflow-x: auto; flex-wrap: wrap;
-            scrollbar-width: none;
+            display: flex; 
+            gap: 10px; 
+            padding: 0 24px 16px 24px;
+            overflow-x: auto; /* Enable horizontal scroll */
+            flex-wrap: nowrap; /* Prevent wrapping to next line */
+            scrollbar-width: none; /* Hide scrollbar Firefox */
+            -webkit-overflow-scrolling: touch; /* Smooth scroll iOS */
         }
-        #quick-replies::-webkit-scrollbar { display: none; }
+        #quick-replies::-webkit-scrollbar { display: none; } /* Hide scrollbar Chrome */
 
         .chip {
+            flex: 0 0 auto; /* Prevent buttons from shrinking */
             background: #ffffff; /* Solid white background */
             border: 1px solid rgba(0,0,0,0.08);
-            padding: 8px 14px;
+            padding: 8px 16px;
             border-radius: 20px;
             font-size: 13px; font-weight: 500;
             color: var(--text-main);
