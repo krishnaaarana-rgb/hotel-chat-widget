@@ -430,38 +430,6 @@
         #send-btn:active { transform: scale(0.95); }
         #send-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; margin-left: -2px; }
 
-        /* ========================================================================
-           MOBILE OPTIMIZATIONS (FIXED: TALLER & CLEANER)
-        ======================================================================== */
-        @media (max-width: 480px) {
-            #chatbot-wrapper {
-                padding: 0; /* Use full width */
-                bottom: 0; right: 0; left: 0;
-            }
-
-            #hotel-chatbot {
-                width: 96%; /* Slightly narrower than screen for 'card' feel */
-                margin: 0 auto;
-                
-                /* FIX: INCREASE HEIGHT TO 85% OF SCREEN */
-                height: 85vh; 
-                max-height: 85vh;
-                
-                bottom: 85px; /* Sit just above launcher */
-                border-radius: 24px 24px 0 0; /* Flat bottom optionally, or rounded */
-            }
-            
-            #hotel-chatbot-launcher {
-                margin-bottom: 15px;
-                right: 15px; /* Keep launcher accessible */
-            }
-            
-            #proactive-nudge {
-                margin-bottom: 5px;
-                right: 15px;
-            }
-        }
-
     </style>
 </head>
 <body>
@@ -864,7 +832,40 @@
             toggleChat();
         }
     }, 2000);
+    // ---------------------------------------------------------
+    // AUTO-DETECT IFRAME (DEMO MODE)
+    // ---------------------------------------------------------
+    // This checks if the widget is running inside an iframe (like on your landing page)
+    if (window.self !== window.top) {
+        
+        // 1. Force the Chat Window to be Full Screen & Always Open
+        const chatWindow = document.getElementById('hotel-chatbot');
+        chatWindow.style.position = 'fixed';
+        chatWindow.style.top = '0';
+        chatWindow.style.bottom = '0';
+        chatWindow.style.left = '0';
+        chatWindow.style.right = '0';
+        chatWindow.style.width = '100%';
+        chatWindow.style.height = '100%';
+        chatWindow.style.maxWidth = '100%';
+        chatWindow.style.maxHeight = '100%';
+        chatWindow.style.borderRadius = '0'; // Remove rounded corners (the iframe has them)
+        chatWindow.style.transform = 'none'; // Remove animation transform
+        chatWindow.style.opacity = '1';
+        chatWindow.style.visibility = 'visible';
+        chatWindow.classList.add('open');
 
+        // 2. Hide the "Launcher" Button and "Nudge" (Not needed in demo)
+        document.getElementById('hotel-chatbot-launcher').style.display = 'none';
+        document.getElementById('proactive-nudge').style.display = 'none';
+
+        // 3. Adjust Header to look like a native app title
+        document.getElementById('hotel-chatbot-header').style.padding = '15px 20px';
+        
+        // 4. Remove the "Minimize" button (Users shouldn't close the demo)
+        const minBtn = document.getElementById('minimize-btn');
+        if(minBtn) minBtn.style.display = 'none';
+    }
 </script>
 </body>
 </html>
