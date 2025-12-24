@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Krishna Rana | Automation Architect</title>
+    <meta name="description" content="Building self-driving businesses with n8n, AI, and Python.">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap" rel="stylesheet">
+
+    <style>
+        /* -----------------------------------------------------------------
+           1. CORE VARIABLES (Light Luxury Theme)
+           ----------------------------------------------------------------- */
+        :root {
+            --bg-body: #FFFFFF;
+            --bg-alt: #F9FAFB;
+            --text-main: #111827;
+            --text-muted: #6B7280;
+            --accent: #111111; /* Stark Black */
+            --accent-blue: #2563EB;
+            --border: #E5E7EB;
+            --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.01);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3, h4 { font-family: 'Playfair Display', serif; color: var(--text-main); }
+        h1 { font-size: 4.5rem; line-height: 1.1; letter-spacing: -0.02em; }
+        h2 { font-size: 3rem; margin-bottom: 1rem; }
+        
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+        .section-padding { padding: 100px 0; }
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex; align-items: center; padding: 12px 28px;
+            background: var(--text-main); color: #FFF; border-radius: 50px;
+            text-decoration: none; font-weight: 500; font-size: 0.95rem;
+            transition: all 0.3s ease; border: 1px solid var(--text-main);
+        }
+        .btn:hover { background: #FFF; color: var(--text-main); transform: translateY(-2px); }
+        .btn-outline { background: transparent; color: var(--text-main); border: 1px solid var(--border); }
+        .btn-outline:hover { border-color: var(--text-main); }
+
+        /* -----------------------------------------------------------------
+           2. NAVIGATION
+           ----------------------------------------------------------------- */
+        nav { padding: 25px 0; position: sticky; top: 0; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); z-index: 100; border-bottom: 1px solid transparent; transition: border 0.3s; }
+        nav.scrolled { border-bottom: 1px solid var(--border); }
+        .nav-inner { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 700; font-size: 1.3rem; letter-spacing: -0.5px; color: var(--text-main); text-decoration: none; }
+        .nav-links a { margin-left: 30px; text-decoration: none; color: var(--text-muted); font-size: 0.9rem; font-weight: 500; transition: color 0.2s; }
+        .nav-links a:hover { color: var(--text-main); }
+
+        /* -----------------------------------------------------------------
+           3. HERO SECTION
+           ----------------------------------------------------------------- */
+        .hero { padding: 140px 0 100px; position: relative; overflow: hidden; }
+        .hero-content { max-width: 800px; position: relative; z-index: 2; }
+        .hero-tag { 
+            display: inline-block; padding: 6px 12px; background: var(--bg-alt); 
+            border: 1px solid var(--border); border-radius: 20px; 
+            font-size: 0.8rem; font-weight: 600; color: var(--text-muted); margin-bottom: 24px;
+        }
+        .hero p { font-size: 1.25rem; color: var(--text-muted); margin-bottom: 40px; max-width: 600px; font-weight: 300; }
+
+        /* -----------------------------------------------------------------
+           4. GLOBAL MAP (Light Version)
+           ----------------------------------------------------------------- */
+        .map-section { margin-bottom: 100px; }
+        .world-map-wrapper { 
+            position: relative; width: 100%; height: 450px; 
+            background: #FFF; border: 1px solid var(--border);
+            border-radius: 30px; margin-top: 40px; box-shadow: var(--shadow-card);
+            overflow: hidden;
+        }
+        .world-map { width: 100%; height: 100%; fill: #F3F4F6; stroke: #E5E7EB; stroke-width: 1.5; }
+        .land { transition: fill 0.3s ease; }
+        .land:hover { fill: #E5E7EB; }
+
+        /* Beacons */
+        .beacon { position: absolute; width: 20px; height: 20px; transform: translate(-50%, -50%); cursor: pointer; }
+        .dot { width: 8px; height: 8px; background: var(--text-main); border-radius: 50%; position: absolute; top: 6px; left: 6px; z-index: 2; }
+        .pulse {
+            width: 20px; height: 20px; background: rgba(0,0,0,0.1); 
+            border-radius: 50%; position: absolute; top: 0; left: 0; opacity: 0.5;
+            animation: ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+        }
+        @keyframes ping { 75%, 100% { transform: scale(2.5); opacity: 0; } }
+
+        /* -----------------------------------------------------------------
+           5. PROJECTS GRID (Bento Style)
+           ----------------------------------------------------------------- */
+        .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        
+        /* Special Card for Veda */
+        .project-card.featured {
+            grid-column: span 3; display: grid; grid-template-columns: 1fr 1fr; 
+            background: #111; color: white; border: none;
+        }
+        .project-card.featured h3, .project-card.featured p { color: white; }
+        .project-card.featured .tag { background: rgba(255,255,255,0.2); color: white; border: none; }
+
+        .project-card {
+            background: #FFF; border: 1px solid var(--border); border-radius: 24px;
+            overflow: hidden; transition: all 0.3s ease; display: flex; flex-direction: column;
+            cursor: pointer; position: relative; box-shadow: var(--shadow-card);
+        }
+        .project-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-hover); border-color: #d1d5db; }
+        
+        .card-image {
+            height: 220px; background: var(--bg-alt); display: flex; 
+            align-items: center; justify-content: center; border-bottom: 1px solid var(--border);
+            font-size: 3rem; color: #E5E7EB; overflow: hidden;
+        }
+        .card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .project-card:hover .card-image img { transform: scale(1.05); }
+
+        .card-content { padding: 30px; flex-grow: 1; display: flex; flex-direction: column; }
+        .card-meta { margin-bottom: 15px; display: flex; gap: 8px; flex-wrap: wrap; }
+        .tag { 
+            font-size: 0.75rem; padding: 4px 10px; border-radius: 12px; 
+            background: #F3F4F6; color: var(--text-muted); font-weight: 600; 
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        
+        .card-content h3 { font-family: 'Inter', sans-serif; font-size: 1.25rem; margin-bottom: 10px; font-weight: 600; }
+        .card-content p { font-size: 0.95rem; color: var(--text-muted); margin-bottom: 20px; line-height: 1.6; }
+        .view-link { margin-top: auto; font-size: 0.9rem; font-weight: 600; color: var(--text-main); text-decoration: underline; }
+
+        /* -----------------------------------------------------------------
+           6. MODAL SYSTEM (For Workflow Details)
+           ----------------------------------------------------------------- */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4); backdrop-filter: blur(5px);
+            z-index: 1000; display: none; align-items: center; justify-content: center;
+            opacity: 0; transition: opacity 0.3s ease;
+        }
+        .modal-overlay.active { display: flex; opacity: 1; }
+        
+        .modal-container {
+            background: #FFF; width: 90%; max-width: 900px; max-height: 90vh;
+            border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            display: flex; flex-direction: column; overflow: hidden;
+            transform: translateY(20px); transition: transform 0.3s ease;
+        }
+        .modal-overlay.active .modal-container { transform: translateY(0); }
+
+        .modal-header { padding: 30px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+        .modal-body { padding: 40px; overflow-y: auto; line-height: 1.7; color: #374151; font-size: 1rem; }
+        .modal-close { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-muted); }
+        
+        /* Modal Typography */
+        .modal-body h4 { font-family: 'Inter', sans-serif; font-size: 1.1rem; font-weight: 700; margin-top: 30px; margin-bottom: 10px; color: #111; text-transform: uppercase; letter-spacing: 1px; }
+        .modal-body ul { margin-left: 20px; margin-bottom: 20px; }
+        .modal-body li { margin-bottom: 8px; }
+        .thought-process { background: #F9FAFB; padding: 25px; border-radius: 12px; border-left: 4px solid #111; margin-top: 40px; font-style: italic; }
+
+        /* -----------------------------------------------------------------
+           7. MOBILE
+           ----------------------------------------------------------------- */
+        @media (max-width: 1024px) {
+            .projects-grid { grid-template-columns: 1fr; }
+            .project-card.featured { grid-template-columns: 1fr; }
+            h1 { font-size: 3rem; }
+            .world-map-wrapper { height: 300px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <div class="container nav-inner">
+            <a href="#" class="logo">Krishna Rana</a>
+            <div class="nav-links">
+                <a href="#work">Selected Work</a>
+                <a href="#contact" class="btn">Hire Me</a>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <section class="hero container">
+            <div class="hero-content">
+                <span class="hero-tag">Automation & Systems Architect</span>
+                <h1>Designing the Infrastructure<br>of the Future.</h1>
+                <p>I don't just write scripts; I build intelligent ecosystems. From AI voice agents to enterprise CRM syncing, I turn manual chaos into reliable code.</p>
+                <div style="display: flex; gap: 15px;">
+                    <a href="#work" class="btn">View Architecture</a>
+                    <a href="https://linkedin.com/in/krishnaaarana" class="btn btn-outline" target="_blank">LinkedIn</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="container map-section">
+            <div style="display: flex; justify-content: space-between; align-items: end; margin-bottom: 20px;">
+                <h3>Global Deployments</h3>
+                <span style="font-size: 0.9rem; color: var(--text-muted);">Active in 6 Continents</span>
+            </div>
+            <div class="world-map-wrapper">
+                <svg viewBox="0 0 1000 500" class="world-map">
+                    <path d="M162,115 C150,115 140,130 130,140 C120,150 110,160 100,160 C90,160 80,150 70,140 C60,130 50,140 40,150 C30,160 40,180 50,190 C60,200 70,210 80,220 C90,230 100,220 110,210 C120,200 130,190 140,180 C150,170 160,160 170,150 C180,140 190,130 200,120 C210,110 220,100 210,90 C200,80 190,90 180,100 C170,110 162,115 162,115 Z" class="land" />
+                    <path d="M220,250 C210,260 200,280 210,300 C220,320 230,340 240,360 C250,380 260,370 270,350 C280,330 290,310 280,290 C270,270 260,250 250,240 C240,230 230,240 220,250 Z" class="land" />
+                    <path d="M450,120 C440,130 430,150 440,170 C450,190 460,180 470,170 C480,160 490,150 480,140 C470,130 460,120 450,120 Z" class="land" />
+                    <path d="M460,200 C450,220 440,250 450,280 C460,310 480,330 500,320 C520,310 530,280 520,250 C510,220 490,200 460,200 Z" class="land" />
+                    <path d="M550,100 C540,120 560,140 580,150 C600,160 650,170 680,160 C710,150 750,130 740,110 C730,90 680,80 650,90 C620,100 580,90 550,100 Z" class="land" />
+                    <path d="M750,300 C740,320 750,340 770,350 C790,360 810,350 800,330 C790,310 770,300 750,300 Z" class="land" />
+                </svg>
+                <div class="beacon" style="top: 25%; left: 18%;"><div class="pulse"></div><div class="dot"></div></div>
+                <div class="beacon" style="top: 60%; left: 26%;"><div class="pulse"></div><div class="dot"></div></div>
+                <div class="beacon" style="top: 28%; left: 48%;"><div class="pulse"></div><div class="dot"></div></div>
+                <div class="beacon" style="top: 55%; left: 52%;"><div class="pulse"></div><div class="dot"></div></div>
+                <div class="beacon" style="top: 30%; left: 70%;"><div class="pulse"></div><div class="dot"></div></div>
+                <div class="beacon" style="top: 70%; left: 82%;"><div class="pulse"></div><div class="dot"></div></div>
+            </div>
+        </section>
+
+        <section id="work" class="section-padding container">
+            <h2>The System Library</h2>
+            <p style="color: var(--text-muted); margin-bottom: 60px;">A collection of production-ready workflows designed for scalability.</p>
+
+            <div class="projects-grid">
+                
+                <div class="project-card featured">
+                    <div class="card-content" style="justify-content: center;">
+                        <span class="tag" style="width: fit-content; margin-bottom: 20px;">Flagship Product</span>
+                        <h3 style="font-size: 2.5rem; margin-bottom: 20px;">Veda Concierge</h3>
+                        <p style="opacity: 0.8;">An AI-powered hospitality concierge that handles guest inquiries, bookings, and recommendations in 95+ languages. Built with a focus on luxury aesthetics and zero-latency responses.</p>
+                        <a href="https://vedaconcierge.com" target="_blank" class="btn" style="background: white; color: black; border: none; margin-top: 20px;">Visit Live Site ↗</a>
+                    </div>
+                    <div style="background: #222; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display'; font-size: 4rem;">Veda.</div>
+                </div>
+
+                <div class="project-card" onclick="openModal('modal-sync')">
+                    <div class="card-image"><span style="font-size: 3rem;">🔄</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="tag">n8n</span><span class="tag">Notion API</span></div>
+                        <h3>Notion ↔ Asana Sync</h3>
+                        <p>Bi-directional task synchronization that handles status mapping, error checking, and Slack alerts.</p>
+                        <span class="view-link">View Architecture →</span>
+                    </div>
+                </div>
+
+                <div class="project-card" onclick="openModal('modal-video')">
+                    <div class="card-image"><span style="font-size: 3rem;">🎥</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="tag">GPT-5</span><span class="tag">HeyGen</span></div>
+                        <h3>Short-Form Video Gen</h3>
+                        <p>End-to-end automation: TikTok scraper -> AI Script Rewrite -> AI Avatar Video Generation.</p>
+                        <span class="view-link">View Architecture →</span>
+                    </div>
+                </div>
+
+                <div class="project-card" onclick="openModal('modal-lead')">
+                    <div class="card-image"><span style="font-size: 3rem;">💎</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="tag">Apollo</span><span class="tag">Gemini</span></div>
+                        <h3>Deep Lead Enrichment</h3>
+                        <p>Scrapes Apollo, LinkedIn, and News to build a comprehensive dossier on every new lead.</p>
+                        <span class="view-link">View Architecture →</span>
+                    </div>
+                </div>
+
+                <div class="project-card" onclick="openModal('modal-voice')">
+                    <div class="card-image"><span style="font-size: 3rem;">🎙️</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="tag">Vapi.ai</span><span class="tag">Cal.com</span></div>
+                        <h3>Voice Qualification</h3>
+                        <p>An AI voice agent that calls leads, qualifies them, and books appointments on Cal.com.</p>
+                        <span class="view-link">View Architecture →</span>
+                    </div>
+                </div>
+
+                <div class="project-card" onclick="openModal('modal-reports')">
+                    <div class="card-image"><span style="font-size: 3rem;">📊</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="tag">GA4</span><span class="tag">Meta Ads</span></div>
+                        <h3>Automated Reporting</h3>
+                        <p>Weekly HTML reports generated from 5 data sources, delivered via Email and Slack.</p>
+                        <span class="view-link">View Architecture →</span>
+                    </div>
+                </div>
+
+                <div class="project-card" onclick="openModal('modal-hotel')">
+                    <div class="card-image"><span style="font-size: 3rem;">🏨</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="tag">Apify</span><span class="tag">Gmail</span></div>
+                        <h3>Hotel Outreach System</h3>
+                        <p>Scrapes TripAdvisor, verifies emails, and drafts personalized AI pitches for hotels.</p>
+                        <span class="view-link">View Architecture →</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="contact" class="section-padding container" style="border-top: 1px solid var(--border);">
+            <div style="max-width: 600px; margin: 0 auto; text-align: center;">
+                <h2>Ready to Automate?</h2>
+                <p style="margin-bottom: 40px; color: var(--text-muted);">Available for contract work and full-time roles.</p>
+                
+                <form action="https://formsubmit.co/krishna@automationexperts.tech" method="POST" style="text-align: left;">
+                    <input type="hidden" name="_subject" value="New Portfolio Lead!">
+                    <div style="margin-bottom: 20px;">
+                        <input type="email" name="email" placeholder="Your Work Email" required style="width: 100%; padding: 15px; border: 1px solid #E5E7EB; border-radius: 12px; font-family: inherit;">
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <textarea name="message" rows="4" placeholder="What are you looking to build?" required style="width: 100%; padding: 15px; border: 1px solid #E5E7EB; border-radius: 12px; font-family: inherit;"></textarea>
+                    </div>
+                    <button type="submit" class="btn" style="width: 100%; justify-content: center;">Send Message</button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <footer style="padding: 40px 0; border-top: 1px solid var(--border); text-align: center; color: var(--text-muted); font-size: 0.9rem;">
+        <p>&copy; 2025 Krishna Rana. Built with n8n & Logic.</p>
+    </footer>
+
+    <div class="modal-overlay" id="modal-overlay" onclick="closeModal()">
+        
+        <div class="modal-container" id="modal-sync" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3>Notion ↔ Asana Task Sync</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <h4>Input</h4>
+                <p>Trigger from Notion Webhook when a task is created or updated.</p>
+                <h4>Tools Used</h4>
+                <ul><li>n8n (Logic)</li><li>Notion API</li><li>Asana API</li><li>Slack API</li></ul>
+                <h4>Workflow Logic</h4>
+                <p>When a task updates in Notion, the system normalizes the data. Switch nodes route the task based on status (e.g., "In Progress" moves to Asana "In Progress"). If IDs are missing, it triggers a Slack alert. Completed tasks send a summary notification.</p>
+                <div class="thought-process">
+                    "I wanted something that felt invisible—where updating a task in Notion would automatically nudge Asana into the right state, without anyone having to copy-paste. The goal was peace of mind."
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-container" id="modal-video" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3>Short-Form Video Generator</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <h4>Purpose</h4>
+                <p>Automates creation of marketing videos by transforming TikTok transcripts into AI-narrated videos.</p>
+                <h4>Tools Used</h4>
+                <ul><li>Apify (TikTok Scraper)</li><li>GPT-5 (Scriptwriting)</li><li>HeyGen (Video Gen)</li><li>Google Drive</li></ul>
+                <h4>Workflow Steps</h4>
+                <p>1. Scrape TikTok transcript.<br>2. Rewrite script using GPT-5 (Storytelling mode).<br>3. Send to HeyGen to generate Avatar video.<br>4. Upload to Drive and log in Sheets.</p>
+                <div class="thought-process">
+                    "I wanted to make sure it could run end-to-end without human intervention. I focused on error handling and added a cap of 15 posts to keep API costs predictable."
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-container" id="modal-lead" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3>Lead Enrichment System</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <h4>Input</h4>
+                <p>Webhook with Company URL and Name.</p>
+                <h4>Tools Used</h4>
+                <ul><li>Apollo API</li><li>Serper (Google Search)</li><li>Gemini (Analysis)</li><li>Apify (LinkedIn)</li></ul>
+                <h4>Logic</h4>
+                <p>The system queries Apollo for financial data, scrapes the company website for context, and uses Serper/Gemini to find and summarize the LinkedIn profile. It compiles everything into a styled Google Doc.</p>
+                <div class="thought-process">
+                    "Data lives in so many places. I wanted a single assistant that could gather essentials, check accuracy, and hand back a polished doc that sales can use immediately."
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-container" id="modal-voice" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3>Voice Agent Lead Qual</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <h4>Input</h4>
+                <p>New Lead from Tally Form.</p>
+                <h4>Tools Used</h4>
+                <ul><li>Vapi.ai (Voice)</li><li>Twilio</li><li>Cal.com</li><li>GPT-4o</li></ul>
+                <h4>Workflow</h4>
+                <p>Webook triggers an outbound call via Vapi. The AI qualifies the lead. If qualified, it checks Cal.com for slots and books the meeting live on the call. Follow-up emails are sent automatically based on outcome.</p>
+                <div class="thought-process">
+                    "My objective was a friction-free pipeline: form fill → booked, qualified meeting in under three minutes."
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-container" id="modal-reports" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3>Weekly Marketing Reports</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <h4>Input</h4>
+                <p>Schedule Trigger (Monday 7am).</p>
+                <h4>Tools Used</h4>
+                <ul><li>Google Analytics 4</li><li>Google Ads API</li><li>Meta Ads API</li><li>GPT-4o (HTML Formatting)</li></ul>
+                <h4>Logic</h4>
+                <p>Fetches data from 5 different domains + Ads platforms. Normalizes metrics. Uses GPT-4o to write a summary analysis and format it into a clean HTML email table.</p>
+                <div class="thought-process">
+                    "Pulling data manually was tedious. I wanted consistency and clarity, meeting the team where they work: detailed insights via email, quick updates in Slack."
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-container" id="modal-hotel" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h3>Hotel Outreach System</h3>
+                <button class="modal-close" onclick="closeModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <h4>Input</h4>
+                <p>Manual Trigger + TripAdvisor Query.</p>
+                <h4>Tools Used</h4>
+                <ul><li>Apify (TripAdvisor)</li><li>mails.so (Verification)</li><li>GPT-5 (Copywriting)</li><li>Gmail</li></ul>
+                <h4>Workflow</h4>
+                <p>Scrapes 750+ hotels. Cleans data. Validates emails. GPT-5 writes a personalized 90-word pitch. Creates a Draft in Gmail for human review.</p>
+                <div class="thought-process">
+                    "By validating addresses first, token spend is minimized and bounce-risk drops. Draft-only sending keeps a human in control while scaling volume."
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // Modal Logic
+        const overlay = document.getElementById('modal-overlay');
+        const modals = document.querySelectorAll('.modal-container');
+
+        function openModal(modalId) {
+            // Hide all modals first
+            modals.forEach(m => m.style.display = 'none');
+            
+            // Show specific modal
+            const modal = document.getElementById(modalId);
+            if(modal) {
+                modal.style.display = 'flex';
+                overlay.classList.add('active');
+                document.body.style.overflow = 'hidden'; // Stop scroll
+            }
+        }
+
+        function closeModal() {
+            overlay.classList.remove('active');
+            document.body.style.overflow = 'auto'; // Restore scroll
+        }
+
+        // Navbar Scroll Effect
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
+    </script>
+
+</body>
+</html>
