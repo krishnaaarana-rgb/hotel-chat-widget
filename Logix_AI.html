@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logix AI | Next-Generation AI Agents</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdfa',
+                            100: '#ccfbf1',
+                            400: '#2dd4bf',
+                            500: '#14b8a6', // Your brand color
+                            600: '#0d9488',
+                            900: '#134e4a',
+                        },
+                        dark: {
+                            bg: '#0B0F19',
+                            card: '#111827',
+                            border: '#1F2937'
+                        }
+                    },
+                    backgroundImage: {
+                        'hero-glow': 'radial-gradient(circle at 50% 0%, rgba(20, 184, 166, 0.15) 0%, transparent 50%)',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Utilities */
+        body {
+            background-color: #0B0F19;
+            color: #F3F4F6;
+        }
+        
+        .glass-nav {
+            background: rgba(11, 15, 25, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .glass-card {
+            background: rgba(17, 24, 39, 0.7);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .text-gradient {
+            background: linear-gradient(to right, #ffffff, #99f6e4);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        /* Code Block Syntax Highlighting Simulation */
+        .token-tag { color: #f472b6; }
+        .token-attr { color: #a78bfa; }
+        .token-string { color: #2dd4bf; }
+        .token-punctuation { color: #9ca3af; }
+    </style>
+</head>
+<body class="antialiased selection:bg-brand-500 selection:text-white">
+
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex-shrink-0 flex items-center gap-3 cursor-pointer">
+                    <div class="w-8 h-8 rounded-lg bg-brand-500 flex items-center justify-center text-white font-bold text-lg">L</div>
+                    <span class="font-bold text-xl tracking-tight text-white">Logix AI</span>
+                </div>
+
+                <div class="hidden md:flex space-x-8">
+                    <a href="#solutions" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Solutions</a>
+                    <a href="#products" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Products</a>
+                    <a href="#about" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">About</a>
+                    <a href="#blog" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Blog</a>
+                </div>
+
+                <div class="hidden md:flex">
+                    <a href="#demo" class="px-5 py-2.5 text-sm font-medium text-white bg-white/10 border border-white/10 rounded-full hover:bg-brand-500 hover:border-brand-500 transition-all duration-300">
+                        Try Demo
+                    </a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 overflow-hidden bg-hero-glow">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center relative z-10">
+            <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-500/10 border border-brand-500/20 text-brand-400 text-xs font-semibold uppercase tracking-wide mb-8" data-aos="fade-down">
+                <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+                New Release v2.0
+            </div>
+            
+            <h1 class="text-5xl lg:text-7xl font-bold tracking-tight mb-6" data-aos="fade-up" data-aos-delay="100">
+                Next-Generation <br>
+                <span class="text-gradient">AI Agents for Business</span>
+            </h1>
+            
+            <p class="mt-6 text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed" data-aos="fade-up" data-aos-delay="200">
+                Transform your customer service with our intelligent AI Agents. Handling hundreds of conversations daily, our solution delivers personalized experiences while saving time and resources.
+            </p>
+            
+            <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4" data-aos="fade-up" data-aos-delay="300">
+                <a href="#" class="w-full sm:w-auto px-8 py-4 bg-brand-500 text-white font-semibold rounded-xl hover:bg-brand-600 transition-all shadow-[0_0_20px_rgba(20,184,166,0.3)]">
+                    Get Started
+                </a>
+                <a href="#solutions" class="w-full sm:w-auto px-8 py-4 bg-dark-card border border-dark-border text-white font-semibold rounded-xl hover:bg-white/5 transition-all">
+                    View Solutions
+                </a>
+            </div>
+        </div>
+
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full pointer-events-none">
+            <div class="absolute top-20 left-20 w-72 h-72 bg-brand-500/10 rounded-full blur-[100px]"></div>
+            <div class="absolute bottom-20 right-20 w-96 h-96 bg-purple-500/10 rounded-full blur-[100px]"></div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-dark-bg relative">
+        <div class="max-w-6xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-16" data-aos="fade-up">
+                <h2 class="text-3xl font-bold mb-4">See Our AI Agent in Action</h2>
+                <p class="text-gray-400">Experience how Logix AI handles complex scenarios effortlessly.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8" data-aos="fade-up" data-aos-delay="200">
+                
+                <div class="glass-card rounded-2xl p-6 hover:-translate-y-2 transition-transform duration-300">
+                    <div class="flex items-center gap-3 mb-6 border-b border-gray-800 pb-4">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        <span class="ml-auto text-xs text-gray-500">Quick FAQ</span>
+                    </div>
+                    <div class="space-y-4 text-sm">
+                        <div class="flex justify-end">
+                            <div class="bg-gray-800 text-white px-4 py-2 rounded-2xl rounded-tr-sm max-w-[85%]">
+                                What's your refund policy?
+                            </div>
+                        </div>
+                        <div class="flex justify-start gap-3">
+                            <div class="w-8 h-8 rounded-full bg-brand-500 flex-shrink-0 flex items-center justify-center text-xs">AI</div>
+                            <div class="bg-gray-800/50 border border-gray-700 text-gray-300 px-4 py-3 rounded-2xl rounded-tl-sm">
+                                We offer a 30-day money-back guarantee. If you're not satisfied, we'll process a full refund.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6 relative border-brand-500/30 shadow-[0_0_30px_rgba(20,184,166,0.1)] hover:-translate-y-2 transition-transform duration-300 lg:-mt-8">
+                    <div class="flex items-center gap-3 mb-6 border-b border-gray-800 pb-4">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        <span class="ml-auto text-xs text-brand-400">Consultation</span>
+                    </div>
+                    <div class="space-y-4 text-sm">
+                        <div class="flex justify-end">
+                            <div class="bg-gray-800 text-white px-4 py-2 rounded-2xl rounded-tr-sm max-w-[85%]">
+                                I need help implementing AI.
+                            </div>
+                        </div>
+                        <div class="flex justify-start gap-3">
+                            <div class="w-8 h-8 rounded-full bg-brand-500 flex-shrink-0 flex items-center justify-center text-xs">AI</div>
+                            <div class="space-y-3 w-full">
+                                <div class="bg-gray-800/50 border border-gray-700 text-gray-300 px-4 py-3 rounded-2xl rounded-tl-sm">
+                                    I recommend scheduling a consultation with our experts.
+                                </div>
+                                <div class="bg-gray-900 border border-gray-700 rounded-xl p-3">
+                                    <div class="text-xs text-gray-400 mb-1">Free AI Consultation</div>
+                                    <div class="font-semibold text-white mb-2">30-minute session</div>
+                                    <button class="w-full py-1.5 bg-brand-500 hover:bg-brand-600 text-white text-xs rounded-md transition-colors">Book Now</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6 hover:-translate-y-2 transition-transform duration-300">
+                    <div class="flex items-center gap-3 mb-6 border-b border-gray-800 pb-4">
+                        <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        <span class="ml-auto text-xs text-gray-500">Sales</span>
+                    </div>
+                    <div class="space-y-4 text-sm">
+                        <div class="flex justify-end">
+                            <div class="bg-gray-800 text-white px-4 py-2 rounded-2xl rounded-tr-sm max-w-[85%]">
+                                Best solution for support?
+                            </div>
+                        </div>
+                        <div class="flex justify-start gap-3">
+                            <div class="w-8 h-8 rounded-full bg-brand-500 flex-shrink-0 flex items-center justify-center text-xs">AI</div>
+                            <div class="bg-gray-800/50 border border-gray-700 text-gray-300 px-4 py-3 rounded-2xl rounded-tl-sm">
+                                I recommend our <span class="text-brand-400 font-medium">Enterprise Suite</span>:
+                                <ul class="mt-2 space-y-1 text-xs text-gray-400 list-disc list-inside">
+                                    <li>24/7 Automated Support</li>
+                                    <li>Multi-language</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section id="solutions" class="py-24">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="mb-12">
+                <h2 class="text-3xl font-bold mb-4">Our Solutions</h2>
+                <div class="h-1 w-20 bg-brand-500 rounded-full"></div>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="group p-8 rounded-2xl border border-gray-800 hover:border-brand-500/50 hover:bg-gray-800/30 transition-all duration-300" data-aos="fade-up">
+                    <div class="w-12 h-12 bg-blue-500/10 rounded-lg flex items-center justify-center mb-6 text-blue-400 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-robot text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">AI Agents</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">Intelligent conversational agents that understand context and deliver personalized experiences.</p>
+                    <a href="#" class="text-brand-400 text-sm font-medium hover:text-brand-300 flex items-center gap-2">
+                        Learn more <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+
+                <div class="group p-8 rounded-2xl border border-gray-800 hover:border-brand-500/50 hover:bg-gray-800/30 transition-all duration-300" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-12 h-12 bg-purple-500/10 rounded-lg flex items-center justify-center mb-6 text-purple-400 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-chart-pie text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Data Analytics</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">Transform raw data into actionable insights with our advanced analytics platform.</p>
+                    <a href="#" class="text-brand-400 text-sm font-medium hover:text-brand-300 flex items-center gap-2">
+                        Learn more <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+
+                <div class="group p-8 rounded-2xl border border-gray-800 hover:border-brand-500/50 hover:bg-gray-800/30 transition-all duration-300" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-12 h-12 bg-brand-500/10 rounded-lg flex items-center justify-center mb-6 text-brand-400 group-hover:scale-110 transition-transform">
+                        <i class="fa-solid fa-gears text-xl"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold mb-3">Process Automation</h3>
+                    <p class="text-gray-400 mb-6 leading-relaxed">Streamline operations with intelligent automation powered by machine learning.</p>
+                    <a href="#" class="text-brand-400 text-sm font-medium hover:text-brand-300 flex items-center gap-2">
+                        Learn more <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 bg-dark-card border-y border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            
+            <div class="grid md:grid-cols-2 gap-16 items-center mb-24">
+                <div data-aos="fade-right">
+                    <h2 class="text-3xl font-bold mb-6">What Makes Us Different</h2>
+                    <div class="space-y-8">
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-500/10 flex items-center justify-center text-brand-400 shrink-0">
+                                <i class="fa-solid fa-bolt"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white">Rapid Integration</h4>
+                                <p class="text-sm text-gray-400 mt-1">Get up and running quickly with our streamlined integration process.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-500/10 flex items-center justify-center text-brand-400 shrink-0">
+                                <i class="fa-solid fa-shield-halved"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white">Enterprise Security</h4>
+                                <p class="text-sm text-gray-400 mt-1">Bank-grade security protocols to protect your sensitive data.</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="w-10 h-10 rounded-full bg-brand-500/10 flex items-center justify-center text-brand-400 shrink-0">
+                                <i class="fa-solid fa-infinity"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-white">Continuous Innovation</h4>
+                                <p class="text-sm text-gray-400 mt-1">Regular updates to keep your solution at the cutting edge.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-[#0f1219] rounded-xl border border-gray-800 p-6 shadow-2xl relative overflow-hidden" data-aos="fade-left">
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex gap-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500/20"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500/20"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500/20"></div>
+                        </div>
+                        <span class="text-xs text-gray-500 font-mono">index.html</span>
+                    </div>
+                    <div class="font-mono text-sm leading-relaxed overflow-x-auto">
+                        <div><span class="token-punctuation">&lt;</span><span class="token-tag">script</span> <span class="token-attr">src</span><span class="token-punctuation">=</span><span class="token-string">"https://app.logixautomation.ai/webchat/plugin.js"</span><span class="token-punctuation">&gt;&lt;/</span><span class="token-tag">script</span><span class="token-punctuation">&gt;</span></div>
+                        <div class="mt-2"><span class="token-punctuation">&lt;</span><span class="token-tag">script</span><span class="token-punctuation">&gt;</span></div>
+                        <div class="pl-4">ktt10<span class="token-punctuation">.</span><span class="text-blue-400">setup</span><span class="token-punctuation">({</span></div>
+                        <div class="pl-8">id<span class="token-punctuation">:</span> <span class="token-string">"YOUR_ID"</span><span class="token-punctuation">,</span></div>
+                        <div class="pl-8">accountId<span class="token-punctuation">:</span> <span class="token-string">"YOUR_ACCOUNT"</span><span class="token-punctuation">,</span></div>
+                        <div class="pl-8">color<span class="token-punctuation">:</span> <span class="token-string">"#14b8a6"</span></div>
+                        <div class="pl-4"><span class="token-punctuation">});</span></div>
+                        <div><span class="token-punctuation">&lt;/</span><span class="token-tag">script</span><span class="token-punctuation">&gt;</span></div>
+                    </div>
+                    <div class="mt-6 pt-6 border-t border-gray-800">
+                        <h4 class="font-semibold mb-1">Seamless Integration</h4>
+                        <p class="text-sm text-gray-400">Single line of code. Customizable appearance. Real-time analytics.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center">
+                <h2 class="text-3xl font-bold mb-16">Your AI Journey With Us</h2>
+                <div class="grid md:grid-cols-4 gap-8 relative">
+                    <div class="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-gray-800 -z-10"></div>
+
+                    <div class="relative" data-aos="fade-up" data-aos-delay="0">
+                        <div class="w-24 h-24 mx-auto bg-dark-card border border-gray-700 rounded-full flex items-center justify-center text-2xl font-bold text-white mb-6 z-10 relative">1</div>
+                        <h4 class="font-bold text-lg mb-2">Consultation</h4>
+                        <p class="text-sm text-gray-400">Understanding your business needs and objectives.</p>
+                    </div>
+
+                    <div class="relative" data-aos="fade-up" data-aos-delay="100">
+                        <div class="w-24 h-24 mx-auto bg-dark-card border border-gray-700 rounded-full flex items-center justify-center text-2xl font-bold text-white mb-6 z-10 relative">2</div>
+                        <h4 class="font-bold text-lg mb-2">Design</h4>
+                        <p class="text-sm text-gray-400">Tailored AI solution aligning with your goals.</p>
+                    </div>
+
+                    <div class="relative" data-aos="fade-up" data-aos-delay="200">
+                        <div class="w-24 h-24 mx-auto bg-brand-500/20 border border-brand-500 text-brand-400 rounded-full flex items-center justify-center text-2xl font-bold mb-6 z-10 relative shadow-[0_0_20px_rgba(20,184,166,0.3)]">3</div>
+                        <h4 class="font-bold text-lg mb-2 text-brand-400">Implementation</h4>
+                        <p class="text-sm text-gray-400">Seamless integration with minimal disruption.</p>
+                    </div>
+
+                    <div class="relative" data-aos="fade-up" data-aos-delay="300">
+                        <div class="w-24 h-24 mx-auto bg-dark-card border border-gray-700 rounded-full flex items-center justify-center text-2xl font-bold text-white mb-6 z-10 relative">4</div>
+                        <h4 class="font-bold text-lg mb-2">Optimization</h4>
+                        <p class="text-sm text-gray-400">Continuous monitoring for maximum performance.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <h2 class="text-3xl font-bold text-center mb-16">What Our Clients Say</h2>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="p-8 rounded-2xl bg-gray-800/20 border border-gray-800 relative" data-aos="fade-up">
+                    <i class="fa-solid fa-quote-left text-4xl text-gray-700 absolute top-8 left-8 opacity-50"></i>
+                    <p class="text-lg text-gray-300 mb-8 relative z-10 pt-8">"Logix AI's solution has transformed our customer service. We've seen a 60% reduction in response times and significantly improved customer satisfaction."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold">T</div>
+                        <div>
+                            <div class="font-bold">Tech Corp International</div>
+                            <div class="text-sm text-gray-500">Client</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-8 rounded-2xl bg-gray-800/20 border border-gray-800 relative" data-aos="fade-up" data-aos-delay="100">
+                    <i class="fa-solid fa-quote-left text-4xl text-gray-700 absolute top-8 left-8 opacity-50"></i>
+                    <p class="text-lg text-gray-300 mb-8 relative z-10 pt-8">"The analytics platform provided by Logix AI has given us unprecedented insights into our operations. It's been a game-changer for our decision-making."</p>
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-green-500 flex items-center justify-center text-white font-bold">G</div>
+                        <div>
+                            <div class="font-bold">Global Solutions Ltd</div>
+                            <div class="text-sm text-gray-500">Client</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-20 bg-brand-900/20 border-y border-brand-500/20">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-4xl font-bold mb-6">Ready to Get Started?</h2>
+            <p class="text-xl text-gray-400 mb-10">Join hundreds of organizations that have already revolutionized their operations with Logix AI.</p>
+            <a href="#" class="inline-block px-10 py-4 bg-brand-500 text-white font-semibold rounded-xl hover:bg-brand-600 transition-all shadow-lg hover:shadow-brand-500/25">
+                Get Started Today
+            </a>
+        </div>
+    </section>
+
+    <footer class="pt-20 pb-10 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid md:grid-cols-4 gap-12 mb-16">
+                <div>
+                    <div class="flex items-center gap-2 mb-6">
+                        <div class="w-6 h-6 rounded bg-brand-500 flex items-center justify-center text-white text-xs">L</div>
+                        <span class="font-bold text-lg text-white">Logix AI</span>
+                    </div>
+                    <p class="text-sm text-gray-500">Next-generation AI agents for business success. Transforming interactions through intelligence.</p>
+                </div>
+                
+                <div>
+                    <h4 class="font-bold text-white mb-6">Company</h4>
+                    <ul class="space-y-4 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">About</a></li>
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">Careers</a></li>
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">Contact</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-white mb-6">Solutions</h4>
+                    <ul class="space-y-4 text-sm text-gray-400">
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">AI Agents</a></li>
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">Data Analytics</a></li>
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">Automation</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-white mb-6">Stay Updated</h4>
+                    <p class="text-xs text-gray-500 mb-4">Get the latest updates on AI technology.</p>
+                    <div class="flex gap-2">
+                        <input type="email" placeholder="Email address" class="bg-gray-800 border border-gray-700 text-white text-sm rounded-lg px-4 py-2 w-full focus:outline-none focus:border-brand-500">
+                        <button class="bg-brand-500 hover:bg-brand-600 text-white px-4 py-2 rounded-lg text-sm transition-colors">Go</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
+                <p class="text-xs text-gray-600">© 2024 Logix AI. All rights reserved.</p>
+                <div class="flex gap-6 text-xs text-gray-500">
+                    <a href="#" class="hover:text-white transition-colors">Logix AI vs Chatbase</a>
+                    <a href="#" class="hover:text-white transition-colors">Logix AI vs Botpress</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            duration: 800,
+            once: true,
+            offset: 100,
+            easing: 'ease-out-cubic'
+        });
+    </script>
+</body>
+</html>
