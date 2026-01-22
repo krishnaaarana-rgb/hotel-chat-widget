@@ -7,20 +7,20 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-sans/style.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-mono/style.css" rel="stylesheet">
     <script>
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: { sans: ['Geist Sans', 'Inter', 'sans-serif'] },
+                    fontFamily: { 
+                        sans: ['Geist Sans', 'Inter', 'sans-serif'],
+                        mono: ['Geist Mono', 'monospace']
+                    },
                     colors: {
                         brand: {
                             blue: '#2563EB', 
                             dark: '#0f172a',
-                            accent: '#10B981' // Green for "Signal/Success"
                         }
-                    },
-                    animation: {
-                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                     }
                 }
             }
@@ -29,26 +29,24 @@
     <style>
         body { font-family: 'Geist Sans', sans-serif; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; }
         
-        /* Smooth Animations */
+        /* Animations */
         .fade-in { animation: fadeIn 0.8s ease-out forwards; opacity: 0; transform: translateY(20px); }
         .delay-100 { animation-delay: 0.1s; }
         .delay-200 { animation-delay: 0.2s; }
-        .delay-300 { animation-delay: 0.3s; }
         
-        @keyframes fadeIn {
-            to { opacity: 1; transform: translateY(0); }
-        }
+        @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
 
-        /* Tab Logic */
+        /* Tabs */
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeEffect 0.4s; }
         @keyframes fadeEffect { from {opacity: 0; transform: translateY(10px);} to {opacity: 1; transform: translateY(0);} }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+        /* Section Dividers */
+        .section-divider { border-top: 1px solid #e2e8f0; }
+        
+        /* Specific List Styling */
+        .check-list li { display: flex; align-items: start; gap: 0.75rem; margin-bottom: 0.5rem; }
+        .check-list i { color: #2563EB; margin-top: 0.25rem; }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 selection:bg-blue-100 selection:text-blue-900">
@@ -60,240 +58,363 @@
                 <span class="text-xl font-bold tracking-tight text-slate-900">Auto<span class="text-blue-600">Layer</span>.</span>
             </div>
             <div class="hidden md:flex items-center gap-4 text-sm font-medium text-slate-500">
-                <span>Prepared for: <span class="text-slate-900 font-bold">Client Team</span></span>
-                <span class="bg-slate-100 text-slate-600 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wide">Valid for 14 Days</span>
+                <span>Status: <span class="text-green-600 font-bold">Proposal Ready</span></span>
             </div>
         </div>
     </nav>
 
-    <header class="pt-40 pb-20 px-6 max-w-6xl mx-auto text-center">
+    <header class="pt-40 pb-32 px-6 max-w-5xl mx-auto text-center relative">
         <div class="fade-in">
             <div class="inline-flex items-center gap-2 text-xs font-bold text-blue-600 bg-blue-50 px-4 py-2 rounded-full border border-blue-100 mb-6">
                 <span class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
                 SYSTEM PROPOSAL
             </div>
             <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-8 text-slate-900 leading-tight">
-                Perfect Timing. <br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Zero Manual Effort.</span>
+                Automated Intelligence Layer
             </h1>
-            <p class="text-xl md:text-2xl font-light text-slate-600 leading-relaxed mb-10 max-w-3xl mx-auto">
-                An automated intelligence layer that feeds your CRM with enriched contacts, detects job changes, and monitors buying signals.
+            <p class="text-xl text-slate-600 leading-relaxed mb-10 max-w-3xl mx-auto">
+                I'll build an automated layer that feeds your CRM with high-quality, enriched contacts at the perfect time. 
+                <br><span class="font-bold text-slate-900">End Result:</span> 30% time savings, higher-quality leads, and perfect timing.
             </p>
             <div class="flex flex-col md:flex-row justify-center gap-4">
                 <a href="#pricing" class="px-8 py-4 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-700 transition shadow-lg shadow-blue-200">
-                    View Investment Options
+                    View Investment
                 </a>
                 <a href="https://excalidraw.com/#room=ad86516c255a754976c7,SSQNLcUvgc5Cj-c9M-DA_g" target="_blank" class="px-8 py-4 bg-white text-slate-700 border border-slate-200 rounded-xl font-bold hover:border-blue-400 hover:text-blue-600 transition flex items-center justify-center gap-2">
-                    <i class="fas fa-project-diagram"></i> View Workflow Diagram
+                    <i class="fas fa-project-diagram"></i> Workflow Diagram
                 </a>
             </div>
         </div>
     </header>
 
-    <section class="bg-slate-900 text-white py-20 px-6 mb-20">
+    <section class="max-w-7xl mx-auto px-6 relative z-10 -mb-16">
+        <div class="bg-white rounded-3xl shadow-2xl border border-slate-100 p-8 md:p-12 fade-in delay-100">
+            <div class="text-center mb-10">
+                <h2 class="text-2xl font-bold text-slate-900">Why Work With Me?</h2>
+                <p class="text-slate-500">I act as a strategic partner, not just a developer.</p>
+            </div>
+            <div class="grid md:grid-cols-4 gap-8 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+                <div class="text-center px-4 pt-4 md:pt-0">
+                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl"><i class="fas fa-bolt"></i></div>
+                    <h4 class="font-bold text-slate-900">Response &lt; 12 Hours</h4>
+                    <p class="text-sm text-slate-500 mt-2">Direct communication. You will never be left waiting for days.</p>
+                </div>
+                <div class="text-center px-4 pt-4 md:pt-0">
+                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl"><i class="fas fa-gem"></i></div>
+                    <h4 class="font-bold text-slate-900">Quality First</h4>
+                    <p class="text-sm text-slate-500 mt-2">I focus on n8n + AI automation specifically. I build robust systems that handle errors.</p>
+                </div>
+                <div class="text-center px-4 pt-4 md:pt-0">
+                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl"><i class="fas fa-hand-holding-heart"></i></div>
+                    <h4 class="font-bold text-slate-900">Genuine Advice</h4>
+                    <p class="text-sm text-slate-500 mt-2">I suggest what works best for <em>your</em> workflow, not just what's easiest to build.</p>
+                </div>
+                <div class="text-center px-4 pt-4 md:pt-0">
+                    <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl"><i class="fas fa-sliders-h"></i></div>
+                    <h4 class="font-bold text-slate-900">Config-Driven</h4>
+                    <p class="text-sm text-slate-500 mt-2">I build systems you can control via Google Sheets without needing code.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bg-slate-900 text-white pt-32 pb-20 px-6">
         <div class="max-w-7xl mx-auto">
-            <div class="grid md:grid-cols-3 gap-8 text-center md:text-left">
-                <div class="p-6">
-                    <div class="text-4xl font-bold text-blue-400 mb-2">30%</div>
-                    <h4 class="text-lg font-bold mb-2">Time Savings</h4>
-                    <p class="text-slate-400 text-sm">Eliminating manual prospecting and data entry allows your team to focus strictly on closing.</p>
+            <h3 class="text-xl font-bold mb-8 border-l-4 border-blue-500 pl-4 uppercase tracking-wider">Technical Architecture</h3>
+            <div class="grid md:grid-cols-5 gap-6">
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <div class="text-blue-400 font-mono text-xs mb-2">CORE AUTOMATION</div>
+                    <div class="font-bold text-lg">n8n</div>
+                    <p class="text-slate-400 text-xs mt-2">Orchestration engine hosted on your instance.</p>
                 </div>
-                <div class="p-6 border-t md:border-t-0 md:border-l border-slate-800">
-                    <div class="text-4xl font-bold text-green-400 mb-2">90%+</div>
-                    <h4 class="text-lg font-bold mb-2">Data Accuracy</h4>
-                    <p class="text-slate-400 text-sm">Automated hygiene loops ensuring no bounced emails and up-to-date phone numbers in JobAdder.</p>
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <div class="text-green-400 font-mono text-xs mb-2">DATA SOURCING</div>
+                    <div class="font-bold text-lg">Apify</div>
+                    <p class="text-slate-400 text-xs mt-2">Scrapes Apollo.io database (275M+ contacts).</p>
                 </div>
-                <div class="p-6 border-t md:border-t-0 md:border-l border-slate-800">
-                    <div class="text-4xl font-bold text-purple-400 mb-2">24/7</div>
-                    <h4 class="text-lg font-bold mb-2">Signal Monitoring</h4>
-                    <p class="text-slate-400 text-sm">Detect funding, expansion, and job changes instantly. Outreach lands when they are ready to buy.</p>
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <div class="text-purple-400 font-mono text-xs mb-2">AI ENGINE</div>
+                    <div class="font-bold text-lg">OpenRouter</div>
+                    <p class="text-slate-400 text-xs mt-2">Claude 3.5 Sonnet / GPT-4 for personalization.</p>
+                </div>
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <div class="text-orange-400 font-mono text-xs mb-2">SIGNALS</div>
+                    <div class="font-bold text-lg">NewsAPI</div>
+                    <p class="text-slate-400 text-xs mt-2">Monitors funding, expansion, and hiring news.</p>
+                </div>
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700">
+                    <div class="text-teal-400 font-mono text-xs mb-2">CONTROL</div>
+                    <div class="font-bold text-lg">Google Sheets</div>
+                    <p class="text-slate-400 text-xs mt-2">Configuration, Approvals, and Execution Logs.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="max-w-7xl mx-auto px-6 mb-24 fade-in delay-200">
+    <section class="max-w-5xl mx-auto px-6 py-24">
         <div class="text-center mb-16">
-            <h3 class="text-3xl font-bold text-slate-900 mb-4">The 4 Core Workflows</h3>
-            <p class="text-slate-500 max-w-2xl mx-auto">Powered by n8n, Apify, and AI. Configurable via Google Sheets.</p>
+            <h3 class="text-3xl font-bold text-slate-900">The 4 Core Workflows</h3>
+            <p class="text-slate-500">A detailed breakdown of the automation logic.</p>
         </div>
 
-        <div class="grid md:grid-cols-2 gap-6">
-            
-            <div class="bg-white border border-slate-200 p-8 rounded-2xl hover:shadow-xl hover:border-blue-300 transition group relative overflow-hidden">
-                <div class="absolute top-0 right-0 bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-bl-lg">THE ENGINE</div>
-                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl font-bold mb-6 group-hover:bg-blue-600 group-hover:text-white transition">1</div>
-                <h4 class="text-xl font-bold text-slate-900 mb-2">Cold Contact Sourcing</h4>
-                <p class="text-sm text-slate-500 mb-4">Apify scrapes Apollo.io based on your filters (Industry, Job Title, Size).</p>
-                <ul class="space-y-3">
-                    <li class="flex items-start gap-3 text-sm text-slate-600">
-                        <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                        <span><strong>AI Email Gen:</strong> Personalized templates created automatically.</span>
-                    </li>
-                    <li class="flex items-start gap-3 text-sm text-slate-600">
-                        <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                        <span><strong>Scoring:</strong> Leads routed to High/Med/Low confidence folders.</span>
-                    </li>
-                    <li class="flex items-start gap-3 text-sm text-slate-600">
-                        <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                        <span><strong>Quality Check:</strong> AI reviews relevance before saving to CRM.</span>
-                    </li>
-                </ul>
+        <div class="mb-16 border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+            <div class="bg-slate-50 p-6 border-b border-slate-200 flex justify-between items-center">
+                <h4 class="text-xl font-bold text-slate-900">Workflow 1: Cold Contact Sourcing</h4>
+                <span class="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">Trigger: Manual/Scheduled</span>
             </div>
-
-            <div class="bg-white border border-slate-200 p-8 rounded-2xl hover:shadow-xl hover:border-blue-300 transition group">
-                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl font-bold mb-6 group-hover:bg-blue-600 group-hover:text-white transition">2</div>
-                <h4 class="text-xl font-bold text-slate-900 mb-2">CRM Hygiene & Updates</h4>
-                <p class="text-sm text-slate-500 mb-4">Triggered manually before mailshots to ensure zero bounces.</p>
-                <ul class="space-y-3">
-                    <li class="flex items-start gap-3 text-sm text-slate-600">
-                        <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                        <span><strong>Re-Verification:</strong> Checks if contact is still at the company.</span>
-                    </li>
-                    <li class="flex items-start gap-3 text-sm text-slate-600">
-                        <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                        <span><strong>Auto-Enrich:</strong> Updates phone numbers and social profiles.</span>
-                    </li>
-                    <li class="flex items-start gap-3 text-sm text-slate-600">
-                        <i class="fas fa-arrow-right text-blue-500 mt-1"></i>
-                        <span>If job change detected, auto-routes to Workflow 3.</span>
-                    </li>
-                </ul>
+            <div class="p-8 grid md:grid-cols-2 gap-8">
+                <div>
+                    <h5 class="font-bold text-slate-900 mb-4 text-sm uppercase">Process</h5>
+                    <ol class="list-decimal pl-4 space-y-3 text-sm text-slate-600 marker:font-bold marker:text-slate-400">
+                        <li><strong>Config Load:</strong> Reads Industry, Job Titles, Company Size, Location from Google Sheets.</li>
+                        <li><strong>Scraping:</strong> Apify scrapes Apollo.io based on params.</li>
+                        <li><strong>Filtering:</strong> Keeps verified emails only. Extracts Phone, LinkedIn, Company Data.</li>
+                        <li><strong>AI Generation:</strong> Generates personalized email for each contact.</li>
+                        <li><strong>Quality Check:</strong> AI reviews email. Flags low quality for regeneration.</li>
+                        <li><strong>Scoring:</strong> Assigns Confidence Score (0-100).</li>
+                        <li><strong>Approval:</strong> Routes to Google Sheets Approval Queue.</li>
+                    </ol>
+                </div>
+                <div>
+                    <h5 class="font-bold text-slate-900 mb-4 text-sm uppercase">Output & Routing</h5>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-100 text-sm text-slate-600">
+                        <p class="mb-2"><strong>On Approval:</strong> Loads to CRM with custom fields (lead_source, confidence_score, ai_email_template).</p>
+                        <p class="mb-2 font-bold">CRM Folder Routing:</p>
+                        <ul class="list-disc pl-4 space-y-1 mb-4">
+                            <li>"Cold Leads - High Confidence" (80-100)</li>
+                            <li>"Cold Leads - Medium Confidence" (50-79)</li>
+                            <li>"Cold Leads - Low Confidence" (0-49)</li>
+                        </ul>
+                        <p><strong>Final Step:</strong> Triggers Email Platform (ROI/Instantly/GHL).</p>
+                    </div>
+                </div>
             </div>
+        </div>
 
-            <div class="bg-white border border-slate-200 p-8 rounded-2xl hover:shadow-xl hover:border-blue-300 transition group">
-                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl font-bold mb-6 group-hover:bg-blue-600 group-hover:text-white transition">3</div>
-                <h4 class="text-xl font-bold text-slate-900 mb-2">Job Change Monitoring</h4>
-                <p class="text-sm text-slate-500 mb-4">Tracks key decision makers. When they move, we strike.</p>
-                <ul class="space-y-3">
-                    <li class="flex items-start gap-3 text-sm text-slate-600">
-                        <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                        <span><strong>Detection:</strong> Monitors specific contacts for role changes.</span>
-                    </li>
-                    <li class="flex items-start gap-3 text-sm text-slate-600">
-                        <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                        <span><strong>Contextual Email:</strong> AI writes "Congrats on the new role at [Company]..."</span>
-                    </li>
-                    <li class="flex items-start gap-3 text-sm text-slate-600">
-                        <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                        <span><strong>Alerts:</strong> Adds to "Job Change Alerts - This Week" folder.</span>
-                    </li>
-                </ul>
+        <div class="mb-16 border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+            <div class="bg-slate-50 p-6 border-b border-slate-200 flex justify-between items-center">
+                <h4 class="text-xl font-bold text-slate-900">Workflow 2: CRM Contact Updates</h4>
+                <span class="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">Trigger: Manual (Pre-Mailshot)</span>
             </div>
+            <div class="p-8">
+                <div class="grid md:grid-cols-3 gap-6">
+                    <div class="bg-white p-4 rounded border border-slate-100">
+                        <div class="font-bold text-slate-900 mb-2">1. Export & Re-verify</div>
+                        <p class="text-sm text-slate-500">Exports CRM contacts and re-verifies via Apify/Apollo to check if they are still at the same company.</p>
+                    </div>
+                    <div class="bg-white p-4 rounded border border-slate-100">
+                        <div class="font-bold text-slate-900 mb-2">2. Detection Logic</div>
+                        <p class="text-sm text-slate-500">If job changed → Route to Workflow 3.<br>If outdated → Flag for review.<br>If valid → Update last_enriched_date.</p>
+                    </div>
+                    <div class="bg-white p-4 rounded border border-slate-100">
+                        <div class="font-bold text-slate-900 mb-2">3. Update Data</div>
+                        <p class="text-sm text-slate-500">Updates CRM with fresh phone, email, and social profiles. Ensures 0% bounce rate.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-            <div class="bg-white border border-slate-200 p-8 rounded-2xl hover:shadow-xl hover:border-blue-300 transition group relative overflow-hidden">
-                <div class="absolute top-0 right-0 bg-purple-100 text-purple-700 text-xs font-bold px-3 py-1 rounded-bl-lg">HIGH INTENT</div>
-                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl font-bold mb-6 group-hover:bg-blue-600 group-hover:text-white transition">4</div>
-                <h4 class="text-xl font-bold text-slate-900 mb-2">News & Signal Monitoring</h4>
-                <p class="text-sm text-slate-500 mb-4">NewsAPI aggregates funding, expansion, and hiring signals.</p>
-                <ul class="space-y-3">
-                    <li class="flex items-start gap-3 text-sm text-slate-600">
-                        <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                        <span><strong>Signal Types:</strong> Funding, New Stores, Leadership Changes.</span>
-                    </li>
-                    <li class="flex items-start gap-3 text-sm text-slate-600">
-                        <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                        <span><strong>Decision Maker Hunting:</strong> Finds the right person to contact based on the news.</span>
-                    </li>
-                    <li class="flex items-start gap-3 text-sm text-slate-600">
-                        <i class="fas fa-check-circle text-green-500 mt-1"></i>
-                        <span><strong>Categorization:</strong> Auto-sorts into "Buying Signals" folders in CRM.</span>
-                    </li>
+        <div class="mb-16 border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+            <div class="bg-slate-50 p-6 border-b border-slate-200 flex justify-between items-center">
+                <h4 class="text-xl font-bold text-slate-900">Workflow 3: Job Change Monitoring</h4>
+                <span class="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">Trigger: Daily</span>
+            </div>
+            <div class="p-8 grid md:grid-cols-2 gap-8">
+                <div>
+                    <h5 class="font-bold text-slate-900 mb-4 text-sm uppercase">Process</h5>
+                    <ol class="list-decimal pl-4 space-y-3 text-sm text-slate-600 marker:font-bold marker:text-slate-400">
+                        <li><strong>Monitor:</strong> Tracks contacts via Apify for job updates.</li>
+                        <li><strong>Detection:</strong> Identifies new hires in target positions at target companies.</li>
+                        <li><strong>Signal Strength:</strong> Calculates based on days in role, seniority, and company size.</li>
+                        <li><strong>AI Drafting:</strong> Generates email referencing the specific move.</li>
+                        <li><strong>Validation:</strong> Quality Checker validates email logic.</li>
+                    </ol>
+                </div>
+                <div>
+                    <h5 class="font-bold text-slate-900 mb-4 text-sm uppercase">Output</h5>
+                    <div class="bg-slate-50 p-4 rounded-lg border border-slate-100 text-sm text-slate-600">
+                        <p class="mb-2"><strong>Action:</strong> Updates CRM record.</p>
+                        <p class="mb-2"><strong>Routing:</strong> Adds to folder "Job Change Alerts - This Week".</p>
+                        <p><strong>Goal:</strong> Timely outreach to decision-makers within days of role change.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mb-16 border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+            <div class="bg-slate-50 p-6 border-b border-slate-200 flex justify-between items-center">
+                <h4 class="text-xl font-bold text-slate-900">Workflow 4: News & Signal Monitoring</h4>
+                <span class="bg-blue-100 text-blue-700 text-xs font-bold px-3 py-1 rounded-full">Trigger: Daily</span>
+            </div>
+            <div class="p-8">
+                <h5 class="font-bold text-slate-900 mb-4 text-sm uppercase">Signals Detected</h5>
+                <div class="grid md:grid-cols-4 gap-4 mb-8">
+                    <div class="bg-blue-50 text-blue-700 px-4 py-2 rounded text-sm text-center font-medium">Funding</div>
+                    <div class="bg-blue-50 text-blue-700 px-4 py-2 rounded text-sm text-center font-medium">New Stores/Locations</div>
+                    <div class="bg-blue-50 text-blue-700 px-4 py-2 rounded text-sm text-center font-medium">Expansion Plans</div>
+                    <div class="bg-blue-50 text-blue-700 px-4 py-2 rounded text-sm text-center font-medium">Leadership Changes</div>
+                </div>
+                <h5 class="font-bold text-slate-900 mb-4 text-sm uppercase">Process Flow</h5>
+                <ul class="space-y-2 text-sm text-slate-600">
+                    <li><i class="fas fa-arrow-right text-blue-500 mr-2"></i> NewsAPI aggregates from sources configured in Sheets.</li>
+                    <li><i class="fas fa-arrow-right text-blue-500 mr-2"></i> AI classifies relevance and extracts key people (Hiring Managers, Execs).</li>
+                    <li><i class="fas fa-arrow-right text-blue-500 mr-2"></i> Apify finds contact details for those specific people.</li>
+                    <li><i class="fas fa-arrow-right text-blue-500 mr-2"></i> AI Generates email referencing the news event.</li>
+                    <li><i class="fas fa-arrow-right text-blue-500 mr-2"></i> <strong>Routing:</strong> Adds to specific folders: "Funding - Hot", "Expansion Signals", etc.</li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <section class="bg-slate-100 py-16 border-y border-slate-200">
-        <div class="max-w-7xl mx-auto px-6">
-            <div class="flex flex-col md:flex-row gap-12 items-center">
-                <div class="md:w-1/2">
-                    <h3 class="text-2xl font-bold mb-6">The AI Quality Checker</h3>
-                    <p class="text-slate-600 mb-6 leading-relaxed">
-                        We don't just generate emails; we grade them. Every AI-generated draft passes through a secondary AI agent that acts as a strict editor.
-                    </p>
+    <section class="bg-slate-100 py-24 border-y border-slate-200">
+        <div class="max-w-6xl mx-auto px-6">
+            <h3 class="text-2xl font-bold mb-12 text-slate-900">The Intelligence System</h3>
+            
+            <div class="grid md:grid-cols-2 gap-12">
+                <div>
+                    <h4 class="font-bold text-lg mb-4 text-slate-900"><i class="fas fa-sliders-h text-blue-600 mr-2"></i> Configuration (Google Sheets)</h4>
+                    <p class="text-sm text-slate-600 mb-4">No code needed. You control everything here:</p>
+                    <ul class="text-sm space-y-3 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                        <li><strong>Sheet 1: Cold Sourcing:</strong> Industries, Job Titles, Size, Locations, Exclusions.</li>
+                        <li><strong>Sheet 2: Job Changes:</strong> Titles to monitor, Refresh frequency.</li>
+                        <li><strong>Sheet 3: News Signals:</strong> Sources (RSS/URLs), Signal Types, Keywords.</li>
+                        <li><strong>Sheet 4: Master Exclusions:</strong> Blacklists (Companies/People).</li>
+                        <li><strong>+ Google Form:</strong> For quick additions without opening the sheet.</li>
+                    </ul>
+
+                    <h4 class="font-bold text-lg mt-8 mb-4 text-slate-900"><i class="fas fa-check-double text-blue-600 mr-2"></i> Approval Workflow</h4>
+                    <p class="text-sm text-slate-600 mb-4">Human-in-the-loop review system.</p>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 text-sm">
+                        <p class="mb-2"><strong>The Queue Includes:</strong> Contact info, Email Draft, Confidence Score, Signal Source.</p>
+                        <p class="mb-2"><strong>Actions:</strong> Approve / Reject / Notes.</p>
+                        <p class="italic text-slate-400">System processes approvals every hour.</p>
+                    </div>
+                </div>
+
+                <div>
+                    <h4 class="font-bold text-lg mb-4 text-slate-900"><i class="fas fa-robot text-blue-600 mr-2"></i> AI Quality Checker</h4>
+                    <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200 mb-8">
+                        <p class="text-sm text-slate-600 mb-4">Every email is scored (0-20) on personalization, grammar, tone, and clarity.</p>
+                        <div class="flex items-center gap-4 text-sm font-mono bg-slate-50 p-3 rounded">
+                            <span class="text-red-500">Score &lt; 12</span>
+                            <span class="text-slate-400">→</span>
+                            <span class="text-slate-700">Regenerate (Improved Prompt)</span>
+                        </div>
+                        <div class="flex items-center gap-4 text-sm font-mono bg-slate-50 p-3 rounded mt-2">
+                            <span class="text-green-500">Score >= 12</span>
+                            <span class="text-slate-400">→</span>
+                            <span class="text-slate-700">Approval Queue</span>
+                        </div>
+                    </div>
+
+                    <h4 class="font-bold text-lg mb-4 text-slate-900"><i class="fas fa-chart-bar text-blue-600 mr-2"></i> Confidence Scoring (0-100)</h4>
                     <div class="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
-                        <div class="flex justify-between text-sm font-bold text-slate-700 mb-2">
-                            <span>Confidence Score</span>
-                            <span class="text-blue-600">88/100</span>
-                        </div>
-                        <div class="w-full bg-slate-200 rounded-full h-2.5 mb-6">
-                            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 88%"></div>
-                        </div>
-                        <ul class="text-sm space-y-2 text-slate-600">
-                            <li class="flex justify-between"><span>Email Verification</span> <span class="font-mono text-green-600">+30 pts</span></li>
-                            <li class="flex justify-between"><span>Full Data Profile</span> <span class="font-mono text-green-600">+40 pts</span></li>
-                            <li class="flex justify-between"><span>Target Relevance</span> <span class="font-mono text-green-600">+18 pts</span></li>
+                        <ul class="space-y-2 text-sm">
+                            <li class="flex justify-between border-b border-slate-100 pb-2">
+                                <span>Email Verified</span>
+                                <span class="font-bold text-green-600">30 pts</span>
+                            </li>
+                            <li class="flex justify-between border-b border-slate-100 pb-2">
+                                <span>Data Completeness</span>
+                                <span class="font-bold text-green-600">40 pts</span>
+                            </li>
+                            <li class="flex justify-between border-b border-slate-100 pb-2">
+                                <span>Target Relevance</span>
+                                <span class="font-bold text-green-600">20 pts</span>
+                            </li>
+                            <li class="flex justify-between">
+                                <span>Signal Strength</span>
+                                <span class="font-bold text-green-600">10 pts</span>
+                            </li>
                         </ul>
                     </div>
                 </div>
-                <div class="md:w-1/2 grid grid-cols-2 gap-4">
-                    <div class="bg-white p-4 rounded-lg text-center border border-slate-200">
-                        <div class="font-bold text-slate-900">n8n</div>
-                        <div class="text-xs text-slate-500">Core Automation</div>
+            </div>
+            
+            <div class="mt-12 bg-white p-8 rounded-xl border border-slate-200">
+                <h4 class="font-bold text-lg mb-4 text-slate-900">CRM Data Structure</h4>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase mb-2">Custom Fields Created</p>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded font-mono">lead_source</span>
+                            <span class="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded font-mono">confidence_score</span>
+                            <span class="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded font-mono">quality_score</span>
+                            <span class="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded font-mono">signal_type</span>
+                            <span class="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded font-mono">signal_date</span>
+                            <span class="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded font-mono">ai_email_template</span>
+                            <span class="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded font-mono">last_enriched_date</span>
+                            <span class="px-2 py-1 bg-slate-100 text-slate-600 text-xs rounded font-mono">apify_profile_url</span>
+                        </div>
                     </div>
-                    <div class="bg-white p-4 rounded-lg text-center border border-slate-200">
-                        <div class="font-bold text-slate-900">Apify</div>
-                        <div class="text-xs text-slate-500">Data Scraper (Apollo)</div>
-                    </div>
-                    <div class="bg-white p-4 rounded-lg text-center border border-slate-200">
-                        <div class="font-bold text-slate-900">OpenRouter</div>
-                        <div class="text-xs text-slate-500">Claude 3.5 / GPT-4</div>
-                    </div>
-                    <div class="bg-white p-4 rounded-lg text-center border border-slate-200">
-                        <div class="font-bold text-slate-900">Google Sheets</div>
-                        <div class="text-xs text-slate-500">Config & Approvals</div>
+                    <div>
+                        <p class="text-xs font-bold text-slate-400 uppercase mb-2">Execution Logs</p>
+                        <p class="text-sm text-slate-600">
+                            <strong>Daily Log:</strong> Date, Workflow Type, Contacts Processed, Emails Generated, Success Rate.<br>
+                            <strong>Weekly Summary:</strong> Total Added, Top Signals, Approval Rate.
+                        </p>
                     </div>
                 </div>
             </div>
+
+            <div class="mt-8">
+                 <h4 class="font-bold text-slate-900 text-sm uppercase mb-2">Error Handling & Scalability</h4>
+                 <p class="text-sm text-slate-600">Automatic retries (3 attempts), Duplicate detection by email, Batch processing (50 contacts/run), Idempotent workflows.</p>
+             </div>
         </div>
     </section>
 
-    <section class="max-w-6xl mx-auto px-6 py-24" id="pricing">
+    <section class="max-w-7xl mx-auto px-6 py-24" id="pricing">
         <div class="text-center mb-12">
-            <h2 class="text-3xl md:text-4xl font-bold mb-6 text-slate-900">Implementation Options</h2>
+            <h2 class="text-3xl md:text-4xl font-bold mb-6 text-slate-900">Platform Options & Pricing</h2>
             <p class="text-slate-500 max-w-2xl mx-auto mb-8">
-                One fixed development price. Choose your platform stack based on your preferences.
+                Choose the stack that fits your growth stage.
             </p>
 
             <div class="inline-flex bg-slate-200 p-1.5 rounded-xl">
-                <button onclick="switchTab('optionA')" id="btn-optionA" class="px-5 py-2.5 rounded-lg text-sm font-bold transition-all text-slate-600 hover:text-slate-900">
-                    Option A: Current Stack
+                <button onclick="switchTab('optionA')" id="btn-optionA" class="px-5 py-2.5 rounded-lg text-sm font-bold transition-all bg-white text-blue-600 shadow-sm cursor-default">
+                    Option A: JobAdder + ROI
                 </button>
-                <button onclick="switchTab('optionB')" id="btn-optionB" class="px-5 py-2.5 rounded-lg text-sm font-bold transition-all bg-white text-blue-600 shadow-sm">
-                    Option B: Recommended
+                <button onclick="switchTab('optionB')" id="btn-optionB" class="px-5 py-2.5 rounded-lg text-sm font-bold transition-all text-slate-600 hover:text-slate-900">
+                    Option B: JobAdder + Instantly
                 </button>
                 <button onclick="switchTab('optionC')" id="btn-optionC" class="px-5 py-2.5 rounded-lg text-sm font-bold transition-all text-slate-600 hover:text-slate-900">
-                    Option C: All-in-One
+                    Option C: GoHighLevel
                 </button>
             </div>
         </div>
 
-        <div id="optionA-content" class="tab-content hidden">
+        <div id="optionA-content" class="tab-content active block">
             <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-lg relative overflow-hidden">
                 <div class="grid md:grid-cols-2 gap-12">
                     <div>
-                        <div class="inline-block bg-slate-100 text-slate-600 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide mb-4">JobAdder + ROI.ai</div>
-                        <h3 class="text-3xl font-bold text-slate-900 mb-4">Low Friction</h3>
-                        <p class="text-slate-600 mb-6">We keep your existing tools. I automate the contact loading and enrichment; you send via ROI.ai.</p>
-                        <ul class="space-y-3 text-sm text-slate-600">
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-green-500"></i> No new platforms to learn.</li>
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-green-500"></i> No additional platform costs.</li>
-                            <li class="flex items-center gap-2"><i class="fas fa-exclamation-circle text-orange-500"></i> Requires manual sending click in ROI.ai.</li>
-                        </ul>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-2">JobAdder + ROI.ai (Current)</h3>
+                        <p class="text-slate-600 mb-6 text-sm">Best for keeping existing tools with no new learning curve.</p>
+                        
+                        <div class="mb-6">
+                            <h5 class="font-bold text-xs uppercase text-slate-400 mb-2">Workflow</h5>
+                            <ol class="list-decimal pl-4 text-sm text-slate-600 space-y-1">
+                                <li>Contacts loaded to JobAdder with AI emails in notes.</li>
+                                <li>User logs into ROI.ai.</li>
+                                <li>Selects JobAdder segment.</li>
+                                <li>Sends campaign manually.</li>
+                            </ol>
+                        </div>
+
+                        <div class="flex gap-4 text-sm">
+                            <div class="text-green-600"><i class="fas fa-check"></i> Already integrated</div>
+                            <div class="text-green-600"><i class="fas fa-check"></i> No extra platform cost</div>
+                            <div class="text-red-500"><i class="fas fa-times"></i> Manual sending</div>
+                        </div>
                     </div>
                     <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 flex flex-col justify-center text-center">
                         <div class="text-sm text-slate-400 font-medium uppercase tracking-widest mb-2">Development Fee</div>
                         <div class="text-5xl font-bold text-slate-900 mb-2">$2,100</div>
-                        <div class="text-slate-500 text-sm mb-6">One-time fixed cost</div>
+                        <div class="text-slate-500 text-sm mb-6">Fixed Price</div>
                         <div class="border-t border-slate-200 pt-4 mt-2">
                             <div class="flex justify-between text-xs text-slate-500 mb-1">
-                                <span>Automation Hosting (n8n/Apify)</span>
+                                <span>Automation Tools (Client Paid)</span>
                                 <span>$55-129/mo</span>
-                            </div>
-                            <div class="flex justify-between text-xs text-slate-500">
-                                <span>Platform Cost</span>
-                                <span>$0 (Existing)</span>
                             </div>
                         </div>
                     </div>
@@ -301,31 +422,36 @@
             </div>
         </div>
 
-        <div id="optionB-content" class="tab-content active block">
+        <div id="optionB-content" class="tab-content hidden">
             <div class="bg-white border-2 border-blue-600 rounded-3xl p-8 md:p-12 shadow-xl relative overflow-hidden">
                 <div class="absolute top-0 right-0 bg-blue-600 text-white text-xs font-bold px-4 py-2 rounded-bl-xl">RECOMMENDED</div>
                 <div class="grid md:grid-cols-2 gap-12">
                     <div>
-                        <div class="inline-block bg-blue-50 text-blue-600 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide mb-4">JobAdder + Instantly.ai</div>
-                        <h3 class="text-3xl font-bold text-slate-900 mb-4">Full Automation</h3>
-                        <p class="text-slate-600 mb-6">Replace ROI.ai with Instantly.ai. Zero manual steps from sourcing to sending. Better deliverability with warm-up.</p>
-                        <ul class="space-y-3 text-sm text-slate-600">
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-green-500"></i> Completely hands-free sending.</li>
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-green-500"></i> Superior email deliverability (warmup included).</li>
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-green-500"></i> Engagement syncs back to JobAdder.</li>
-                        </ul>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-2">JobAdder + Instantly.ai</h3>
+                        <p class="text-slate-600 mb-6 text-sm">End-to-end automation with superior deliverability.</p>
+                        
+                        <div class="mb-6">
+                            <h5 class="font-bold text-xs uppercase text-slate-400 mb-2">Workflow</h5>
+                            <ol class="list-decimal pl-4 text-sm text-slate-600 space-y-1">
+                                <li>Contacts approved in Google Sheets.</li>
+                                <li>n8n automatically adds to Instantly campaign.</li>
+                                <li>Instantly sends emails (warmup included).</li>
+                                <li>Tracks opens/clicks/replies via API.</li>
+                            </ol>
+                        </div>
+
+                        <div class="flex gap-4 text-sm">
+                            <div class="text-green-600"><i class="fas fa-check"></i> Zero manual steps</div>
+                            <div class="text-green-600"><i class="fas fa-check"></i> 5-10 Sending Accounts</div>
+                        </div>
                     </div>
                     <div class="bg-blue-50 rounded-2xl p-8 border border-blue-100 flex flex-col justify-center text-center">
                         <div class="text-sm text-blue-400 font-medium uppercase tracking-widest mb-2">Development Fee</div>
-                        <div class="text-5xl font-bold text-slate-900 mb-2">$2,100</div>
-                        <div class="text-slate-500 text-sm mb-6">One-time fixed cost</div>
+                        <div class="text-4xl font-bold text-slate-900 mb-2">Contact Me</div>
+                        <div class="text-slate-500 text-sm mb-6">Let's discuss scope</div>
                         <div class="border-t border-blue-200 pt-4 mt-2">
-                            <div class="flex justify-between text-xs text-slate-500 mb-1">
-                                <span>Automation Hosting</span>
-                                <span>$55-129/mo</span>
-                            </div>
                             <div class="flex justify-between text-xs text-slate-500 font-bold text-blue-600">
-                                <span>Instantly.ai + Emails</span>
+                                <span>Add Platform Cost</span>
                                 <span>+$67-157/mo</span>
                             </div>
                         </div>
@@ -338,28 +464,31 @@
             <div class="bg-white border border-slate-200 rounded-3xl p-8 md:p-12 shadow-lg relative overflow-hidden">
                 <div class="grid md:grid-cols-2 gap-12">
                     <div>
-                        <div class="inline-block bg-purple-50 text-purple-600 px-3 py-1 rounded-lg text-xs font-bold uppercase tracking-wide mb-4">GoHighLevel (GHL)</div>
-                        <div class="flex items-center gap-2 mb-4">
-                            <h3 class="text-3xl font-bold text-slate-900">Consolidation</h3>
+                        <h3 class="text-2xl font-bold text-slate-900 mb-2">GoHighLevel (All-in-One)</h3>
+                        <p class="text-slate-600 mb-6 text-sm">Complete platform consolidation (CRM + Email + SMS).</p>
+                        
+                        <div class="mb-6">
+                            <h5 class="font-bold text-xs uppercase text-slate-400 mb-2">Workflow</h5>
+                            <ol class="list-decimal pl-4 text-sm text-slate-600 space-y-1">
+                                <li>Contacts loaded directly to GHL.</li>
+                                <li>Automated email/SMS campaigns triggered.</li>
+                                <li>All tracking and engagement in one dashboard.</li>
+                                <li>Visual workflow builder.</li>
+                            </ol>
                         </div>
-                        <p class="text-slate-600 mb-6">Replace both JobAdder and ROI.ai. An all-in-one CRM and Marketing platform. Best for simplifying your tech stack.</p>
-                        <ul class="space-y-3 text-sm text-slate-600">
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-green-500"></i> Single platform for everything.</li>
-                            <li class="flex items-center gap-2"><i class="fas fa-check text-green-500"></i> Built-in SMS and visual workflows.</li>
-                            <li class="flex items-center gap-2"><i class="fas fa-exclamation-circle text-orange-500"></i> Requires migration from JobAdder.</li>
-                        </ul>
+
+                        <div class="flex gap-4 text-sm">
+                            <div class="text-green-600"><i class="fas fa-check"></i> One platform for everything</div>
+                            <div class="text-orange-500"><i class="fas fa-exclamation-circle"></i> Requires migration</div>
+                        </div>
                     </div>
                     <div class="bg-slate-50 rounded-2xl p-8 border border-slate-100 flex flex-col justify-center text-center">
                         <div class="text-sm text-slate-400 font-medium uppercase tracking-widest mb-2">Development Fee</div>
-                        <div class="text-5xl font-bold text-slate-900 mb-2">$2,100</div>
-                        <div class="text-slate-500 text-sm mb-6">One-time fixed cost</div>
+                        <div class="text-4xl font-bold text-slate-900 mb-2">Contact Me</div>
+                        <div class="text-slate-500 text-sm mb-6">Let's discuss scope</div>
                         <div class="border-t border-slate-200 pt-4 mt-2">
-                            <div class="flex justify-between text-xs text-slate-500 mb-1">
-                                <span>Automation Hosting</span>
-                                <span>$55-129/mo</span>
-                            </div>
                             <div class="flex justify-between text-xs text-slate-500 font-bold text-purple-600">
-                                <span>GHL Subscription</span>
+                                <span>Add Platform Cost</span>
                                 <span>+$97-297/mo</span>
                             </div>
                         </div>
@@ -367,54 +496,124 @@
                 </div>
             </div>
         </div>
-        
-        <div class="text-center mt-12">
-            <p class="text-sm text-slate-400">Payment Schedule: 30% Start / 30% Core Workflows / 30% Signals / 10% Handover.</p>
+
+        <div class="text-center mt-12 text-sm text-slate-500">
+            <p><strong>Payment Schedule:</strong> 30% Start | 30% Wk 2 | 30% Wk 3 | 10% Handover.</p>
         </div>
     </section>
 
     <section class="bg-slate-900 text-white py-20 px-6">
-        <div class="max-w-5xl mx-auto">
+        <div class="max-w-6xl mx-auto">
             <h3 class="text-2xl font-bold mb-10 border-l-4 border-blue-500 pl-4">Implementation Timeline (4-5 Weeks)</h3>
-            <div class="grid md:grid-cols-4 gap-8">
-                <div class="relative">
-                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center font-bold mb-4">1</div>
-                    <h5 class="font-bold text-lg mb-2">Setup & Config</h5>
-                    <p class="text-sm text-slate-400">API connections, Config Sheets, CRM folder creation.</p>
+            <div class="grid md:grid-cols-5 gap-8 border-t border-slate-800 pt-8">
+                <div>
+                    <div class="text-blue-500 font-bold mb-2">Week 1</div>
+                    <h5 class="font-bold text-white mb-2">Setup & Config</h5>
+                    <ul class="text-xs text-slate-400 space-y-1 list-disc pl-4">
+                        <li>n8n configured</li>
+                        <li>API access established</li>
+                        <li>CRM folders created</li>
+                        <li>Config Sheets built</li>
+                    </ul>
                 </div>
-                <div class="relative">
-                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center font-bold mb-4">2</div>
-                    <h5 class="font-bold text-lg mb-2">Core Workflows</h5>
-                    <p class="text-sm text-slate-400">Cold Sourcing & CRM Hygiene live. Approval queue operational.</p>
+                <div>
+                    <div class="text-blue-500 font-bold mb-2">Week 2</div>
+                    <h5 class="font-bold text-white mb-2">Core Workflows</h5>
+                    <ul class="text-xs text-slate-400 space-y-1 list-disc pl-4">
+                        <li>Cold Sourcing operational</li>
+                        <li>CRM Updates operational</li>
+                        <li>Approval queue functional</li>
+                        <li>AI Quality Checker integrated</li>
+                    </ul>
                 </div>
-                <div class="relative">
-                    <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center font-bold mb-4">3</div>
-                    <h5 class="font-bold text-lg mb-2">Signal Detection</h5>
-                    <p class="text-sm text-slate-400">Job Change & News monitoring. Error handling robust.</p>
+                <div>
+                    <div class="text-blue-500 font-bold mb-2">Week 3</div>
+                    <h5 class="font-bold text-white mb-2">Signal Detection</h5>
+                    <ul class="text-xs text-slate-400 space-y-1 list-disc pl-4">
+                        <li>Job Change Monitor live</li>
+                        <li>News Monitor live</li>
+                        <li>Error handling complete</li>
+                    </ul>
                 </div>
-                <div class="relative">
-                    <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center font-bold mb-4"><i class="fas fa-flag-checkered"></i></div>
-                    <h5 class="font-bold text-lg mb-2">Handover</h5>
-                    <p class="text-sm text-slate-400">End-to-end testing, documentation, video training, and hypercare.</p>
+                <div>
+                    <div class="text-blue-500 font-bold mb-2">Week 4</div>
+                    <h5 class="font-bold text-white mb-2">Testing & Handover</h5>
+                    <ul class="text-xs text-slate-400 space-y-1 list-disc pl-4">
+                        <li>End-to-end testing</li>
+                        <li>Documentation complete</li>
+                        <li>Video tutorials recorded</li>
+                        <li>Client training</li>
+                    </ul>
+                </div>
+                <div>
+                    <div class="text-green-500 font-bold mb-2">Week 5</div>
+                    <h5 class="font-bold text-white mb-2">Hypercare</h5>
+                    <ul class="text-xs text-slate-400 space-y-1 list-disc pl-4">
+                        <li>Production monitoring</li>
+                        <li>Bug fixes</li>
+                        <li>Optimization</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
-    <footer class="bg-white py-12 border-t border-slate-200">
+    <section class="max-w-7xl mx-auto px-6 py-24 border-b border-slate-200">
+        <div class="grid md:grid-cols-2 gap-16">
+            <div>
+                <h3 class="text-xl font-bold text-slate-900 mb-6">Deliverables</h3>
+                <div class="space-y-6">
+                    <div>
+                        <h5 class="font-bold text-sm text-slate-700 uppercase mb-2">Technical</h5>
+                        <ul class="text-sm text-slate-600 list-disc pl-4">
+                            <li>4 fully functional n8n workflows</li>
+                            <li>CRM integration (fields, folders)</li>
+                            <li>Google Sheets config system</li>
+                            <li>Approval queue & AI Quality Checker</li>
+                            <li>Execution log dashboard</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h5 class="font-bold text-sm text-slate-700 uppercase mb-2">Docs & Training</h5>
+                        <ul class="text-sm text-slate-600 list-disc pl-4">
+                            <li>Technical architecture diagram</li>
+                            <li>User guides & SOPs</li>
+                            <li>Recorded video tutorials</li>
+                            <li>Live handover session</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold text-slate-900 mb-6">Requirements</h3>
+                <div class="bg-slate-50 p-6 rounded-xl border border-slate-200 text-sm">
+                    <p class="mb-4"><strong>Required to Start:</strong><br> Google Workspace Admin Email (for integration setup and permissions).</p>
+                    <p class="mb-4"><strong>Assumptions Verified:</strong></p>
+                    <ul class="list-disc pl-4 space-y-1 text-slate-600">
+                        <li>JobAdder API read/write access available.</li>
+                        <li>ROI.ai natively integrated.</li>
+                        <li>Client provides Apify account.</li>
+                        <li>System runs on client n8n instance.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="bg-white py-12">
         <div class="max-w-7xl mx-auto px-6 flex flex-col md:flex-row justify-between items-center gap-6">
             <div class="text-left">
                 <div class="text-xl font-bold tracking-tight">Auto<span class="text-blue-600">Layer</span>.</div>
                 <p class="text-slate-400 text-sm mt-1">Direct development. No middlemen.</p>
             </div>
-            <div class="flex flex-col md:flex-row gap-6 text-sm font-medium">
-                <div class="text-slate-600 flex items-center gap-2">
-                    <i class="fas fa-envelope text-blue-500"></i>
-                    Direct Communication
-                </div>
-                <div class="text-slate-600 flex items-center gap-2">
+            <div class="flex flex-col md:flex-row gap-6 text-sm font-medium text-slate-600">
+                <div class="flex items-center gap-2">
                     <i class="fas fa-shield-alt text-blue-500"></i>
                     4 Weeks Hypercare Included
+                </div>
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-headset text-blue-500"></i>
+                    Ongoing Support: $30/hr (Optional)
                 </div>
             </div>
         </div>
@@ -422,32 +621,24 @@
 
     <script>
         function switchTab(tab) {
-            // Hide all contents
             document.querySelectorAll('.tab-content').forEach(el => {
                 el.classList.remove('active');
                 el.classList.add('hidden');
             });
-
-            // Button Styles
             const activeClass = "px-5 py-2.5 rounded-lg text-sm font-bold transition-all bg-white text-blue-600 shadow-sm cursor-default";
             const inactiveClass = "px-5 py-2.5 rounded-lg text-sm font-bold transition-all text-slate-600 hover:text-slate-900 cursor-pointer";
 
-            // Reset buttons
             ['optionA', 'optionB', 'optionC'].forEach(id => {
                 document.getElementById('btn-' + id).className = inactiveClass;
             });
 
-            // Activate specific button
             document.getElementById('btn-' + tab).className = activeClass;
-
-            // Show specific content
             const content = document.getElementById(tab + '-content');
             content.classList.remove('hidden');
             content.classList.add('active');
         }
-
-        // Initialize Option B as active by default (Recommended)
-        switchTab('optionB');
+        // Initialize Option A (Current Stack) or change to B as per preference
+        switchTab('optionA'); 
     </script>
 </body>
 </html>
