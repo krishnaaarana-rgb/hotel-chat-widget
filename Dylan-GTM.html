@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GTM Engineering Blueprint | Krishna Rana</title>
+    <title>GTM Engineering Partner | Krishna Rana</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-sans/style.css" rel="stylesheet">
@@ -17,137 +17,114 @@
                         mono: ['Geist Mono', 'monospace']
                     },
                     colors: {
-                        dark: {
-                            900: '#020617',
-                            800: '#0f172a',
-                            700: '#1e293b',
-                        },
                         brand: {
-                            green: '#10B981', // Signal/Growth
-                            blue: '#3B82F6',  // Tech/IT
-                            purple: '#8B5CF6' // n8n
+                            dark: '#0f172a',
+                            primary: '#2563EB', // Professional Blue
+                            success: '#059669', // Emerald
                         }
                     },
-                    animation: {
-                        'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    boxShadow: {
+                        'soft': '0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02)',
+                        'glow': '0 0 15px rgba(37, 99, 235, 0.1)'
                     }
                 }
             }
         }
     </script>
     <style>
-        body { font-family: 'Geist Sans', sans-serif; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; background-color: #020617; color: #f8fafc; }
+        body { font-family: 'Geist Sans', sans-serif; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; background-color: #f8fafc; color: #0f172a; }
         
-        /* Glassmorphism */
-        .glass { background: rgba(15, 23, 42, 0.6); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.05); }
-        .glass-card { background: rgba(30, 41, 59, 0.4); border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s ease; }
-        .glass-card:hover { border-color: rgba(59, 130, 246, 0.5); transform: translateY(-2px); }
+        /* Clean Card Styling */
+        .pro-card { background: white; border: 1px solid #e2e8f0; border-radius: 1rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); transition: all 0.2s ease; }
+        .pro-card:hover { border-color: #cbd5e1; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); transform: translateY(-2px); }
 
         /* Animations */
         .fade-in { animation: fadeIn 0.8s ease-out forwards; opacity: 0; transform: translateY(20px); }
-        .delay-100 { animation-delay: 0.1s; }
-        .delay-200 { animation-delay: 0.2s; }
-        .delay-300 { animation-delay: 0.3s; }
-        
         @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
 
-        /* Tabs */
+        /* Tab Logic */
         .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeEffect 0.4s; }
-        @keyframes fadeEffect { from {opacity: 0; transform: translateY(10px);} to {opacity: 1; transform: translateY(0);} }
-
-        /* Tech Badges */
-        .tech-badge { font-family: 'Geist Mono', monospace; font-size: 0.75rem; padding: 0.25rem 0.5rem; border-radius: 0.25rem; background: rgba(255,255,255,0.05); color: #94a3b8; border: 1px solid rgba(255,255,255,0.05); }
+        .tab-content.active { display: block; animation: fadeEffect 0.3s; }
+        @keyframes fadeEffect { from {opacity: 0; transform: translateY(5px);} to {opacity: 1; transform: translateY(0);} }
     </style>
 </head>
-<body class="selection:bg-emerald-500/30 selection:text-emerald-200">
+<body class="selection:bg-blue-100 selection:text-blue-900">
 
-    <nav class="fixed w-full z-50 glass border-b border-white/5">
+    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-2 h-8 bg-gradient-to-b from-emerald-400 to-blue-500 rounded-full"></div>
+                <div class="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-lg">KR</div>
                 <div>
-                    <span class="text-lg font-bold tracking-tight text-white block leading-none">Krishna Rana</span>
-                    <span class="text-xs text-slate-400 font-mono">GTM Systems Engineer</span>
+                    <span class="text-sm font-bold tracking-tight text-slate-900 block leading-none">Krishna Rana</span>
+                    <span class="text-xs text-slate-500 font-mono">GTM Systems Engineer</span>
                 </div>
             </div>
-            <div class="hidden md:flex items-center gap-4 text-sm font-medium text-slate-400">
-                <span>Prepared for: <span class="text-white font-bold">Dylan @ Zetix & Telligent</span></span>
-                <a href="https://www.linkedin.com/in/krishnaaarana/" target="_blank" class="hover:text-white transition"><i class="fab fa-linkedin text-lg"></i></a>
+            <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
+                <span class="bg-slate-100 px-3 py-1 rounded-full text-xs">Prepared for <strong>Dylan</strong></span>
+                <a href="https://automationexperts.tech/projects" target="_blank" class="hover:text-blue-600 transition">Portfolio</a>
+                <a href="https://www.linkedin.com/in/krishnaaarana/" target="_blank" class="hover:text-blue-600 transition"><i class="fab fa-linkedin text-lg"></i></a>
             </div>
         </div>
     </nav>
 
-    <header class="pt-40 pb-20 px-6 max-w-6xl mx-auto relative overflow-hidden">
-        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-blue-500/10 rounded-full blur-[100px] -z-10"></div>
-        
-        <div class="fade-in text-center">
-            <div class="inline-flex items-center gap-2 text-xs font-bold text-emerald-400 bg-emerald-500/10 px-4 py-2 rounded-full border border-emerald-500/20 mb-8 font-mono">
-                <span class="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></span>
+    <header class="pt-40 pb-24 px-6 max-w-6xl mx-auto text-center relative">
+        <div class="fade-in">
+            <div class="inline-flex items-center gap-2 text-xs font-bold text-blue-700 bg-blue-50 px-4 py-2 rounded-full border border-blue-100 mb-8 font-mono">
+                <span class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
                 AVAILABLE FOR PARTNERSHIP
             </div>
-            <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-8 text-white leading-tight">
+            
+            <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-8 text-slate-900 leading-tight">
                 I don't just run campaigns.<br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-blue-400 to-purple-400">I engineer the infrastructure.</span>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-600">I engineer the infrastructure.</span>
             </h1>
-            <p class="text-xl text-slate-400 leading-relaxed mb-10 max-w-3xl mx-auto">
+            
+            <p class="text-xl text-slate-500 leading-relaxed mb-10 max-w-3xl mx-auto">
                 You need a builder who can wire <strong>Clay, Instantly, and HubSpot</strong> into a scalable engine.
                 I build agency-grade systems that handle complexity so you can focus on closing.
             </p>
             
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-4xl mx-auto border-t border-b border-white/10 py-6 mb-10">
-                <div class="text-center">
-                    <div class="text-3xl font-bold text-white mb-1">10k+</div>
-                    <div class="text-xs text-slate-500 uppercase tracking-widest font-mono">n8n Executions</div>
-                </div>
-                <div class="text-center border-l border-white/5">
-                    <div class="text-3xl font-bold text-white mb-1">Global</div>
-                    <div class="text-xs text-slate-500 uppercase tracking-widest font-mono">US, UK, CA, AU, NZ, IN</div>
-                </div>
-                <div class="text-center border-l border-white/5">
-                    <div class="text-3xl font-bold text-white mb-1">Certified</div>
-                    <div class="text-xs text-slate-500 uppercase tracking-widest font-mono">HubSpot & Airtable</div>
-                </div>
-                <div class="text-center border-l border-white/5">
-                    <div class="text-3xl font-bold text-white mb-1">Frontend</div>
-                    <div class="text-xs text-slate-500 uppercase tracking-widest font-mono">Lovable & React</div>
-                </div>
-            </div>
-
-            <div class="flex flex-col md:flex-row justify-center gap-4">
-                <a href="#architecture" class="px-8 py-4 bg-white text-slate-900 rounded-lg font-bold hover:bg-slate-200 transition flex items-center justify-center gap-2">
+            <div class="flex flex-col md:flex-row justify-center gap-4 mb-16">
+                <a href="#architecture" class="px-8 py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition flex items-center justify-center gap-2 shadow-lg shadow-slate-200">
                     <i class="fas fa-microchip"></i> View The Blueprint
                 </a>
-                <a href="https://automationexperts.tech/" target="_blank" class="px-8 py-4 glass text-white border border-white/10 rounded-lg font-bold hover:border-emerald-400/50 hover:text-emerald-400 transition flex items-center justify-center gap-2">
-                    <i class="fas fa-star"></i> Read Reviews
+                <a href="https://automationexperts.tech/projects" target="_blank" class="px-8 py-4 bg-white text-slate-700 border border-slate-200 rounded-xl font-bold hover:border-blue-300 hover:text-blue-600 transition flex items-center justify-center gap-2">
+                    <i class="fas fa-folder-open"></i> View My Projects
                 </a>
+            </div>
+
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto border-t border-slate-200 pt-8">
+                <div>
+                    <div class="text-3xl font-bold text-slate-900 mb-1">10k+</div>
+                    <div class="text-xs text-slate-500 uppercase tracking-widest font-semibold">n8n Executions</div>
+                </div>
+                <div class="border-l border-slate-200">
+                    <div class="text-3xl font-bold text-slate-900 mb-1">Global</div>
+                    <div class="text-xs text-slate-500 uppercase tracking-widest font-semibold">US, UK, CA, AU, NZ</div>
+                </div>
+                <div class="border-l border-slate-200">
+                    <div class="text-3xl font-bold text-slate-900 mb-1">Certified</div>
+                    <div class="text-xs text-slate-500 uppercase tracking-widest font-semibold">HubSpot & Airtable</div>
+                </div>
+                <div class="border-l border-slate-200">
+                    <div class="text-3xl font-bold text-slate-900 mb-1">Front-End</div>
+                    <div class="text-xs text-slate-500 uppercase tracking-widest font-semibold">Lovable & React</div>
+                </div>
             </div>
         </div>
     </header>
 
-    <section class="max-w-7xl mx-auto px-6 mb-32">
-        <h3 class="text-center text-slate-500 text-sm font-mono uppercase tracking-widest mb-8">The Engineering Stack</h3>
-        <div class="flex flex-wrap justify-center gap-4 md:gap-8 opacity-70 grayscale hover:grayscale-0 transition-all duration-500">
-            <div class="flex items-center gap-2 bg-white/5 px-4 py-2 rounded border border-white/5">
-                <i class="fas fa-project-diagram text-red-500"></i> <span class="font-bold text-white">n8n</span>
-            </div>
-            <div class="flex items-center gap-2 bg-white/5 px-4 py-2 rounded border border-white/5">
-                <i class="fab fa-hubspot text-orange-500"></i> <span class="font-bold text-white">HubSpot</span>
-            </div>
-            <div class="flex items-center gap-2 bg-white/5 px-4 py-2 rounded border border-white/5">
-                <i class="fas fa-check-circle text-blue-500"></i> <span class="font-bold text-white">GoHighLevel</span>
-            </div>
-             <div class="flex items-center gap-2 bg-white/5 px-4 py-2 rounded border border-white/5">
-                <i class="fas fa-table text-yellow-400"></i> <span class="font-bold text-white">Airtable</span>
-            </div>
-            <div class="flex items-center gap-2 bg-white/5 px-4 py-2 rounded border border-white/5">
-                <i class="fas fa-paper-plane text-emerald-500"></i> <span class="font-bold text-white">Instantly</span>
-            </div>
-            <div class="flex items-center gap-2 bg-white/5 px-4 py-2 rounded border border-white/5">
-                <i class="fas fa-folder text-slate-200"></i> <span class="font-bold text-white">Close</span>
-            </div>
-            <div class="flex items-center gap-2 bg-white/5 px-4 py-2 rounded border border-white/5">
-                <i class="fas fa-code text-pink-500"></i> <span class="font-bold text-white">Lovable.dev</span>
+    <section class="max-w-7xl mx-auto px-6 mb-24">
+        <div class="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+            <h3 class="text-center text-slate-400 text-xs font-bold uppercase tracking-widest mb-8">The Engineering Stack</h3>
+            <div class="flex flex-wrap justify-center gap-6 md:gap-12 opacity-80">
+                <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-project-diagram text-red-500 text-xl"></i> <span class="font-bold">n8n</span></div>
+                <div class="flex items-center gap-2 text-slate-600"><i class="fab fa-hubspot text-orange-500 text-xl"></i> <span class="font-bold">HubSpot</span></div>
+                <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-check-circle text-blue-500 text-xl"></i> <span class="font-bold">GoHighLevel</span></div>
+                <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-table text-yellow-500 text-xl"></i> <span class="font-bold">Airtable</span></div>
+                <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-paper-plane text-emerald-500 text-xl"></i> <span class="font-bold">Instantly</span></div>
+                <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-folder text-slate-800 text-xl"></i> <span class="font-bold">Close</span></div>
+                <div class="flex items-center gap-2 text-slate-600"><i class="fas fa-code text-pink-500 text-xl"></i> <span class="font-bold">Lovable</span></div>
             </div>
         </div>
     </section>
@@ -155,64 +132,64 @@
     <section class="max-w-6xl mx-auto px-6 py-20" id="architecture">
         <div class="flex flex-col md:flex-row justify-between items-end mb-12">
             <div>
-                <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Architecture First.</h2>
-                <p class="text-slate-400 max-w-xl">
-                    The JD asks for someone who can "build, break, and scale." Here is how I approach the infrastructure for your two distinct business models.
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Architecture First.</h2>
+                <p class="text-slate-500 max-w-xl">
+                    The JD asks for someone who can "build, break, and scale." Here is exactly how I approach the infrastructure for your two distinct business models.
                 </p>
             </div>
             
-            <div class="flex bg-slate-800/50 p-1 rounded-lg border border-white/5 mt-6 md:mt-0">
-                <button onclick="switchTab('zetix')" id="btn-zetix" class="px-6 py-2 rounded text-sm font-bold transition-all bg-emerald-600 text-white shadow-lg shadow-emerald-900/50">
+            <div class="flex bg-slate-100 p-1.5 rounded-xl border border-slate-200 mt-6 md:mt-0">
+                <button onclick="switchTab('zetix')" id="btn-zetix" class="px-6 py-2.5 rounded-lg text-sm font-bold transition-all bg-white text-emerald-600 shadow-sm border border-slate-200">
                     Zetix (Agency)
                 </button>
-                <button onclick="switchTab('telligent')" id="btn-telligent" class="px-6 py-2 rounded text-sm font-bold transition-all text-slate-400 hover:text-white">
+                <button onclick="switchTab('telligent')" id="btn-telligent" class="px-6 py-2.5 rounded-lg text-sm font-bold transition-all text-slate-500 hover:text-slate-900">
                     Telligent (IT)
                 </button>
-                <button onclick="switchTab('engine')" id="btn-engine" class="px-6 py-2 rounded text-sm font-bold transition-all text-slate-400 hover:text-white">
+                <button onclick="switchTab('engine')" id="btn-engine" class="px-6 py-2.5 rounded-lg text-sm font-bold transition-all text-slate-500 hover:text-slate-900">
                     The Engine (n8n)
                 </button>
             </div>
         </div>
 
-        <div id="zetix-content" class="tab-content active fade-in">
+        <div id="zetix-content" class="tab-content active block">
             <div class="grid md:grid-cols-2 gap-12">
-                <div class="glass-card p-8 rounded-2xl">
+                <div class="pro-card p-8">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 bg-emerald-500/20 text-emerald-400 rounded-lg flex items-center justify-center text-xl"><i class="fas fa-users-cog"></i></div>
-                        <h3 class="text-xl font-bold text-white">Multi-Tenant Agency Infrastructure</h3>
+                        <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center text-xl"><i class="fas fa-users-cog"></i></div>
+                        <h3 class="text-xl font-bold text-slate-900">Multi-Tenant Agency Infrastructure</h3>
                     </div>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
                         For an agency, speed of deployment is key. I build systems that allow you to onboard new clients without reinventing the wheel every time.
                     </p>
                     <ul class="space-y-4">
                         <li class="flex items-start gap-3">
-                            <i class="fas fa-check text-emerald-400 mt-1"></i>
+                            <i class="fas fa-check text-emerald-500 mt-1"></i>
                             <div>
-                                <strong class="text-white block text-sm">Standardized Data Models</strong>
+                                <strong class="text-slate-900 block text-sm">Standardized Data Models</strong>
                                 <span class="text-xs text-slate-500">Unified Clay templates that adapt to different ICPs.</span>
                             </div>
                         </li>
                         <li class="flex items-start gap-3">
-                            <i class="fas fa-check text-emerald-400 mt-1"></i>
+                            <i class="fas fa-check text-emerald-500 mt-1"></i>
                             <div>
-                                <strong class="text-white block text-sm">Inbox Rotation Logic</strong>
+                                <strong class="text-slate-900 block text-sm">Inbox Rotation Logic</strong>
                                 <span class="text-xs text-slate-500">Automated DNS setup monitoring and reputation management across client domains.</span>
                             </div>
                         </li>
                         <li class="flex items-start gap-3">
-                            <i class="fas fa-check text-emerald-400 mt-1"></i>
+                            <i class="fas fa-check text-emerald-500 mt-1"></i>
                             <div>
-                                <strong class="text-white block text-sm">Unified Reporting</strong>
+                                <strong class="text-slate-900 block text-sm">Unified Reporting</strong>
                                 <span class="text-xs text-slate-500">Pulling Instantly/Smartlead API data into a central Airtable/Dashboard for client reporting.</span>
                             </div>
                         </li>
                     </ul>
                 </div>
                 
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 font-mono text-xs text-slate-300 relative overflow-hidden">
+                <div class="bg-slate-900 text-slate-300 rounded-2xl p-6 font-mono text-xs shadow-xl relative overflow-hidden">
                     <div class="absolute top-0 right-0 bg-slate-800 px-3 py-1 rounded-bl text-[10px] text-slate-400">n8n Workflow Logic</div>
                     <div class="text-emerald-400 mb-2">// Client Onboarding Automation</div>
-                    <div class="pl-4 border-l border-slate-700 space-y-2">
+                    <div class="pl-4 border-l border-slate-700 space-y-3">
                         <p><span class="text-purple-400">trigger</span>: New_Client_Signed (HubSpot)</p>
                         <p><span class="text-blue-400">action</span>: Create_Workspace (Instantly)</p>
                         <p><span class="text-blue-400">action</span>: Clone_Clay_Table (Template_ID)</p>
@@ -225,43 +202,43 @@
 
         <div id="telligent-content" class="tab-content hidden">
             <div class="grid md:grid-cols-2 gap-12">
-                <div class="glass-card p-8 rounded-2xl">
+                <div class="pro-card p-8">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 bg-blue-500/20 text-blue-400 rounded-lg flex items-center justify-center text-xl"><i class="fas fa-server"></i></div>
-                        <h3 class="text-xl font-bold text-white">High-Ticket Signal Based Outbound</h3>
+                        <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center text-xl"><i class="fas fa-server"></i></div>
+                        <h3 class="text-xl font-bold text-slate-900">High-Ticket Signal Based Outbound</h3>
                     </div>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
-                        Selling IT/MSP services requires timing, not just volume. I focus on <span class="text-white">intent signals</span> to trigger workflows.
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
+                        Selling IT/MSP services requires timing, not just volume. I focus on <span class="text-slate-900 font-semibold">intent signals</span> to trigger workflows.
                     </p>
                     <ul class="space-y-4">
                         <li class="flex items-start gap-3">
-                            <i class="fas fa-bolt text-blue-400 mt-1"></i>
+                            <i class="fas fa-bolt text-blue-500 mt-1"></i>
                             <div>
-                                <strong class="text-white block text-sm">Tech Stack Detection</strong>
+                                <strong class="text-slate-900 block text-sm">Tech Stack Detection</strong>
                                 <span class="text-xs text-slate-500">Trigger: "Company installs Azure/AWS". Action: Send "Cloud Migration" sequence.</span>
                             </div>
                         </li>
                         <li class="flex items-start gap-3">
-                            <i class="fas fa-bolt text-blue-400 mt-1"></i>
+                            <i class="fas fa-bolt text-blue-500 mt-1"></i>
                             <div>
-                                <strong class="text-white block text-sm">Hiring Signals</strong>
+                                <strong class="text-slate-900 block text-sm">Hiring Signals</strong>
                                 <span class="text-xs text-slate-500">Trigger: "New CTO hired". Action: High-touch manual task in Close CRM + LinkedIn connect.</span>
                             </div>
                         </li>
                         <li class="flex items-start gap-3">
-                            <i class="fas fa-bolt text-blue-400 mt-1"></i>
+                            <i class="fas fa-bolt text-blue-500 mt-1"></i>
                             <div>
-                                <strong class="text-white block text-sm">Security Compliance</strong>
+                                <strong class="text-slate-900 block text-sm">Security Compliance</strong>
                                 <span class="text-xs text-slate-500">Monitoring for compliance deadlines (ISO 27001) to pitch consulting services.</span>
                             </div>
                         </li>
                     </ul>
                 </div>
                 
-                <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 font-mono text-xs text-slate-300 relative overflow-hidden">
+                <div class="bg-slate-900 text-slate-300 rounded-2xl p-6 font-mono text-xs shadow-xl relative overflow-hidden">
                     <div class="absolute top-0 right-0 bg-slate-800 px-3 py-1 rounded-bl text-[10px] text-slate-400">Signal Flow</div>
                     <div class="text-blue-400 mb-2">// Intent Signal Processor</div>
-                    <div class="pl-4 border-l border-slate-700 space-y-2">
+                    <div class="pl-4 border-l border-slate-700 space-y-3">
                         <p><span class="text-purple-400">input</span>: Apollo_Intent_Data (Keywords: "Cybersecurity")</p>
                         <p><span class="text-orange-400">if</span>: Company_Size > 50 && Rev > $10M</p>
                         <p class="pl-4"><span class="text-green-400">then</span>: Enrich_Contact (Clay)</p>
@@ -275,86 +252,118 @@
 
         <div id="engine-content" class="tab-content hidden">
             <div class="grid md:grid-cols-2 gap-12">
-                <div class="glass-card p-8 rounded-2xl">
+                <div class="pro-card p-8">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 bg-purple-500/20 text-purple-400 rounded-lg flex items-center justify-center text-xl"><i class="fas fa-cogs"></i></div>
-                        <h3 class="text-xl font-bold text-white">The Build Philosophy</h3>
+                        <div class="w-10 h-10 bg-purple-50 text-purple-600 rounded-lg flex items-center justify-center text-xl"><i class="fas fa-cogs"></i></div>
+                        <h3 class="text-xl font-bold text-slate-900">The Build Philosophy</h3>
                     </div>
-                    <p class="text-slate-400 text-sm leading-relaxed mb-6">
+                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
                         I compete with high-level agencies because I build systems that don't break. My n8n workflows are built for production, not just testing.
                     </p>
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-white/5 p-3 rounded border border-white/5">
-                            <div class="text-white font-bold text-sm mb-1">Idempotency</div>
+                        <div class="bg-slate-50 p-3 rounded border border-slate-100">
+                            <div class="text-slate-900 font-bold text-sm mb-1">Idempotency</div>
                             <div class="text-xs text-slate-500">Ensuring the same data isn't processed twice, saving API credits.</div>
                         </div>
-                        <div class="bg-white/5 p-3 rounded border border-white/5">
-                            <div class="text-white font-bold text-sm mb-1">Error Handling</div>
+                        <div class="bg-slate-50 p-3 rounded border border-slate-100">
+                            <div class="text-slate-900 font-bold text-sm mb-1">Error Handling</div>
                             <div class="text-xs text-slate-500">Auto-retries and Slack alerts when APIs fail. No silent failures.</div>
                         </div>
-                        <div class="bg-white/5 p-3 rounded border border-white/5">
-                            <div class="text-white font-bold text-sm mb-1">Custom Frontends</div>
+                        <div class="bg-slate-50 p-3 rounded border border-slate-100">
+                            <div class="text-slate-900 font-bold text-sm mb-1">Custom Frontends</div>
                             <div class="text-xs text-slate-500">Using Lovable/React to build internal tools for your team.</div>
                         </div>
-                        <div class="bg-white/5 p-3 rounded border border-white/5">
-                            <div class="text-white font-bold text-sm mb-1">CRM Hygiene</div>
+                        <div class="bg-slate-50 p-3 rounded border border-slate-100">
+                            <div class="text-slate-900 font-bold text-sm mb-1">CRM Hygiene</div>
                             <div class="text-xs text-slate-500">Deep expertise in HubSpot, GHL, and Close data structures.</div>
                         </div>
                     </div>
                 </div>
                 
                 <div class="flex flex-col justify-center">
-                    <div class="bg-gradient-to-br from-purple-900/50 to-slate-900 border border-purple-500/30 rounded-2xl p-8 text-center">
-                        <i class="fas fa-network-wired text-4xl text-purple-400 mb-4"></i>
-                        <h4 class="text-2xl font-bold text-white mb-2">10,000+ Executions</h4>
+                    <div class="bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 rounded-2xl p-8 text-center shadow-2xl text-white">
+                        <i class="fas fa-network-wired text-4xl text-blue-400 mb-4"></i>
+                        <h4 class="text-2xl font-bold mb-2">10,000+ Executions</h4>
                         <p class="text-slate-400 text-sm mb-6">I've scaled workflows for companies in Canada, USA, UK, Spain, Aus, NZ, and India.</p>
-                        <a href="https://automationexperts.tech/" class="text-emerald-400 font-bold text-sm hover:underline">See the systems in action &rarr;</a>
+                        <a href="https://automationexperts.tech/projects" target="_blank" class="text-emerald-400 font-bold text-sm hover:underline">See the systems in action &rarr;</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="max-w-4xl mx-auto px-6 py-20 border-t border-white/10">
-        <h2 class="text-3xl font-bold text-white mb-10 text-center">Why I'm the "GTM Engineer" you need</h2>
+    <section class="bg-white py-24 border-y border-slate-200">
+        <div class="max-w-4xl mx-auto px-6 text-center">
+            <h2 class="text-3xl font-bold text-slate-900 mb-4">Prove It.</h2>
+            <p class="text-slate-500 mb-10">Theory is good. Production-ready code is better. Browse my library of live automation projects.</p>
+            
+            <div class="grid md:grid-cols-2 gap-6 mb-12 text-left">
+                <a href="https://automationexperts.tech/projects" target="_blank" class="group pro-card p-6 block hover:border-blue-400">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center text-xl group-hover:bg-blue-600 group-hover:text-white transition-colors"><i class="fas fa-robot"></i></div>
+                        <i class="fas fa-external-link-alt text-slate-300 group-hover:text-blue-500"></i>
+                    </div>
+                    <h4 class="font-bold text-slate-900 mb-2">Automated Outbound Systems</h4>
+                    <p class="text-sm text-slate-500">See how I wire Clay -> Instantly -> CRM with error handling.</p>
+                </a>
+                <a href="https://automationexperts.tech/projects" target="_blank" class="group pro-card p-6 block hover:border-purple-400">
+                    <div class="flex justify-between items-start mb-4">
+                        <div class="w-10 h-10 bg-purple-50 text-purple-600 rounded-lg flex items-center justify-center text-xl group-hover:bg-purple-600 group-hover:text-white transition-colors"><i class="fas fa-database"></i></div>
+                        <i class="fas fa-external-link-alt text-slate-300 group-hover:text-purple-500"></i>
+                    </div>
+                    <h4 class="font-bold text-slate-900 mb-2">CRM Architecture & Data</h4>
+                    <p class="text-sm text-slate-500">HubSpot and GHL schemas designed for scalability.</p>
+                </a>
+            </div>
+
+            <a href="https://automationexperts.tech/projects" target="_blank" class="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-blue-600 transition">
+                View All Projects <i class="fas fa-arrow-right"></i>
+            </a>
+        </div>
+    </section>
+
+    <section class="max-w-5xl mx-auto px-6 py-20">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-slate-900">Why I'm the "GTM Engineer" you need</h2>
+        </div>
         <div class="grid md:grid-cols-3 gap-6">
-            <div class="glass-card p-6 rounded-xl border-t-4 border-t-emerald-500">
-                <h4 class="font-bold text-white mb-2">Agency Competitor</h4>
-                <p class="text-xs text-slate-400 leading-relaxed">
+            <div class="pro-card p-8 border-t-4 border-t-emerald-500">
+                <h4 class="font-bold text-slate-900 mb-3">Agency Competitor</h4>
+                <p class="text-sm text-slate-500 leading-relaxed">
                     I build the same high-level systems agencies charge $10k+ for. I know the GHL and Close ecosystems inside out.
                 </p>
             </div>
-            <div class="glass-card p-6 rounded-xl border-t-4 border-t-blue-500">
-                <h4 class="font-bold text-white mb-2">Technical + Sales</h4>
-                <p class="text-xs text-slate-400 leading-relaxed">
-                    Most engineers don't understand "Sales Logic." Most sales rep don't understand API webhooks. I speak both fluently.
+            <div class="pro-card p-8 border-t-4 border-t-blue-500">
+                <h4 class="font-bold text-slate-900 mb-3">Technical + Sales</h4>
+                <p class="text-sm text-slate-500 leading-relaxed">
+                    Most engineers don't understand "Sales Logic." Most sales reps don't understand API webhooks. I speak both fluently.
                 </p>
             </div>
-            <div class="glass-card p-6 rounded-xl border-t-4 border-t-purple-500">
-                <h4 class="font-bold text-white mb-2">Ownership Mindset</h4>
-                <p class="text-xs text-slate-400 leading-relaxed">
+            <div class="pro-card p-8 border-t-4 border-t-purple-500">
+                <h4 class="font-bold text-slate-900 mb-3">Ownership Mindset</h4>
+                <p class="text-sm text-slate-500 leading-relaxed">
                     The JD mentions "ownership, not billable hours." That is my default state. I build to scale, not to churn hours.
                 </p>
             </div>
         </div>
     </section>
 
-    <footer class="bg-slate-950 py-20 border-t border-white/10">
-        <div class="max-w-2xl mx-auto px-6 text-center">
+    <footer class="bg-slate-900 py-24 text-center">
+        <div class="max-w-2xl mx-auto px-6">
             <h2 class="text-3xl font-bold text-white mb-6">Ready to build the engine?</h2>
-            <p class="text-slate-400 mb-8">
-                I've researched Zetix and Telligent. I have the stack expertise (Instantly, Clay, n8n, HubSpot). 
+            <p class="text-slate-400 mb-10">
+                I've researched Zetix and Telligent. I have the stack expertise. <br>
                 Let's discuss how we implement this.
             </p>
             <div class="flex flex-col md:flex-row justify-center gap-4">
-                <a href="mailto:krishnarana@automationexperts.tech" class="px-8 py-4 bg-emerald-600 text-white rounded-lg font-bold hover:bg-emerald-700 transition shadow-lg shadow-emerald-900/50">
-                    Email Me: krishnarana@automationexperts.tech
+                <a href="mailto:krishnarana@automationexperts.tech" class="px-8 py-4 bg-white text-slate-900 rounded-xl font-bold hover:bg-blue-50 transition">
+                    Email Me
                 </a>
-                <a href="https://www.linkedin.com/in/krishnaaarana/" target="_blank" class="px-8 py-4 border border-white/10 text-white rounded-lg font-bold hover:bg-white/5 transition">
-                    Connect on LinkedIn
+                <a href="https://automationexperts.tech/#testimonials" target="_blank" class="px-8 py-4 border border-slate-700 text-white rounded-xl font-bold hover:border-slate-500 transition">
+                    Read Client Reviews
                 </a>
             </div>
-            <div class="mt-12 text-xs text-slate-600 font-mono">
+            <div class="mt-16 pt-8 border-t border-slate-800 text-xs text-slate-600 font-mono">
                 &copy; 2024 Krishna Rana. GTM Engineering.
             </div>
         </div>
@@ -365,12 +374,13 @@
             // Hide all contents
             document.querySelectorAll('.tab-content').forEach(el => {
                 el.classList.remove('active');
-                el.classList.add('hidden');
+                // Ensure display is none when hidden
+                el.style.display = 'none';
             });
 
             // Button Styles
-            const activeClass = "px-6 py-2 rounded text-sm font-bold transition-all bg-emerald-600 text-white shadow-lg shadow-emerald-900/50 cursor-default";
-            const inactiveClass = "px-6 py-2 rounded text-sm font-bold transition-all text-slate-400 hover:text-white cursor-pointer";
+            const activeClass = "px-6 py-2.5 rounded-lg text-sm font-bold transition-all bg-white text-emerald-600 shadow-sm border border-slate-200 cursor-default";
+            const inactiveClass = "px-6 py-2.5 rounded-lg text-sm font-bold transition-all text-slate-500 hover:text-slate-900 cursor-pointer";
 
             // Reset buttons
             ['zetix', 'telligent', 'engine'].forEach(id => {
@@ -382,12 +392,15 @@
 
             // Show specific content
             const content = document.getElementById(tab + '-content');
-            content.classList.remove('hidden');
             content.classList.add('active');
+            content.style.display = 'block'; // Force display block to fix visibility issue
         }
 
         // Initialize Zetix
-        switchTab('zetix');
+        // Run immediately to ensure visibility on load
+        window.onload = function() {
+            switchTab('zetix');
+        };
     </script>
 </body>
 </html>
