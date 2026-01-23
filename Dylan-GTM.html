@@ -8,6 +8,7 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-sans/style.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/geist@1.0.0/dist/fonts/geist-mono/style.css" rel="stylesheet">
+    
     <script>
         tailwind.config = {
             theme: {
@@ -21,153 +22,248 @@
                             dark: '#0f172a',
                             primary: '#2563EB',
                             success: '#059669',
+                            slate: '#f8fafc'
+                        }
+                    },
+                    boxShadow: {
+                        'soft': '0 4px 6px -1px rgba(0, 0, 0, 0.02), 0 2px 4px -1px rgba(0, 0, 0, 0.02)',
+                        'glow': '0 0 20px rgba(37, 99, 235, 0.15)'
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
                         }
                     }
                 }
             }
         }
     </script>
+
     <style>
-        body { font-family: 'Geist Sans', sans-serif; -webkit-font-smoothing: antialiased; scroll-behavior: smooth; background-color: #f8fafc; color: #0f172a; }
+        body { 
+            font-family: 'Geist Sans', sans-serif; 
+            -webkit-font-smoothing: antialiased; 
+            scroll-behavior: smooth; 
+            background-color: #f8fafc; 
+            color: #0f172a; 
+        }
         
-        .pro-card { background: white; border: 1px solid #e2e8f0; border-radius: 1rem; transition: all 0.2s ease; }
-        .pro-card:hover { border-color: #cbd5e1; box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); transform: translateY(-2px); }
+        /* UI Components */
+        .pro-card { 
+            background: white; 
+            border: 1px solid #e2e8f0; 
+            border-radius: 1rem; 
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+        .pro-card:hover { 
+            border-color: #94a3b8; 
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05); 
+            transform: translateY(-4px); 
+        }
 
-        .tech-grid-item { background: #f8fafc; padding: 1rem; border-radius: 0.5rem; border: 1px solid #e2e8f0; display: flex; align-items: center; gap: 0.75rem; font-size: 0.875rem; font-weight: 600; color: #475569; }
+        /* Tech Badges */
+        .tech-badge {
+            font-family: 'Geist Mono', monospace;
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            background: #f1f5f9;
+            color: #475569;
+            border: 1px solid #e2e8f0;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
 
+        /* Code Block Styling */
+        .code-window { 
+            background: #0f172a; 
+            color: #e2e8f0; 
+            border-radius: 0.75rem; 
+            font-family: 'Geist Mono', monospace; 
+            font-size: 0.85rem; 
+            overflow: hidden; 
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .code-header { 
+            background: #1e293b; 
+            padding: 0.75rem 1rem; 
+            display: flex; 
+            gap: 0.5rem; 
+            align-items: center; 
+            border-bottom: 1px solid #334155;
+        }
+        .dot { width: 0.75rem; height: 0.75rem; border-radius: 50%; }
+        .line-num { color: #475569; margin-right: 1rem; user-select: none; }
+        .code-content { padding: 1.5rem; overflow-x: auto; }
+
+        /* Syntax Highlighting Sim */
+        .token-keyword { color: #c084fc; } /* Purple */
+        .token-function { color: #60a5fa; } /* Blue */
+        .token-string { color: #4ade80; }   /* Green */
+        .token-comment { color: #64748b; font-style: italic; } /* Gray */
+        .token-variable { color: #facc15; } /* Yellow */
+
+        /* Animations */
         .fade-in { animation: fadeIn 0.8s ease-out forwards; opacity: 0; transform: translateY(20px); }
+        .delay-100 { animation-delay: 0.1s; }
+        .delay-200 { animation-delay: 0.2s; }
+        .delay-300 { animation-delay: 0.3s; }
         @keyframes fadeIn { to { opacity: 1; transform: translateY(0); } }
 
+        /* Tabs */
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeEffect 0.3s; }
         @keyframes fadeEffect { from {opacity: 0; transform: translateY(5px);} to {opacity: 1; transform: translateY(0);} }
-
-        /* Code Block Styling */
-        .code-window { background: #1e293b; color: #e2e8f0; border-radius: 0.75rem; font-family: 'Geist Mono', monospace; font-size: 0.8rem; overflow: hidden; }
-        .code-header { background: #0f172a; padding: 0.5rem 1rem; display: flex; gap: 0.5rem; align-items: center; }
-        .dot { width: 0.75rem; height: 0.75rem; border-radius: 50%; }
+        
+        /* Flowchart Connector Lines */
+        .connector {
+            position: relative;
+        }
+        .connector::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            right: -1rem;
+            width: 1rem;
+            height: 2px;
+            background: #cbd5e1;
+            z-index: 0;
+        }
+        @media (max-width: 768px) {
+            .connector::after { display: none; }
+        }
     </style>
 </head>
 <body class="selection:bg-blue-100 selection:text-blue-900">
 
-    <nav class="fixed w-full z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
+    <nav class="fixed w-full z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
         <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
             <div class="flex items-center gap-3">
-                <div class="w-8 h-8 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-lg">KR</div>
+                <div class="w-9 h-9 bg-blue-600 text-white rounded-lg flex items-center justify-center font-bold text-lg shadow-lg shadow-blue-500/30">KR</div>
                 <div>
                     <span class="text-sm font-bold tracking-tight text-slate-900 block leading-none">Krishna Rana</span>
-                    <span class="text-xs text-slate-500 font-mono">GTM Systems Engineer</span>
+                    <span class="text-[10px] text-slate-500 font-mono uppercase tracking-wide">GTM Systems Engineer</span>
                 </div>
             </div>
-            <div class="hidden md:flex items-center gap-6 text-sm font-medium text-slate-600">
-                <a href="#adaptability" class="hover:text-blue-600 transition">Stack</a>
-                <a href="#process" class="hover:text-blue-600 transition">Process</a>
-                <a href="https://automationexperts.tech/projects" target="_blank" class="hover:text-blue-600 transition">Projects</a>
-                <a href="https://www.linkedin.com/in/krishnaaarana/" target="_blank" class="hover:text-blue-600 transition"><i class="fab fa-linkedin text-lg"></i></a>
+            <div class="hidden md:flex items-center gap-8 text-sm font-medium text-slate-600">
+                <a href="#blueprint" class="hover:text-blue-600 transition">Blueprint</a>
+                <a href="#code-vault" class="hover:text-blue-600 transition">Code Vault</a>
+                <a href="#roadmap" class="hover:text-blue-600 transition">30-Day Plan</a>
+                <a href="https://automationexperts.tech/projects" target="_blank" class="px-4 py-2 bg-slate-900 text-white rounded-lg hover:bg-slate-800 transition">
+                    View Portfolio
+                </a>
             </div>
         </div>
     </nav>
 
-    <header class="pt-40 pb-24 px-6 max-w-6xl mx-auto text-center relative">
+    <header class="pt-40 pb-28 px-6 max-w-7xl mx-auto text-center relative overflow-hidden">
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] bg-blue-50 rounded-full blur-[120px] -z-10 opacity-50"></div>
+
         <div class="fade-in">
-            <div class="inline-flex items-center gap-2 text-xs font-bold text-blue-700 bg-blue-50 px-4 py-2 rounded-full border border-blue-100 mb-8 font-mono">
+            <div class="inline-flex items-center gap-2 text-xs font-bold text-blue-700 bg-blue-50 px-4 py-2 rounded-full border border-blue-100 mb-8 font-mono shadow-sm">
                 <span class="w-2 h-2 bg-blue-600 rounded-full animate-pulse"></span>
-                AVAILABLE FOR PARTNERSHIP
+                PREPARED FOR DYLAN
             </div>
             
-            <h1 class="text-5xl md:text-7xl font-bold tracking-tight mb-8 text-slate-900 leading-tight">
-                I don't just run campaigns.<br>
-                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-emerald-600">I engineer the infrastructure.</span>
+            <h1 class="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tight mb-8 text-slate-900 leading-[1.1]">
+                Scale Your GTM.<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 via-indigo-600 to-emerald-600">Engineer the Engine.</span>
             </h1>
             
-            <p class="text-xl text-slate-500 leading-relaxed mb-10 max-w-3xl mx-auto">
-                You need a builder who can wire <strong>Clay, Instantly, and HubSpot</strong> into a scalable engine.
-                I build agency-grade systems that handle complexity so you can focus on closing.
+            <p class="text-xl text-slate-500 leading-relaxed mb-12 max-w-3xl mx-auto">
+                You need a builder who can wire <strong>Clay, Instantly, and HubSpot</strong> into a scalable system.
+                I build agency-grade infrastructure that handles complexity so you can focus on closing.
             </p>
             
-            <div class="flex flex-col md:flex-row justify-center gap-4 mb-16">
-                <a href="#architecture" class="px-8 py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition flex items-center justify-center gap-2 shadow-lg shadow-slate-200">
-                    <i class="fas fa-microchip"></i> View The Blueprint
+            <div class="flex flex-col md:flex-row justify-center gap-5 mb-20">
+                <a href="#blueprint" class="px-8 py-4 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition flex items-center justify-center gap-2 shadow-xl shadow-slate-200 hover:shadow-2xl">
+                    <i class="fas fa-microchip"></i> View Technical Blueprint
                 </a>
-                <a href="https://automationexperts.tech/projects" target="_blank" class="px-8 py-4 bg-white text-slate-700 border border-slate-200 rounded-xl font-bold hover:border-blue-300 hover:text-blue-600 transition flex items-center justify-center gap-2">
-                    <i class="fas fa-folder-open"></i> View My Projects
+                <a href="https://automationexperts.tech/projects" target="_blank" class="px-8 py-4 bg-white text-slate-700 border border-slate-200 rounded-xl font-bold hover:border-blue-300 hover:text-blue-600 transition flex items-center justify-center gap-2 shadow-sm">
+                    <i class="fas fa-folder-open"></i> Browse Live Projects
                 </a>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto border-t border-slate-200 pt-8">
-                <div>
-                    <div class="text-3xl font-bold text-slate-900 mb-1">10k+</div>
-                    <div class="text-xs text-slate-500 uppercase tracking-widest font-semibold">n8n Executions</div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-5xl mx-auto border-t border-slate-200 pt-10">
+                <div class="text-center md:text-left">
+                    <div class="text-4xl font-bold text-slate-900 mb-1 tracking-tight">10k+</div>
+                    <div class="text-xs text-slate-500 uppercase tracking-widest font-semibold font-mono">n8n Executions</div>
                 </div>
-                <div class="border-l border-slate-200">
-                    <div class="text-3xl font-bold text-slate-900 mb-1">Global</div>
-                    <div class="text-xs text-slate-500 uppercase tracking-widest font-semibold">US, UK, CA, AU, NZ</div>
+                <div class="text-center md:text-left border-l border-slate-200 pl-8">
+                    <div class="text-4xl font-bold text-slate-900 mb-1 tracking-tight">Global</div>
+                    <div class="text-xs text-slate-500 uppercase tracking-widest font-semibold font-mono">Deployed in 6 Countries</div>
                 </div>
-                <div class="border-l border-slate-200">
-                    <div class="text-3xl font-bold text-slate-900 mb-1">Certified</div>
-                    <div class="text-xs text-slate-500 uppercase tracking-widest font-semibold">HubSpot & Airtable</div>
+                <div class="text-center md:text-left border-l border-slate-200 pl-8">
+                    <div class="text-4xl font-bold text-slate-900 mb-1 tracking-tight">300%</div>
+                    <div class="text-xs text-slate-500 uppercase tracking-widest font-semibold font-mono">Avg Efficiency Gain</div>
                 </div>
-                <div class="border-l border-slate-200">
-                    <div class="text-3xl font-bold text-slate-900 mb-1">Front-End</div>
-                    <div class="text-xs text-slate-500 uppercase tracking-widest font-semibold">Lovable & React</div>
+                <div class="text-center md:text-left border-l border-slate-200 pl-8">
+                    <div class="text-4xl font-bold text-slate-900 mb-1 tracking-tight">10+</div>
+                    <div class="text-xs text-slate-500 uppercase tracking-widest font-semibold font-mono">Tools Integrated</div>
                 </div>
             </div>
         </div>
     </header>
 
-    <section class="max-w-7xl mx-auto px-6 py-24 bg-slate-50 border-y border-slate-200" id="adaptability">
+    <section class="max-w-7xl mx-auto px-6 py-24 border-t border-slate-200 bg-slate-50" id="gtm-os">
         <div class="text-center mb-16">
-            <h2 class="text-3xl font-bold text-slate-900 mb-4">Tool Agnostic & Highly Adaptable</h2>
+            <h2 class="text-3xl font-bold text-slate-900 mb-4">The GTM Operating System</h2>
             <p class="text-slate-500 max-w-2xl mx-auto">
-                I don't just learn "tools"; I understand the underlying logic (APIs, Webhooks, JSON). 
-                I have deployed production systems across 10+ different platforms. If your stack changes, I adapt in days, not weeks.
+                My approach isn't linear. It's a closed-loop system. Here is how I visualize the data flow for an agency like Zetix or an IT firm like Telligent.
             </p>
         </div>
 
-        <div class="grid md:grid-cols-4 gap-6">
-            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                <h4 class="font-bold text-slate-900 mb-4 text-sm uppercase tracking-wider border-b border-slate-100 pb-2">Orchestration</h4>
-                <div class="space-y-3">
-                    <div class="tech-grid-item"><i class="fas fa-project-diagram text-red-500"></i> n8n (Expert)</div>
-                    <div class="tech-grid-item"><i class="fas fa-bolt text-purple-500"></i> Make.com</div>
-                    <div class="tech-grid-item"><i class="fas fa-code-branch text-orange-500"></i> Zapier</div>
-                </div>
+        <div class="grid md:grid-cols-5 gap-4 items-center justify-center max-w-6xl mx-auto">
+            <div class="pro-card p-6 text-center connector relative z-10">
+                <div class="w-12 h-12 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl"><i class="fas fa-radar"></i></div>
+                <h4 class="font-bold text-slate-900">1. Signal</h4>
+                <div class="text-xs text-slate-500 mt-2 font-mono">Apollo, LinkedIn, NewsAPI</div>
             </div>
-            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                <h4 class="font-bold text-slate-900 mb-4 text-sm uppercase tracking-wider border-b border-slate-100 pb-2">Data & CRM</h4>
-                <div class="space-y-3">
-                    <div class="tech-grid-item"><i class="fab fa-hubspot text-orange-600"></i> HubSpot</div>
-                    <div class="tech-grid-item"><i class="fas fa-table text-yellow-500"></i> Airtable</div>
-                    <div class="tech-grid-item"><i class="fas fa-check-circle text-blue-500"></i> GoHighLevel</div>
-                    <div class="tech-grid-item"><i class="fas fa-database text-emerald-600"></i> Supabase</div>
-                </div>
+
+            <div class="pro-card p-6 text-center connector relative z-10 border-blue-200 bg-blue-50/50">
+                <div class="w-12 h-12 bg-white text-blue-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl shadow-sm"><i class="fas fa-database"></i></div>
+                <h4 class="font-bold text-slate-900">2. Enrich</h4>
+                <div class="text-xs text-slate-500 mt-2 font-mono">Clay, Prospeo, Waterfall</div>
             </div>
-            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                <h4 class="font-bold text-slate-900 mb-4 text-sm uppercase tracking-wider border-b border-slate-100 pb-2">Outbound</h4>
-                <div class="space-y-3">
-                    <div class="tech-grid-item"><i class="fas fa-users text-blue-400"></i> Clay</div>
-                    <div class="tech-grid-item"><i class="fas fa-paper-plane text-emerald-500"></i> Instantly</div>
-                    <div class="tech-grid-item"><i class="fas fa-rocket text-purple-600"></i> Apollo</div>
-                    <div class="tech-grid-item"><i class="fas fa-envelope text-blue-600"></i> Smartlead</div>
-                </div>
+
+            <div class="pro-card p-6 text-center connector relative z-20 bg-slate-900 border-slate-800 text-white transform scale-110 shadow-2xl">
+                <div class="w-12 h-12 bg-blue-600 text-white rounded-full flex items-center justify-center mx-auto mb-4 text-xl animate-pulse"><i class="fas fa-cogs"></i></div>
+                <h4 class="font-bold text-white">3. Logic Core</h4>
+                <div class="text-xs text-slate-400 mt-2 font-mono">n8n / OpenAI GPT-4</div>
             </div>
-            <div class="bg-white p-6 rounded-xl border border-slate-200 shadow-sm">
-                <h4 class="font-bold text-slate-900 mb-4 text-sm uppercase tracking-wider border-b border-slate-100 pb-2">Frontend</h4>
-                <div class="space-y-3">
-                    <div class="tech-grid-item"><i class="fas fa-heart text-pink-500"></i> Lovable.dev</div>
-                    <div class="tech-grid-item"><i class="fab fa-react text-blue-400"></i> React</div>
-                    <div class="tech-grid-item"><i class="fab fa-js text-yellow-400"></i> JavaScript</div>
-                </div>
+
+            <div class="pro-card p-6 text-center connector relative z-10">
+                <div class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl"><i class="fas fa-paper-plane"></i></div>
+                <h4 class="font-bold text-slate-900">4. Engage</h4>
+                <div class="text-xs text-slate-500 mt-2 font-mono">Instantly, Smartlead</div>
+            </div>
+
+            <div class="pro-card p-6 text-center relative z-10">
+                <div class="w-12 h-12 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center mx-auto mb-4 text-xl"><i class="fab fa-hubspot"></i></div>
+                <h4 class="font-bold text-slate-900">5. Sync</h4>
+                <div class="text-xs text-slate-500 mt-2 font-mono">HubSpot / Close / GHL</div>
+            </div>
+        </div>
+
+        <div class="mt-12 text-center">
+            <div class="inline-flex items-center gap-2 text-sm text-slate-500 bg-white px-4 py-2 rounded-full border border-slate-200">
+                <i class="fas fa-sync text-blue-500 fa-spin"></i>
+                <span>Bi-directional sync enabled at every stage</span>
             </div>
         </div>
     </section>
 
-    <section class="max-w-6xl mx-auto px-6 py-24" id="architecture">
+    <section class="max-w-6xl mx-auto px-6 py-24" id="blueprint">
         <div class="flex flex-col md:flex-row justify-between items-end mb-12">
             <div>
-                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Architecture First.</h2>
+                <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-4">Architecture Deep Dive</h2>
                 <p class="text-slate-500 max-w-xl">
-                    The JD asks for "Building, Breaking, and Scaling." Here is exactly how I approach the infrastructure for Zetix vs. Telligent.
+                    The JD asks for "Building, Breaking, and Scaling." Here is exactly how I approach the infrastructure for Zetix vs. Telligent vs. The Engine itself.
                 </p>
             </div>
             
@@ -186,50 +282,60 @@
 
         <div id="zetix-content" class="tab-content active block">
             <div class="grid md:grid-cols-2 gap-12">
-                <div class="pro-card p-8">
+                <div class="pro-card p-8 h-full flex flex-col justify-center">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 bg-emerald-50 text-emerald-600 rounded-lg flex items-center justify-center text-xl"><i class="fas fa-users-cog"></i></div>
-                        <h3 class="text-xl font-bold text-slate-900">Multi-Tenant Agency Infrastructure</h3>
+                        <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-xl flex items-center justify-center text-xl border border-emerald-100"><i class="fas fa-users-cog"></i></div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900">Multi-Tenant Agency Infrastructure</h3>
+                            <span class="text-xs text-slate-500 font-mono">Focus: Speed & Scalability</span>
+                        </div>
                     </div>
                     <p class="text-slate-600 text-sm leading-relaxed mb-6">
-                        For an agency, speed of deployment is key. I build systems that allow you to onboard new clients without reinventing the wheel every time.
+                        For an agency, the bottleneck is onboarding. I build systems that allow you to spin up new client environments in minutes, not days.
                     </p>
-                    <ul class="space-y-4">
-                        <li class="flex items-start gap-3">
-                            <i class="fas fa-check text-emerald-500 mt-1"></i>
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100">
+                            <i class="fas fa-database text-emerald-500 mt-1"></i>
                             <div>
-                                <strong class="text-slate-900 block text-sm">Standardized Data Models</strong>
-                                <span class="text-xs text-slate-500">Unified Clay templates that adapt to different ICPs.</span>
+                                <strong class="text-slate-900 block text-sm mb-1">Standardized Data Models</strong>
+                                <p class="text-xs text-slate-500">Unified Clay templates that adapt to different ICPs without breaking the schema.</p>
                             </div>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="fas fa-check text-emerald-500 mt-1"></i>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100">
+                            <i class="fas fa-shield-alt text-emerald-500 mt-1"></i>
                             <div>
-                                <strong class="text-slate-900 block text-sm">Inbox Rotation Logic</strong>
-                                <span class="text-xs text-slate-500">Automated DNS setup monitoring and reputation management across client domains.</span>
+                                <strong class="text-slate-900 block text-sm mb-1">Inbox Rotation Logic</strong>
+                                <p class="text-xs text-slate-500">Automated DNS setup monitoring. If a domain burns, the system auto-pauses and rotates.</p>
                             </div>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="fas fa-check text-emerald-500 mt-1"></i>
-                            <div>
-                                <strong class="text-slate-900 block text-sm">Unified Reporting</strong>
-                                <span class="text-xs text-slate-500">Pulling Instantly/Smartlead API data into a central Airtable/Dashboard for client reporting.</span>
-                            </div>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="code-window shadow-xl">
+                <div class="code-window shadow-2xl">
                     <div class="code-header">
                         <div class="dot bg-red-500"></div><div class="dot bg-yellow-500"></div><div class="dot bg-green-500"></div>
-                        <span class="ml-2 text-slate-400">onboarding_automation.json</span>
+                        <span class="ml-2 text-slate-400 text-xs">onboarding_automation.json</span>
                     </div>
-                    <div class="p-6 space-y-3">
-                        <div class="text-purple-400">// Trigger: Contract Signed</div>
-                        <div class="pl-4 text-blue-300">await instantly.createWorkspace({ client: data.name });</div>
-                        <div class="pl-4 text-blue-300">await clay.cloneTable({ templateId: 'agency_master_v2' });</div>
-                        <div class="pl-4 text-blue-300">await postmark.setupDMARC({ domain: data.domain });</div>
-                        <div class="text-green-400 pt-2">// Result: Ready to prospect in 120s</div>
+                    <div class="code-content">
+                        <div class="font-mono text-xs leading-6">
+                            <span class="token-comment">// 1. Trigger: Contract Signed in HubSpot</span><br>
+                            <span class="token-keyword">const</span> <span class="token-variable">clientData</span> = <span class="token-function">await</span> hubspot.getDeal(id);<br><br>
+                            
+                            <span class="token-comment">// 2. Spin up Instantly Workspace</span><br>
+                            <span class="token-keyword">const</span> <span class="token-variable">workspace</span> = <span class="token-function">await</span> instantly.createWorkspace({<br>
+                            &nbsp;&nbsp;name: clientData.company_name,<br>
+                            &nbsp;&nbsp;seats: 5<br>
+                            });<br><br>
+
+                            <span class="token-comment">// 3. Clone Master Clay Table</span><br>
+                            <span class="token-function">await</span> clay.cloneTable({<br>
+                            &nbsp;&nbsp;templateId: <span class="token-string">'agency_master_v2'</span>,<br>
+                            &nbsp;&nbsp;destWorkspace: workspace.id<br>
+                            });<br><br>
+
+                            <span class="token-comment">// 4. Notify Slack Channel</span><br>
+                            <span class="token-function">await</span> slack.send(<span class="token-string">`🚀 ${clientData.name} environment live.`</span>);
+                        </div>
                     </div>
                 </div>
             </div>
@@ -237,46 +343,59 @@
 
         <div id="telligent-content" class="tab-content hidden">
             <div class="grid md:grid-cols-2 gap-12">
-                <div class="pro-card p-8">
+                <div class="pro-card p-8 h-full flex flex-col justify-center">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center text-xl"><i class="fas fa-server"></i></div>
-                        <h3 class="text-xl font-bold text-slate-900">High-Ticket Signal Based Outbound</h3>
+                        <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl border border-blue-100"><i class="fas fa-server"></i></div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900">High-Ticket Signal Based Outbound</h3>
+                            <span class="text-xs text-slate-500 font-mono">Focus: Intent & Timing</span>
+                        </div>
                     </div>
                     <p class="text-slate-600 text-sm leading-relaxed mb-6">
-                        Selling IT/MSP services requires timing, not just volume. I focus on <span class="text-slate-900 font-semibold">intent signals</span> to trigger workflows.
+                        Selling IT/MSP services is about timing. I focus on <span class="text-slate-900 font-semibold">intent signals</span> to trigger high-value, low-volume workflows.
                     </p>
-                    <ul class="space-y-4">
-                        <li class="flex items-start gap-3">
+                    <div class="space-y-4">
+                        <div class="flex items-start gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100">
                             <i class="fas fa-bolt text-blue-500 mt-1"></i>
                             <div>
-                                <strong class="text-slate-900 block text-sm">Tech Stack Detection</strong>
-                                <span class="text-xs text-slate-500">Trigger: "Company installs Azure/AWS". Action: Send "Cloud Migration" sequence.</span>
+                                <strong class="text-slate-900 block text-sm mb-1">Tech Stack Detection</strong>
+                                <p class="text-xs text-slate-500">Trigger: "Company installs Azure/AWS". Action: Send "Cloud Migration" sequence.</p>
                             </div>
-                        </li>
-                        <li class="flex items-start gap-3">
-                            <i class="fas fa-bolt text-blue-500 mt-1"></i>
+                        </div>
+                        <div class="flex items-start gap-4 p-4 bg-slate-50 rounded-lg border border-slate-100">
+                            <i class="fas fa-user-tie text-blue-500 mt-1"></i>
                             <div>
-                                <strong class="text-slate-900 block text-sm">Hiring Signals</strong>
-                                <span class="text-xs text-slate-500">Trigger: "New CTO hired". Action: High-touch manual task in Close CRM + LinkedIn connect.</span>
+                                <strong class="text-slate-900 block text-sm mb-1">Hiring Signals</strong>
+                                <p class="text-xs text-slate-500">Trigger: "New CTO hired". Action: High-touch manual task in Close CRM + LinkedIn connect.</p>
                             </div>
-                        </li>
-                    </ul>
+                        </div>
+                    </div>
                 </div>
                 
-                <div class="code-window shadow-xl">
+                <div class="code-window shadow-2xl">
                     <div class="code-header">
                         <div class="dot bg-red-500"></div><div class="dot bg-yellow-500"></div><div class="dot bg-green-500"></div>
-                        <span class="ml-2 text-slate-400">signal_processor.js</span>
+                        <span class="ml-2 text-slate-400 text-xs">signal_processor.js</span>
                     </div>
-                    <div class="p-6 space-y-3">
-                        <div class="text-purple-400">const signal = await apollo.getIntent({ keywords: ['Cybersecurity'] });</div>
-                        <div class="text-orange-400">if (signal.companySize > 50 && signal.rev > 10M) {</div>
-                        <div class="pl-4 text-blue-300">const context = await clay.enrich(signal.domain);</div>
-                        <div class="pl-4 text-blue-300">const email = await gpt4.writeIntro(context);</div>
-                        <div class="pl-4 text-blue-300">await closeCRM.createTask({ type: 'Call CTO', note: email });</div>
-                        <div class="text-orange-400">} else {</div>
-                        <div class="pl-4 text-slate-500">await nurturing.addToSequence('Low_Priority');</div>
-                        <div class="text-orange-400">}</div>
+                    <div class="code-content">
+                         <div class="font-mono text-xs leading-6">
+                            <span class="token-comment">// 1. Catch Webhook from Apollo/NewsAPI</span><br>
+                            <span class="token-keyword">const</span> <span class="token-variable">signal</span> = input.body;<br><br>
+                            
+                            <span class="token-comment">// 2. Filter for High Value Targets</span><br>
+                            <span class="token-keyword">if</span> (signal.companySize > 50 && signal.revenue > 10000000) {<br><br>
+                                
+                                <span class="token-comment">// 3. AI Research Agent</span><br>
+                                <span class="token-keyword">const</span> <span class="token-variable">context</span> = <span class="token-function">await</span> perplexity.research(signal.domain);<br><br>
+                                
+                                <span class="token-comment">// 4. Create Manual Task in Close</span><br>
+                                <span class="token-function">await</span> closeCRM.createTask({<br>
+                                &nbsp;&nbsp;type: <span class="token-string">'Call CTO'</span>,<br>
+                                &nbsp;&nbsp;note: <span class="token-string">`They just raised Series B. Context: ${context}`</span><br>
+                                });<br>
+                            }<br>
+                             <span class="token-keyword">else</span> { <span class="token-function">await</span> nurture.add(signal.email); }
+                        </div>
                     </div>
                 </div>
             </div>
@@ -284,10 +403,13 @@
 
         <div id="engine-content" class="tab-content hidden">
              <div class="grid md:grid-cols-2 gap-12">
-                <div class="pro-card p-8">
+                <div class="pro-card p-8 h-full flex flex-col justify-center">
                     <div class="flex items-center gap-3 mb-6">
-                        <div class="w-10 h-10 bg-purple-50 text-purple-600 rounded-lg flex items-center justify-center text-xl"><i class="fas fa-cogs"></i></div>
-                        <h3 class="text-xl font-bold text-slate-900">The Build Philosophy</h3>
+                        <div class="w-12 h-12 bg-purple-50 text-purple-600 rounded-xl flex items-center justify-center text-xl border border-purple-100"><i class="fas fa-cogs"></i></div>
+                        <div>
+                            <h3 class="text-xl font-bold text-slate-900">The Build Philosophy</h3>
+                            <span class="text-xs text-slate-500 font-mono">Focus: Reliability & uptime</span>
+                        </div>
                     </div>
                     <p class="text-slate-600 text-sm leading-relaxed mb-6">
                         I compete with high-level agencies because I build systems that don't break. My n8n workflows are built for production.
@@ -306,118 +428,223 @@
                 
                 <div class="flex flex-col justify-center">
                     <div class="bg-slate-900 rounded-2xl p-8 text-center shadow-2xl text-white">
-                        <i class="fas fa-network-wired text-4xl text-blue-400 mb-4"></i>
-                        <h4 class="text-2xl font-bold mb-2">10,000+ Executions</h4>
-                        <p class="text-slate-400 text-sm mb-6">I've scaled workflows for companies in Canada, USA, UK, Spain, Aus, NZ, and India.</p>
-                        <a href="https://automationexperts.tech/projects" target="_blank" class="text-emerald-400 font-bold text-sm hover:underline">See the systems in action &rarr;</a>
+                        <i class="fas fa-network-wired text-4xl text-blue-400 mb-6"></i>
+                        <h4 class="text-3xl font-bold mb-2">10,000+ Executions</h4>
+                        <p class="text-slate-400 text-sm mb-8">I've scaled workflows for companies in Canada, USA, UK, Spain, Aus, NZ, and India.</p>
+                        <a href="https://automationexperts.tech/projects" target="_blank" class="text-emerald-400 font-bold text-sm hover:underline border border-emerald-900 bg-emerald-900/20 px-4 py-2 rounded-full">See the systems in action &rarr;</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section class="max-w-7xl mx-auto px-6 py-24 bg-white border-t border-slate-200" id="process">
-        <div class="text-center mb-16">
-            <h2 class="text-3xl font-bold text-slate-900 mb-4">How I Build Systems</h2>
-            <p class="text-slate-500 max-w-2xl mx-auto">
-                I don't just "zap" things together. I follow a strict engineering protocol to ensure your systems scale.
-            </p>
+    <section class="max-w-7xl mx-auto px-6 py-24 bg-slate-50 border-y border-slate-200" id="code-vault">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl font-bold text-slate-900 mb-4">The Code Vault</h2>
+            <p class="text-slate-500">Actual snippets of how I handle common GTM engineering challenges.</p>
         </div>
-        <div class="grid md:grid-cols-4 gap-4">
-            <div class="pro-card p-6 border-t-4 border-t-slate-400">
-                <div class="text-4xl font-bold text-slate-200 mb-4">01</div>
-                <h4 class="font-bold text-slate-900 mb-2">Architecture</h4>
-                <p class="text-xs text-slate-500">Mapping the logic in Excalidraw/Miro before touching a single tool. Defining data flow and edge cases.</p>
+
+        <div class="grid md:grid-cols-3 gap-6">
+            <div class="pro-card p-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <i class="fas fa-tachometer-alt text-orange-500"></i>
+                    <h4 class="font-bold text-slate-900 text-sm">Rate Limit Handling</h4>
+                </div>
+                <div class="bg-slate-900 rounded p-4 mb-4">
+                    <code class="text-xs text-green-400 font-mono">
+                        await wait(500); // Backoff<br>
+                        if (error.code === 429) {<br>
+                        &nbsp;&nbsp;retry(3);<br>
+                        }
+                    </code>
+                </div>
+                <p class="text-xs text-slate-500">Prevents API bans when blasting Clay/Apollo requests.</p>
             </div>
-            <div class="pro-card p-6 border-t-4 border-t-blue-500">
-                <div class="text-4xl font-bold text-blue-100 mb-4">02</div>
-                <h4 class="font-bold text-slate-900 mb-2">Data Schema</h4>
-                <p class="text-xs text-slate-500">Standardizing fields across HubSpot, Clay, and Instantly so data doesn't get lost in translation.</p>
+
+            <div class="pro-card p-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <i class="fas fa-exclamation-triangle text-red-500"></i>
+                    <h4 class="font-bold text-slate-900 text-sm">Error Reporting</h4>
+                </div>
+                <div class="bg-slate-900 rounded p-4 mb-4">
+                    <code class="text-xs text-blue-400 font-mono">
+                        try { run() } catch (e) {<br>
+                        &nbsp;&nbsp;slack.alert('Workflow Failed', e);<br>
+                        &nbsp;&nbsp;db.logError(e);<br>
+                        }
+                    </code>
+                </div>
+                <p class="text-xs text-slate-500">I connect n8n error nodes to Slack so we know immediately if a sync fails.</p>
             </div>
-            <div class="pro-card p-6 border-t-4 border-t-purple-500">
-                <div class="text-4xl font-bold text-purple-100 mb-4">03</div>
-                <h4 class="font-bold text-slate-900 mb-2">Logic Build</h4>
-                <p class="text-xs text-slate-500">Building the n8n workflows with strict error handling, rate limiting, and fallback routes.</p>
-            </div>
-            <div class="pro-card p-6 border-t-4 border-t-emerald-500">
-                <div class="text-4xl font-bold text-emerald-100 mb-4">04</div>
-                <h4 class="font-bold text-slate-900 mb-2">Harden & Scale</h4>
-                <p class="text-xs text-slate-500">Stress testing with volume. Setting up monitoring dashboards to track deliverability and API health.</p>
+
+            <div class="pro-card p-6">
+                <div class="flex items-center gap-2 mb-4">
+                    <i class="fas fa-broom text-purple-500"></i>
+                    <h4 class="font-bold text-slate-900 text-sm">Normalization</h4>
+                </div>
+                <div class="bg-slate-900 rounded p-4 mb-4">
+                    <code class="text-xs text-purple-400 font-mono">
+                        name = name.trim();<br>
+                        title = title.replace('Senior', 'Sr.');<br>
+                        return { clean_name, clean_title };
+                    </code>
+                </div>
+                <p class="text-xs text-slate-500">Ensures " Jane Doe " becomes "Jane Doe" before entering the CRM.</p>
             </div>
         </div>
     </section>
 
-    <section class="bg-slate-50 py-24 border-y border-slate-200">
-        <div class="max-w-4xl mx-auto px-6 text-center">
-            <h2 class="text-3xl font-bold text-slate-900 mb-4">Prove It.</h2>
-            <p class="text-slate-500 mb-10">Theory is good. Production-ready code is better. Browse my library of live automation projects.</p>
+    <section class="max-w-6xl mx-auto px-6 py-24">
+        <div class="grid md:grid-cols-2 gap-16 items-center">
+            <div>
+                <h2 class="text-3xl font-bold text-slate-900 mb-6">Operational Excellence</h2>
+                <p class="text-slate-500 mb-6 leading-relaxed">
+                    Building the automation is only 50% of the job. The other 50% is ensuring it runs forever without breaking.
+                </p>
+                <ul class="space-y-4">
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-blue-500 mt-1"></i>
+                        <div>
+                            <strong class="text-slate-900">Documentation First</strong>
+                            <p class="text-xs text-slate-500">Every workflow I build comes with a Loom video and a Miro diagram. No "black box" code.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-blue-500 mt-1"></i>
+                        <div>
+                            <strong class="text-slate-900">Cost Optimization</strong>
+                            <p class="text-xs text-slate-500">I monitor API usage (OpenAI, Clay credits) to ensure we aren't burning cash on bad data.</p>
+                        </div>
+                    </li>
+                    <li class="flex items-start gap-3">
+                        <i class="fas fa-check-circle text-blue-500 mt-1"></i>
+                        <div>
+                            <strong class="text-slate-900">Security & Privacy</strong>
+                            <p class="text-xs text-slate-500">Handling GDPR/PII data carefully within n8n self-hosted environments.</p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <div class="bg-slate-900 p-8 rounded-2xl text-white shadow-2xl relative">
+                <div class="absolute -top-4 -right-4 bg-emerald-500 text-white w-12 h-12 rounded-full flex items-center justify-center font-bold text-lg shadow-lg">A+</div>
+                <h4 class="font-bold text-lg mb-4">My Quality Checklist</h4>
+                <div class="space-y-3 font-mono text-sm text-slate-400">
+                    <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-full border border-emerald-500 bg-emerald-500/20 flex items-center justify-center text-[10px] text-emerald-500">✓</div> Error Routes Configured</div>
+                    <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-full border border-emerald-500 bg-emerald-500/20 flex items-center justify-center text-[10px] text-emerald-500">✓</div> API Rate Limits Checked</div>
+                    <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-full border border-emerald-500 bg-emerald-500/20 flex items-center justify-center text-[10px] text-emerald-500">✓</div> Data Types Validated</div>
+                    <div class="flex items-center gap-2"><div class="w-4 h-4 rounded-full border border-emerald-500 bg-emerald-500/20 flex items-center justify-center text-[10px] text-emerald-500">✓</div> Documentation Recorded</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-6 py-24 bg-slate-50 border-t border-slate-200" id="roadmap">
+        <div class="text-center mb-16">
+            <h2 class="text-3xl font-bold text-slate-900 mb-4">The First 30 Days</h2>
+            <p class="text-slate-500">If we partner up, here is exactly how I will execute in Month 1.</p>
+        </div>
+        
+        <div class="grid md:grid-cols-4 gap-6">
+            <div class="pro-card p-6 border-t-4 border-t-slate-400">
+                <div class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Week 1</div>
+                <h4 class="font-bold text-slate-900 mb-2">Audit & Architect</h4>
+                <p class="text-xs text-slate-500 mb-4">Audit existing HubSpot/Clay setups. Map out the "Ideal State" in Miro.</p>
+                <ul class="text-[10px] text-slate-500 list-disc pl-3 space-y-1">
+                    <li>Audit API Keys</li>
+                    <li>Map Data Schema</li>
+                    <li>Setup n8n Instance</li>
+                </ul>
+            </div>
             
-            <div class="grid md:grid-cols-2 gap-6 mb-12 text-left">
-                <a href="https://automationexperts.tech/projects" target="_blank" class="group pro-card p-6 block hover:border-blue-400">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-lg flex items-center justify-center text-xl group-hover:bg-blue-600 group-hover:text-white transition-colors"><i class="fas fa-robot"></i></div>
-                        <i class="fas fa-external-link-alt text-slate-300 group-hover:text-blue-500"></i>
-                    </div>
-                    <h4 class="font-bold text-slate-900 mb-2">Automated Outbound Systems</h4>
-                    <p class="text-sm text-slate-500">See how I wire Clay -> Instantly -> CRM with error handling.</p>
-                </a>
-                <a href="https://automationexperts.tech/projects" target="_blank" class="group pro-card p-6 block hover:border-purple-400">
-                    <div class="flex justify-between items-start mb-4">
-                        <div class="w-10 h-10 bg-purple-50 text-purple-600 rounded-lg flex items-center justify-center text-xl group-hover:bg-purple-600 group-hover:text-white transition-colors"><i class="fas fa-database"></i></div>
-                        <i class="fas fa-external-link-alt text-slate-300 group-hover:text-purple-500"></i>
-                    </div>
-                    <h4 class="font-bold text-slate-900 mb-2">CRM Architecture & Data</h4>
-                    <p class="text-sm text-slate-500">HubSpot and GHL schemas designed for scalability.</p>
-                </a>
+            <div class="pro-card p-6 border-t-4 border-t-blue-500">
+                <div class="text-xs font-bold text-blue-500 uppercase tracking-widest mb-2">Week 2</div>
+                <h4 class="font-bold text-slate-900 mb-2">Core Pipelines</h4>
+                <p class="text-xs text-slate-500 mb-4">Build the "Zetix Onboarding" flow and the first "Telligent Signal" scraper.</p>
+                <ul class="text-[10px] text-slate-500 list-disc pl-3 space-y-1">
+                    <li>Clay Templates Built</li>
+                    <li>HubSpot Sync Live</li>
+                    <li>Signal Scraper v1</li>
+                </ul>
             </div>
 
-            <a href="https://automationexperts.tech/projects" target="_blank" class="inline-flex items-center gap-2 text-slate-900 font-bold hover:text-blue-600 transition">
-                View All Projects <i class="fas fa-arrow-right"></i>
-            </a>
+            <div class="pro-card p-6 border-t-4 border-t-purple-500">
+                <div class="text-xs font-bold text-purple-500 uppercase tracking-widest mb-2">Week 3</div>
+                <h4 class="font-bold text-slate-900 mb-2">Enrichment Layer</h4>
+                <p class="text-xs text-slate-500 mb-4">Integrate GPT-4/Perplexity for deep research on Telligent prospects.</p>
+                <ul class="text-[10px] text-slate-500 list-disc pl-3 space-y-1">
+                    <li>AI Agent Config</li>
+                    <li>Personalization Logic</li>
+                    <li>Outbound Test Batch</li>
+                </ul>
+            </div>
+
+            <div class="pro-card p-6 border-t-4 border-t-emerald-500">
+                <div class="text-xs font-bold text-emerald-500 uppercase tracking-widest mb-2">Week 4</div>
+                <h4 class="font-bold text-slate-900 mb-2">Handover & Scale</h4>
+                <p class="text-xs text-slate-500 mb-4">Documentation, loom videos, and ramping up volume.</p>
+                <ul class="text-[10px] text-slate-500 list-disc pl-3 space-y-1">
+                    <li>Full Docs Written</li>
+                    <li>Error Alerting Live</li>
+                    <li>Volume Scale-up</li>
+                </ul>
+            </div>
         </div>
     </section>
 
     <footer class="bg-slate-900 py-24 text-center">
-        <div class="max-w-2xl mx-auto px-6">
-            <h2 class="text-3xl font-bold text-white mb-6">Ready to build the engine?</h2>
-            <p class="text-slate-400 mb-10">
-                I've researched Zetix and Telligent. I have the stack expertise. <br>
-                Let's discuss how we implement this.
+        <div class="max-w-3xl mx-auto px-6">
+            <h2 class="text-3xl md:text-4xl font-bold text-white mb-6">Ready to build the engine?</h2>
+            <p class="text-slate-400 mb-10 text-lg">
+                I've done the research. I have the stack expertise. <br>
+                Let's move from "Campaigns" to "Systems."
             </p>
-            <div class="flex flex-col md:flex-row justify-center gap-4">
-                <a href="mailto:krishnarana@automationexperts.tech" class="px-8 py-4 bg-white text-slate-900 rounded-xl font-bold hover:bg-blue-50 transition">
-                    Email Me
+            <div class="flex flex-col md:flex-row justify-center gap-5">
+                <a href="mailto:krishnarana@automationexperts.tech" class="px-8 py-4 bg-blue-600 text-white rounded-xl font-bold hover:bg-blue-500 transition shadow-lg shadow-blue-900/50">
+                    Email Me to Start
                 </a>
-                <a href="https://automationexperts.tech/#testimonials" target="_blank" class="px-8 py-4 border border-slate-700 text-white rounded-xl font-bold hover:border-slate-500 transition">
-                    Read Client Reviews
+                <a href="https://automationexperts.tech/projects" target="_blank" class="px-8 py-4 border border-slate-700 text-white rounded-xl font-bold hover:bg-white/5 transition">
+                    View Portfolio Projects
                 </a>
             </div>
-            <div class="mt-16 pt-8 border-t border-slate-800 text-xs text-slate-600 font-mono">
-                &copy; 2024 Krishna Rana. GTM Engineering.
+            
+            <div class="mt-20 pt-8 border-t border-slate-800 flex flex-col md:flex-row justify-between items-center text-xs text-slate-600 font-mono">
+                <div>&copy; 2024 Krishna Rana. GTM Engineering.</div>
+                <div class="flex gap-4 mt-4 md:mt-0">
+                    <a href="#" class="hover:text-slate-400">Github</a>
+                    <a href="#" class="hover:text-slate-400">LinkedIn</a>
+                    <a href="#" class="hover:text-slate-400">Twitter</a>
+                </div>
             </div>
         </div>
     </footer>
 
     <script>
         function switchTab(tab) {
+            // Hide all contents
             document.querySelectorAll('.tab-content').forEach(el => {
                 el.classList.remove('active');
                 el.style.display = 'none';
             });
 
+            // Button Styles
             const activeClass = "px-6 py-2.5 rounded-lg text-sm font-bold transition-all bg-white text-emerald-600 shadow-sm border border-slate-200 cursor-default";
             const inactiveClass = "px-6 py-2.5 rounded-lg text-sm font-bold transition-all text-slate-500 hover:text-slate-900 cursor-pointer";
 
+            // Reset buttons
             ['zetix', 'telligent', 'engine'].forEach(id => {
                 document.getElementById('btn-' + id).className = inactiveClass;
             });
 
+            // Activate specific button
             document.getElementById('btn-' + tab).className = activeClass;
+
+            // Show specific content
             const content = document.getElementById(tab + '-content');
             content.classList.add('active');
             content.style.display = 'block';
         }
 
+        // Initialize Zetix on Load
         window.onload = function() {
             switchTab('zetix');
         };
